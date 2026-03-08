@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demon Castle | Solo Hunters System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&family=Cinzel:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#04000a; --red:#ff1a3a; --deep-red:#cc0022; --fire:#ff5500;
+      --ember:#ff8800; --dark-red:#660011; --blood:#990022;
+      --purple:#8b00ff; --dark:#08000f; --gold:#ffd700; --cyan:#00d4ff;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:#d0b0b8;overflow-x:hidden;min-height:100vh}
+
+    .bg-base{position:fixed;inset:0;z-index:0;pointer-events:none;
+      background:radial-gradient(ellipse 110% 65% at 50% 0%,rgba(200,0,30,0.24) 0%,transparent 60%),
+                 radial-gradient(ellipse 60% 40% at 15% 85%,rgba(120,0,160,0.13) 0%,transparent 55%),
+                 radial-gradient(ellipse 50% 35% at 85% 65%,rgba(160,0,20,0.11) 0%,transparent 50%),
+                 radial-gradient(ellipse 80% 30% at 50% 100%,rgba(180,0,20,0.12) 0%,transparent 60%),
+                 var(--bg)}
+    .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:linear-gradient(rgba(180,0,30,0.04) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(180,0,30,0.04) 1px,transparent 1px);
+      background-size:48px 48px;animation:grid-drift 50s linear infinite alternate}
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
+    .bg-veins{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .bg-veins::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+      width:1px;height:100%;background:linear-gradient(180deg,rgba(180,0,30,0.0) 0%,rgba(180,0,30,0.25) 20%,rgba(120,0,150,0.2) 50%,rgba(180,0,30,0.15) 80%,transparent 100%);
+      animation:vein-pulse 5s ease-in-out infinite}
+    .bg-veins::after{content:'';position:absolute;inset:0;
+      background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 3px)}
+    @keyframes vein-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+    .bg-embers{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+    .ember{position:absolute;border-radius:50%;animation:ember-rise linear infinite}
+    @keyframes ember-rise{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:var(--op)}90%{opacity:calc(var(--op)*.3)}100%{transform:translateY(-100vh) translateX(var(--dx)) scale(.2);opacity:0}}
+
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:58px;display:flex;align-items:center;
+      justify-content:space-between;padding:0 28px;background:rgba(4,0,10,0.95);
+      border-bottom:1px solid rgba(180,0,30,0.25);backdrop-filter:blur(16px)}
+    .navbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(180,0,30,0.5),rgba(120,0,180,0.3),transparent)}
+    .nav-logo{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:3px;
+      color:var(--cyan);text-decoration:none;text-transform:uppercase;text-shadow:0 0 18px rgba(0,212,255,0.6)}
+    .nav-links{display:flex;gap:8px}
+    .nav-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;
+      padding:5px 14px;text-decoration:none;border-radius:3px;background:rgba(180,0,30,0.06);
+      border:1px solid rgba(180,0,30,0.3);color:rgba(255,80,100,0.8);transition:all .2s}
+    .nav-btn:hover{background:rgba(180,0,30,0.15);border-color:var(--red);color:#fff;box-shadow:0 0 12px rgba(180,0,30,0.3)}
+    .nav-btn.home{border-color:rgba(0,212,255,0.2);color:rgba(0,212,255,0.6);background:rgba(0,212,255,0.03)}
+    .nav-btn.home:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.08)}
+
+    .page{position:relative;z-index:2;padding:82px 0 110px}
+    .container{max-width:980px;margin:0 auto;padding:0 24px}
+
+    /* HEADER */
+    .hero{text-align:center;padding:0 0 20px}
+    .hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;
+      font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,60,80,.6);
+      border:1px solid rgba(180,0,30,0.3);padding:4px 18px;border-radius:2px;margin-bottom:20px;
+      background:rgba(180,0,30,0.06);animation:blink 4s ease-in-out infinite}
+    .hero-dot{width:4px;height:4px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);animation:blink 1.2s ease-in-out infinite}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+    .hero-title{font-family:'Cinzel',serif;font-size:clamp(30px,8vw,68px);font-weight:900;
+      letter-spacing:clamp(4px,2vw,14px);text-transform:uppercase;color:#fff;line-height:1;
+      text-shadow:0 0 30px rgba(220,0,40,0.7),0 0 60px rgba(180,0,30,0.4),0 0 100px rgba(120,0,0,0.3);
+      margin-bottom:10px;animation:title-flicker 8s ease-in-out infinite}
+    @keyframes title-flicker{0%,95%,100%{opacity:1}97%{opacity:.82}98%{opacity:1}99%{opacity:.88}}
+    .hero-sub{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(200,100,120,.4);margin-bottom:32px}
+    .hero-divider{display:flex;align-items:center;width:clamp(180px,45vw,380px);margin:0 auto 40px}
+    .hero-line{flex:1;height:1px}
+    .hero-line:first-child{background:linear-gradient(90deg,transparent,rgba(180,0,30,0.65))}
+    .hero-line:last-child{background:linear-gradient(90deg,rgba(180,0,30,0.65),transparent)}
+    .hero-skull{font-size:13px;color:rgba(200,0,30,.7);margin:0 14px;text-shadow:0 0 8px rgba(180,0,30,.8)}
+
+    /* CASTLE */
+    .castle-scene{display:flex;justify-content:center;align-items:flex-end;margin-bottom:44px;
+      position:relative;height:440px}
+    .castle-scene::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+      width:540px;height:130px;background:radial-gradient(ellipse,rgba(220,0,30,0.3) 0%,rgba(160,0,20,0.1) 45%,transparent 70%);
+      pointer-events:none;animation:ground-pulse 4s ease-in-out infinite}
+    .castle-scene::after{content:'';position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+      width:320px;height:55px;background:radial-gradient(ellipse,rgba(255,60,0,0.2) 0%,transparent 70%);pointer-events:none}
+    @keyframes ground-pulse{0%,100%{opacity:.8;transform:translateX(-50%) scaleX(1)}50%{opacity:1;transform:translateX(-50%) scaleX(1.06)}}
+    .castle-svg{animation:castle-float 6s ease-in-out infinite;position:relative;z-index:2;
+      filter:drop-shadow(0 0 32px rgba(180,0,30,0.4)) drop-shadow(0 0 64px rgba(140,0,20,0.22))}
+    @keyframes castle-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+    /* STATS */
+    .stats-row{display:flex;justify-content:center;gap:14px;margin-bottom:52px;flex-wrap:wrap}
+    .stat-chip{display:flex;flex-direction:column;align-items:center;gap:5px;padding:16px 28px;
+      border:1px solid rgba(180,0,30,0.2);border-radius:4px;background:rgba(12,0,4,0.85);
+      position:relative;overflow:hidden;min-width:100px}
+    .stat-chip::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(180,0,30,0.6),transparent)}
+    .stat-chip::after{content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 50% 0%,rgba(180,0,30,0.06) 0%,transparent 70%)}
+    .stat-val{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;
+      color:var(--red);text-shadow:0 0 14px rgba(220,0,40,0.6);position:relative;z-index:1}
+    .stat-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2.5px;
+      text-transform:uppercase;color:rgba(220,100,120,.4);position:relative;z-index:1}
+
+    /* SECTION LABEL */
+    .sec-label{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+    .sec-label-text{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(220,80,100,.6);white-space:nowrap}
+    .sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(180,0,30,0.3),transparent)}
+
+    /* TOWER */
+    .tower-wrap{margin-bottom:60px}
+    .tower{display:flex;flex-direction:column;gap:2px}
+
+    .floor{display:flex;align-items:stretch;border:1px solid rgba(130,0,20,0.14);border-radius:2px;
+      overflow:hidden;position:relative;opacity:0;transform:translateX(-8px);transition:border-color .2s,box-shadow .2s}
+    .floor.vis{opacity:1;transform:translateX(0);transition:opacity .3s ease,transform .3s ease,border-color .2s,box-shadow .2s}
+    .floor:hover{border-color:rgba(180,0,30,0.28)}
+    .floor.boss{border-color:rgba(200,0,30,0.38);cursor:pointer;background:rgba(180,0,30,0.05)}
+    .floor.boss:hover{border-color:var(--red);box-shadow:0 0 16px rgba(180,0,30,0.16)}
+    .floor.notable{border-color:rgba(180,100,0,0.28);background:rgba(180,100,0,0.04);cursor:pointer}
+    .floor.notable:hover{border-color:rgba(255,150,0,0.45);box-shadow:0 0 12px rgba(180,100,0,0.12)}
+    .floor.final{border-color:rgba(255,80,0,0.48);cursor:pointer;
+      background:linear-gradient(90deg,rgba(180,0,30,0.08),rgba(200,60,0,0.08));
+      animation:final-glow 3s ease-in-out infinite}
+    @keyframes final-glow{0%,100%{box-shadow:none}50%{box-shadow:0 0 28px rgba(220,60,0,0.18)}}
+    .floor.final:hover{border-color:var(--fire);box-shadow:0 0 32px rgba(220,80,0,0.28)}
+
+    .fl-num{width:50px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;
+      color:rgba(180,0,30,.28);background:rgba(0,0,0,.28);border-right:1px solid rgba(130,0,20,0.1)}
+    .floor.boss .fl-num{color:rgba(255,50,70,.75)}
+    .floor.notable .fl-num{color:rgba(220,140,0,.6)}
+    .floor.final .fl-num{color:var(--fire);text-shadow:0 0 8px rgba(255,80,0,.5)}
+
+    .fl-bar{width:3px;flex-shrink:0;background:rgba(130,0,20,0.18)}
+    .floor.boss .fl-bar{background:var(--red);box-shadow:0 0 6px rgba(200,0,30,.5)}
+    .floor.notable .fl-bar{background:rgba(220,140,0,.7);box-shadow:0 0 5px rgba(220,140,0,.4)}
+    .floor.final .fl-bar{background:var(--fire);box-shadow:0 0 10px rgba(255,80,0,.7)}
+
+    .fl-content{flex:1;padding:9px 16px;display:flex;align-items:center;gap:12px}
+    .fl-name{font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;color:rgba(180,120,130,.38);flex:1}
+    .floor.boss .fl-name{color:#fff;font-size:14px}
+    .floor.notable .fl-name{color:rgba(255,180,60,.8)}
+    .floor.final .fl-name{color:var(--fire);font-size:15px;font-weight:700;
+      font-family:'Cinzel',serif;text-shadow:0 0 14px rgba(255,80,0,.5)}
+
+    .fl-tag{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;
+      text-transform:uppercase;padding:3px 10px;border-radius:2px;flex-shrink:0}
+    .ft-boss{color:var(--red);border:1px solid rgba(200,0,30,.4);background:rgba(180,0,30,.07)}
+    .ft-final{color:var(--fire);border:1px solid rgba(255,80,0,.4);background:rgba(200,60,0,.07)}
+    .ft-notable{color:rgba(220,160,0,.8);border:1px solid rgba(200,140,0,.3);background:rgba(180,120,0,.05)}
+    .ft-normal{color:rgba(130,0,20,.38);border:1px solid rgba(100,0,15,.18);background:transparent}
+
+    .fl-chev{font-family:'Share Tech Mono',monospace;font-size:14px;color:rgba(200,0,30,.28);
+      flex-shrink:0;transition:transform .25s;padding:0 4px}
+    .floor.boss .fl-chev{color:rgba(255,50,70,.6)}
+    .floor.final .fl-chev{color:var(--fire)}
+    .floor.notable .fl-chev{color:rgba(220,160,0,.6)}
+
+    /* DROP PANEL */
+    .drop-panel{display:none;padding:18px 20px 20px 56px;background:rgba(0,0,0,.55);
+      border-top:1px solid rgba(130,0,20,.18);flex-wrap:wrap;gap:12px}
+    .drop-panel.open{display:flex;animation:dp-in .2s ease}
+    @keyframes dp-in{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+    .dp-lbl{width:100%;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(200,0,30,.48);margin-bottom:2px}
+    .drop-card{display:flex;align-items:center;gap:14px;padding:12px 16px;
+      border-radius:4px;border:1px solid rgba(180,0,30,.2);background:rgba(12,0,4,.85);
+      flex:1;min-width:220px;position:relative;overflow:hidden}
+    .drop-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(180,0,30,.4),transparent)}
+    .drop-card.gold{border-color:rgba(200,160,0,.22);background:rgba(10,8,0,.85)}
+    .drop-card.gold::before{background:linear-gradient(90deg,transparent,rgba(200,160,0,.4),transparent)}
+    .drop-img{width:52px;height:52px;object-fit:contain;
+      filter:drop-shadow(0 0 10px rgba(200,0,30,.6));flex-shrink:0}
+    .drop-card.gold .drop-img{filter:drop-shadow(0 0 10px rgba(200,160,0,.6))}
+    .drop-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;
+      text-transform:uppercase;color:#fff;display:block;margin-bottom:3px}
+    .drop-stat{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;
+      color:rgba(200,140,150,.52);display:block;line-height:1.6;margin-bottom:5px}
+    .drop-rate{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:8px;
+      letter-spacing:1.5px;text-transform:uppercase;padding:2px 9px;border-radius:2px}
+    .rate-low{color:var(--red);border:1px solid rgba(200,0,30,.35);background:rgba(180,0,30,.08)}
+    .rate-event{color:rgba(180,80,255,.8);border:1px solid rgba(150,0,230,.35);background:rgba(120,0,200,.06)}
+    .rate-sure{color:#00e090;border:1px solid rgba(0,200,120,.3);background:rgba(0,160,100,.06)}
+
+    /* LOOT GRID */
+    .loot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:52px}
+    .loot-card{position:relative;background:linear-gradient(145deg,rgba(10,0,4,0.98),rgba(14,0,8,0.98));
+      border:1px solid rgba(160,0,25,0.17);border-radius:5px;overflow:hidden;
+      opacity:0;transform:translateY(12px);transition:border-color .2s,box-shadow .2s}
+    .loot-card.vis{opacity:1;transform:translateY(0);transition:opacity .4s ease,transform .4s ease,border-color .2s,box-shadow .2s}
+    .loot-card:hover{border-color:rgba(200,0,30,.38);box-shadow:0 0 20px rgba(150,0,20,.14)}
+    .loot-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(200,0,30,.5),transparent)}
+    .corner{position:absolute;width:8px;height:8px;pointer-events:none}
+    .corner.tl{top:0;left:0;border-top:1.5px solid rgba(200,0,30,.48);border-left:1.5px solid rgba(200,0,30,.48)}
+    .corner.tr{top:0;right:0;border-top:1.5px solid rgba(200,0,30,.48);border-right:1.5px solid rgba(200,0,30,.48)}
+    .corner.bl{bottom:0;left:0;border-bottom:1.5px solid rgba(200,0,30,.48);border-left:1.5px solid rgba(200,0,30,.48)}
+    .corner.br{bottom:0;right:0;border-bottom:1.5px solid rgba(200,0,30,.48);border-right:1.5px solid rgba(200,0,30,.48)}
+    .loot-img-wrap{height:120px;display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.35);border-bottom:1px solid rgba(160,0,25,.1);position:relative}
+    .loot-img-wrap::after{content:'';position:absolute;inset:0;
+      background:radial-gradient(circle at 50% 50%,rgba(180,0,30,.05) 0%,transparent 70%)}
+    .loot-img{width:72px;height:72px;object-fit:contain;
+      animation:loot-float 4s ease-in-out infinite;
+      filter:drop-shadow(0 0 14px rgba(180,0,30,.55));position:relative;z-index:1}
+    @keyframes loot-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .loot-card:hover .loot-img{animation-play-state:paused;transform:scale(1.08)}
+    .loot-body{padding:14px 16px 18px}
+    .loot-rarity{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+    .r-mythic{color:rgba(255,50,70,.8)}
+    .r-legendary{color:rgba(220,170,0,.8)}
+    .r-epic{color:rgba(180,80,255,.8)}
+    .loot-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;color:#fff;margin-bottom:8px;line-height:1.4}
+    .loot-stat{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.8px;
+      color:rgba(200,150,160,.52);margin-bottom:10px;line-height:1.7}
+    .loot-how{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;
+      text-transform:uppercase;padding:4px 11px;border-radius:2px;
+      color:rgba(220,80,100,.7);border:1px solid rgba(180,0,30,.24);background:rgba(180,0,30,.05)}
+
+    /* CRAFTING */
+    .craft-panel{border:1px solid rgba(180,0,30,.2);border-radius:5px;padding:24px 28px;
+      background:rgba(10,0,4,.88);position:relative;overflow:hidden;margin-bottom:32px}
+    .craft-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(180,0,30,.6),rgba(120,0,180,.3),transparent)}
+    .craft-title{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:3px;
+      text-transform:uppercase;color:var(--red);text-shadow:0 0 10px rgba(200,0,30,.4);margin-bottom:20px}
+    .craft-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+    .craft-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 18px;
+      border:1px solid rgba(180,0,30,.18);border-radius:4px;background:rgba(0,0,0,.35)}
+    .craft-img{width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(180,0,30,.5))}
+    .craft-qty{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;
+      color:var(--red);text-shadow:0 0 8px rgba(200,0,30,.4)}
+    .craft-name{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;
+      text-transform:uppercase;color:rgba(220,140,150,.55);text-align:center}
+    .craft-sep{font-family:'Share Tech Mono',monospace;font-size:22px;color:rgba(180,0,30,.35);
+      flex-shrink:0;align-self:center}
+    .craft-result{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 22px;
+      border:1px solid rgba(200,0,30,.35);border-radius:4px;background:rgba(180,0,30,.06);
+      position:relative;overflow:hidden}
+    .craft-result::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(200,0,30,.5),transparent)}
+    .craft-result-img{width:62px;height:62px;object-fit:contain;
+      filter:drop-shadow(0 0 14px rgba(200,0,30,.7));animation:loot-float 4s ease-in-out infinite}
+    .craft-result-name{font-family:'Orbitron',monospace;font-size:9px;font-weight:700;
+      letter-spacing:1.5px;text-transform:uppercase;color:#fff;text-align:center}
+
+    @media(max-width:640px){
+      .stats-row{gap:10px}.stat-chip{padding:12px 18px}
+      .drop-panel.open{padding-left:20px}
+      .loot-grid{grid-template-columns:1fr 1fr}
+      .craft-row{justify-content:center}
+    }
+    @media(max-width:420px){.loot-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="bg-base"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-veins"></div>
+  <div class="bg-embers" id="embers"></div>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn home">⬅ Home</a>
+      <a href="artifacts.html" class="nav-btn">Artifacts</a>
+      <a href="levelguide.html" class="nav-btn">Gate Info</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+
+      <header class="hero">
+        <div class="hero-tag"><span class="hero-dot"></span>Special Zone — Demon Realm<span class="hero-dot"></span></div>
+        <h1 class="hero-title">Demon Castle</h1>
+        <p class="hero-sub">35 Floors &nbsp;·&nbsp; 2 Bosses &nbsp;·&nbsp; Exclusive Artifacts</p>
+        <div class="hero-divider">
+          <div class="hero-line"></div>
+          <span class="hero-skull">☠</span>
+          <div class="hero-line"></div>
+        </div>
+      </header>
+
+      <!-- CASTLE SVG -->
+      <div class="castle-scene">
+        <svg class="castle-svg" width="380" height="400" viewBox="0 0 380 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="glow-fire" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="6" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <radialGradient id="lava-glow" cx="50%" cy="100%" r="60%">
+              <stop offset="0%" stop-color="#ff3300" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#ff0000" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="wall-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#9a0015"/>
+              <stop offset="100%" stop-color="#440008"/>
+            </linearGradient>
+            <linearGradient id="wall-grad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7a0010"/>
+              <stop offset="100%" stop-color="#330006"/>
+            </linearGradient>
+          </defs>
+
+          <!-- GROUND LAVA GLOW -->
+          <ellipse cx="190" cy="392" rx="160" ry="12" fill="url(#lava-glow)"/>
+          <ellipse cx="190" cy="394" rx="110" ry="7" fill="#ff2200" opacity=".12"/>
+
+          <!-- === DEMON HORNS === -->
+          <!-- Left main horn -->
+          <polygon points="72,2 58,72 92,72" fill="#6a000e"/>
+          <polygon points="72,2 58,72 92,72" fill="none" stroke="#cc0022" stroke-width="1" opacity=".6"/>
+          <!-- Left horn inner glow -->
+          <polygon points="72,10 63,70 81,70" fill="#880015" opacity=".5"/>
+          <!-- Right main horn -->
+          <polygon points="308,2 294,72 322,72" fill="#6a000e"/>
+          <polygon points="308,2 294,72 322,72" fill="none" stroke="#cc0022" stroke-width="1" opacity=".6"/>
+          <polygon points="308,10 299,70 317,70" fill="#880015" opacity=".5"/>
+          <!-- Horn fire tips -->
+          <ellipse cx="72"  cy="5"  rx="5" ry="8"  fill="#ff4400" opacity=".9" filter="url(#glow-fire)"/>
+          <ellipse cx="72"  cy="7"  rx="3" ry="5"  fill="#ffaa00" opacity=".95"/>
+          <ellipse cx="308" cy="5"  rx="5" ry="8"  fill="#ff4400" opacity=".9" filter="url(#glow-fire)"/>
+          <ellipse cx="308" cy="7"  rx="3" ry="5"  fill="#ffaa00" opacity=".95"/>
+
+          <!-- Center spire -->
+          <polygon points="190,18 174,80 206,80" fill="#880015"/>
+          <polygon points="190,18 174,80 206,80" fill="none" stroke="#dd0025" stroke-width=".8" opacity=".5"/>
+          <!-- Spire fire -->
+          <ellipse cx="190" cy="20" rx="7"  ry="11" fill="#ff5500" opacity=".95" filter="url(#glow-fire)"/>
+          <ellipse cx="190" cy="22" rx="4.5" ry="7" fill="#ffbb00" opacity=".95"/>
+          <ellipse cx="190" cy="25" rx="2.5" ry="4" fill="#fff0c0" opacity=".9"/>
+
+          <!-- Sub-spires left & right of center -->
+          <polygon points="140,38 130,80 150,80" fill="#770012"/>
+          <polygon points="140,38 130,80 150,80" fill="none" stroke="#bb0020" stroke-width=".6" opacity=".4"/>
+          <ellipse cx="140" cy="40" rx="4" ry="6" fill="#ff4400" opacity=".8"/>
+          <ellipse cx="140" cy="42" rx="2.5" ry="4" fill="#ffaa00" opacity=".9"/>
+          <polygon points="240,38 230,80 250,80" fill="#770012"/>
+          <polygon points="240,38 230,80 250,80" fill="none" stroke="#bb0020" stroke-width=".6" opacity=".4"/>
+          <ellipse cx="240" cy="40" rx="4" ry="6" fill="#ff4400" opacity=".8"/>
+          <ellipse cx="240" cy="42" rx="2.5" ry="4" fill="#ffaa00" opacity=".9"/>
+
+          <!-- BATTLEMENTS ROW -->
+          <rect x="60"  y="72" width="16" height="28" rx="1" fill="#880015"/>
+          <rect x="82"  y="64" width="18" height="36" rx="1" fill="#990016"/>
+          <rect x="106" y="70" width="16" height="30" rx="1" fill="#880015"/>
+          <rect x="128" y="66" width="16" height="34" rx="1" fill="#990016"/>
+          <rect x="150" y="72" width="16" height="28" rx="1" fill="#880015"/>
+          <rect x="170" y="68" width="20" height="32" rx="1" fill="#990016"/>  <!-- center highlight -->
+          <rect x="196" y="72" width="16" height="28" rx="1" fill="#880015"/>
+          <rect x="218" y="66" width="16" height="34" rx="1" fill="#990016"/>
+          <rect x="240" y="70" width="16" height="30" rx="1" fill="#880015"/>
+          <rect x="262" y="64" width="18" height="36" rx="1" fill="#990016"/>
+          <rect x="286" y="72" width="16" height="28" rx="1" fill="#880015"/>
+          <!-- Battlement edge glow -->
+          <rect x="58" y="100" width="264" height="3" fill="#bb0018" opacity=".6"/>
+
+          <!-- UPPER TOWER BODY -->
+          <rect x="70" y="100" width="240" height="80" fill="url(#wall-grad)"/>
+          <rect x="70" y="100" width="240" height="80" fill="none" stroke="#cc0020" stroke-width=".6" opacity=".25"/>
+          <!-- Skull ornaments on upper wall -->
+          <!-- Skull L -->
+          <ellipse cx="108" cy="125" rx="10" ry="9" fill="#550010"/>
+          <ellipse cx="104" cy="128" rx="3" ry="3" fill="#220006" opacity=".8"/>
+          <ellipse cx="112" cy="128" rx="3" ry="3" fill="#220006" opacity=".8"/>
+          <rect x="103" y="133" width="10" height="3" rx="1" fill="#330008" opacity=".7"/>
+          <!-- Skull R -->
+          <ellipse cx="272" cy="125" rx="10" ry="9" fill="#550010"/>
+          <ellipse cx="268" cy="128" rx="3" ry="3" fill="#220006" opacity=".8"/>
+          <ellipse cx="276" cy="128" rx="3" ry="3" fill="#220006" opacity=".8"/>
+          <rect x="267" y="133" width="10" height="3" rx="1" fill="#330008" opacity=".7"/>
+          <!-- Upper windows (arched, glowing) -->
+          <rect x="140" y="108" width="24" height="36" rx="3" fill="#ff1a2a" opacity=".12"/>
+          <rect x="140" y="108" width="24" height="36" rx="3" fill="none" stroke="#ff2233" stroke-width="1" opacity=".55"/>
+          <ellipse cx="152" cy="108" rx="12" ry="7" fill="#ff1a2a" opacity=".12"/>
+          <ellipse cx="152" cy="125" rx="9" ry="14" fill="#ff3300" opacity=".07"/>
+          <rect x="215" y="108" width="24" height="36" rx="3" fill="#ff1a2a" opacity=".12"/>
+          <rect x="215" y="108" width="24" height="36" rx="3" fill="none" stroke="#ff2233" stroke-width="1" opacity=".55"/>
+          <ellipse cx="227" cy="108" rx="12" ry="7" fill="#ff1a2a" opacity=".12"/>
+          <ellipse cx="227" cy="125" rx="9" ry="14" fill="#ff3300" opacity=".07"/>
+
+          <!-- CHAINS hanging from upper tower -->
+          <!-- Chain L -->
+          <line x1="90"  y1="178" x2="24"  y2="260" stroke="#441008" stroke-width="2.5" stroke-dasharray="5,4" opacity=".7"/>
+          <circle cx="24" cy="262" r="5" fill="#551010" stroke="#aa1010" stroke-width="1" opacity=".8"/>
+          <!-- Chain R -->
+          <line x1="290" y1="178" x2="356" y2="260" stroke="#441008" stroke-width="2.5" stroke-dasharray="5,4" opacity=".7"/>
+          <circle cx="356" cy="262" r="5" fill="#551010" stroke="#aa1010" stroke-width="1" opacity=".8"/>
+          <!-- Chain M -->
+          <line x1="175" y1="180" x2="155" y2="230" stroke="#441008" stroke-width="2" stroke-dasharray="4,3" opacity=".5"/>
+          <line x1="205" y1="180" x2="225" y2="230" stroke="#441008" stroke-width="2" stroke-dasharray="4,3" opacity=".5"/>
+
+          <!-- DIVIDER BAND -->
+          <rect x="56" y="178" width="268" height="7" fill="#bb0018" opacity=".7"/>
+
+          <!-- MID TOWER BODY -->
+          <rect x="44" y="185" width="292" height="90" fill="url(#wall-grad2)"/>
+          <rect x="44" y="185" width="292" height="90" fill="none" stroke="#bb0018" stroke-width=".6" opacity=".2"/>
+          <!-- Mid windows x4 -->
+          <rect x="64"  y="202" width="20" height="28" rx="1" fill="#ff1a2a" opacity=".1"/>
+          <rect x="64"  y="202" width="20" height="28" rx="1" fill="none" stroke="#cc1122" stroke-width=".7" opacity=".45"/>
+          <ellipse cx="74"  cy="216" rx="7" ry="10" fill="#ff2200" opacity=".06"/>
+          <rect x="146" y="202" width="20" height="28" rx="1" fill="#ff1a2a" opacity=".1"/>
+          <rect x="146" y="202" width="20" height="28" rx="1" fill="none" stroke="#cc1122" stroke-width=".7" opacity=".45"/>
+          <ellipse cx="156" cy="216" rx="7" ry="10" fill="#ff2200" opacity=".06"/>
+          <rect x="214" y="202" width="20" height="28" rx="1" fill="#ff1a2a" opacity=".1"/>
+          <rect x="214" y="202" width="20" height="28" rx="1" fill="none" stroke="#cc1122" stroke-width=".7" opacity=".45"/>
+          <ellipse cx="224" cy="216" rx="7" ry="10" fill="#ff2200" opacity=".06"/>
+          <rect x="296" y="202" width="20" height="28" rx="1" fill="#ff1a2a" opacity=".1"/>
+          <rect x="296" y="202" width="20" height="28" rx="1" fill="none" stroke="#cc1122" stroke-width=".7" opacity=".45"/>
+          <ellipse cx="306" cy="216" rx="7" ry="10" fill="#ff2200" opacity=".06"/>
+          <!-- Lava drips from mid band -->
+          <path d="M100,185 Q102,200 100,210 Q98,215 100,220" stroke="#ff3300" stroke-width="1.5" fill="none" opacity=".4"/>
+          <ellipse cx="100" cy="222" rx="3" ry="2" fill="#ff3300" opacity=".35"/>
+          <path d="M190,185 Q192,198 190,212 Q188,220 191,228" stroke="#ff3300" stroke-width="2" fill="none" opacity=".5"/>
+          <ellipse cx="191" cy="230" rx="4" ry="2.5" fill="#ff4400" opacity=".4"/>
+          <path d="M280,185 Q282,200 280,210 Q278,216 280,221" stroke="#ff3300" stroke-width="1.5" fill="none" opacity=".4"/>
+          <ellipse cx="280" cy="223" rx="3" ry="2" fill="#ff3300" opacity=".35"/>
+
+          <!-- SECOND DIVIDER -->
+          <rect x="28" y="273" width="324" height="6" fill="#990014" opacity=".65"/>
+
+          <!-- LOWER BASE -->
+          <rect x="16" y="279" width="348" height="90" fill="#550010"/>
+          <rect x="16" y="279" width="348" height="90" fill="none" stroke="#aa0018" stroke-width=".5" opacity=".22"/>
+          <!-- Base windows x4 -->
+          <rect x="38"  y="296" width="26" height="36" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="38"  y="296" width="26" height="36" rx="1" fill="none" stroke="#990010" stroke-width=".6" opacity=".4"/>
+          <rect x="138" y="296" width="26" height="36" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="138" y="296" width="26" height="36" rx="1" fill="none" stroke="#990010" stroke-width=".6" opacity=".4"/>
+          <rect x="216" y="296" width="26" height="36" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="216" y="296" width="26" height="36" rx="1" fill="none" stroke="#990010" stroke-width=".6" opacity=".4"/>
+          <rect x="316" y="296" width="26" height="36" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="316" y="296" width="26" height="36" rx="1" fill="none" stroke="#990010" stroke-width=".6" opacity=".4"/>
+          <!-- Demon Gate arch -->
+          <rect x="158" y="308" width="64" height="61" rx="2" fill="#1a0004"/>
+          <ellipse cx="190" cy="308" rx="32" ry="20" fill="#1a0004"/>
+          <ellipse cx="190" cy="308" rx="32" ry="20" fill="none" stroke="#dd0020" stroke-width="1" opacity=".45" filter="url(#glow-red)"/>
+          <!-- Gate inner glow -->
+          <ellipse cx="190" cy="330" rx="22" ry="28" fill="#ff1500" opacity=".06"/>
+          <!-- Gate eye symbol -->
+          <ellipse cx="190" cy="310" rx="14" ry="8" fill="none" stroke="#ff2200" stroke-width=".7" opacity=".3"/>
+          <ellipse cx="190" cy="310" rx="5"  ry="5" fill="#ff0000" opacity=".15"/>
+          <!-- Lava pools at base sides -->
+          <ellipse cx="50"  cy="370" rx="26" ry="6" fill="#ff2200" opacity=".18"/>
+          <ellipse cx="330" cy="370" rx="26" ry="6" fill="#ff2200" opacity=".18"/>
+
+          <!-- OUTER SIDE TOWERS -->
+          <rect x="0"   y="220" width="38" height="149" fill="#550010"/>
+          <rect x="342" y="220" width="38" height="149" fill="#550010"/>
+          <!-- Side tower battlements -->
+          <rect x="0"   y="210" width="12" height="16" rx="1" fill="#660012"/>
+          <rect x="14"  y="204" width="12" height="22" rx="1" fill="#660012"/>
+          <rect x="28"  y="210" width="12" height="16" rx="1" fill="#660012"/>
+          <rect x="342" y="210" width="12" height="16" rx="1" fill="#660012"/>
+          <rect x="356" y="204" width="12" height="22" rx="1" fill="#660012"/>
+          <rect x="368" y="210" width="12" height="16" rx="1" fill="#660012"/>
+          <!-- Side tower windows -->
+          <rect x="8"   y="260" width="14" height="20" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="8"   y="260" width="14" height="20" rx="1" fill="none" stroke="#880010" stroke-width=".5" opacity=".38"/>
+          <rect x="358" y="260" width="14" height="20" rx="1" fill="#ff1a2a" opacity=".08"/>
+          <rect x="358" y="260" width="14" height="20" rx="1" fill="none" stroke="#880010" stroke-width=".5" opacity=".38"/>
+          <!-- Side tower fires at top -->
+          <ellipse cx="19"  cy="206" rx="5" ry="7" fill="#ff4400" opacity=".7"/>
+          <ellipse cx="19"  cy="208" rx="3" ry="4" fill="#ffaa00" opacity=".85"/>
+          <ellipse cx="361" cy="206" rx="5" ry="7" fill="#ff4400" opacity=".7"/>
+          <ellipse cx="361" cy="208" rx="3" ry="4" fill="#ffaa00" opacity=".85"/>
+
+          <!-- STEPS -->
+          <rect x="8"   y="368" width="364" height="10" fill="#440008"/>
+          <rect x="0"   y="378" width="380" height="6"  fill="#330006"/>
+          <rect x="0"   y="384" width="380" height="3"  fill="#220004"/>
+
+          <!-- GLOW OUTLINES -->
+          <rect x="16" y="279" width="348" height="90" fill="none" stroke="#dd0020" stroke-width=".5" opacity=".22"/>
+          <rect x="44" y="185" width="292" height="90" fill="none" stroke="#cc0018" stroke-width=".5" opacity=".18"/>
+          <rect x="70" y="100" width="240" height="80" fill="none" stroke="#cc0018" stroke-width=".5" opacity=".14"/>
+
+          <!-- OVERALL EDGE ATMOSPHERIC GLOW -->
+          <rect x="0" y="0" width="380" height="400" fill="none" stroke="#ff1a2a" stroke-width="1" opacity=".04" rx="2"/>
+        </svg>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-chip"><span class="stat-val">35</span><span class="stat-label">Floors</span></div>
+        <div class="stat-chip"><span class="stat-val">2</span><span class="stat-label">Bosses</span></div>
+        <div class="stat-chip"><span class="stat-val">5%</span><span class="stat-label">Boss Drop Rate</span></div>
+        <div class="stat-chip"><span class="stat-val">6+</span><span class="stat-label">Exclusive Items</span></div>
+      </div>
+
+      <!-- TOWER -->
+      <div class="sec-label"><span class="sec-label-text">☠ Tower — Click bosses to reveal drops</span></div>
+      <div class="tower-wrap">
+        <div class="tower" id="tower"></div>
+      </div>
+
+      <!-- LOOT -->
+      <div class="sec-label"><span class="sec-label-text">◈ All Demon Castle Loot</span></div>
+      <div class="loot-grid">
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/AltarRing.png" alt="Altar Ring"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-mythic">Mythic · Tier S</div>
+            <div class="loot-name">Altar Ring</div>
+            <div class="loot-stat">10% HP · 5% Def · 30% Sword Dmg · 40% Magic Dmg<br>Shiny: +15% HP</div>
+            <span class="loot-how">Demon Castle — Summoning</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/DemonBeserkRing.png" alt="Demon Beserk Ring"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-mythic">Mythic · Tier S</div>
+            <div class="loot-name">Demon Beserk Ring</div>
+            <div class="loot-stat">25% Melee Attack · +5% Speed stacking on hit<br>Shiny: 37.5%</div>
+            <span class="loot-how">Vulcan — 5% Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/EvilEyeAmulet.png" alt="Evil Eye Amulet"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-mythic">Mythic · Tier A</div>
+            <div class="loot-name">Evil Eye Amulet</div>
+            <div class="loot-stat">20% HP · 5% Luck<br>Shiny: 30% HP</div>
+            <span class="loot-how">Cerberus — 5% Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/DemonMagicAmulet.png" alt="Demon Magic Amulet"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-epic">Epic · Tier A</div>
+            <div class="loot-name">Demon Magic Amulet</div>
+            <div class="loot-stat">15% Ability Dmg<br>Shiny: 22.5%</div>
+            <span class="loot-how">Floor 15 Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/HeartlessRing.png" alt="Heartless Ring"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-legendary">Legendary · Tier B</div>
+            <div class="loot-name">Heartless Ring</div>
+            <div class="loot-stat">15% HP · +20% HP bonus inside Demon Castle<br>Shiny: 22.5%</div>
+            <span class="loot-how">Demon Castle Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/Artifacts/SoullessRing.png" alt="Soulless Ring"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-legendary">Legendary · Tier B</div>
+            <div class="loot-name">Soulless Ring</div>
+            <div class="loot-stat">10% Ability Dmg · +5% Def inside Demon Castle<br>Shiny: 15%</div>
+            <span class="loot-how">Demon Castle Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/materials/DemonicCube.png" alt="Demon Cube"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-epic">Crafting Material</div>
+            <div class="loot-name">Demon Cube</div>
+            <div class="loot-stat">Used to craft True Demon King Daggers<br>Required: ×25</div>
+            <span class="loot-how">Demon Castle Drop</span>
+          </div>
+        </div>
+
+        <div class="loot-card">
+          <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+          <div class="loot-img-wrap"><img class="loot-img" src="../images/materials/DemonicShard.png" alt="Demon Shard"></div>
+          <div class="loot-body">
+            <div class="loot-rarity r-epic">Crafting Material</div>
+            <div class="loot-name">Demon Shard</div>
+            <div class="loot-stat">Used to craft True Demon King Daggers & Demonic Armor<br>Required: ×20</div>
+            <span class="loot-how">Cerberus / Vulcan Drop</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CRAFTING -->
+      <div class="sec-label"><span class="sec-label-text">⚗ Weapon Crafting</span></div>
+      <div class="craft-panel">
+        <div class="craft-title">True Demon King Daggers — Crafting Recipe</div>
+        <div class="craft-row">
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicCube.png" alt="Demonic Cube">
+            <span class="craft-qty">×25</span>
+            <span class="craft-name">Demonic Cube</span>
+          </div>
+          <span class="craft-sep">+</span>
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicShard.png" alt="Demonic Shard">
+            <span class="craft-qty">×20</span>
+            <span class="craft-name">Demonic Shard</span>
+          </div>
+          <span class="craft-sep">+</span>
+          <div class="craft-item">
+            <img class="craft-img" src="../images/weapons/DemonKingDaggers.png" alt="Demon King Daggers">
+            <span class="craft-qty">×1</span>
+            <span class="craft-name">Demon King Daggers</span>
+          </div>
+          <span class="craft-sep">→</span>
+          <div class="craft-result">
+            <img class="craft-result-img" src="../images/weapons/TrueDemonKingDaggers.png" alt="True Demon King Daggers">
+            <span class="craft-result-name">True Demon King Daggers</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-label"><span class="sec-label-text">⚗ Armor Crafting</span></div>
+
+      <div class="craft-panel">
+        <div class="craft-title">Demonic Helmet — Crafting Recipe</div>
+        <div class="craft-row">
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicCube.png" alt="Demonic Cube">
+            <span class="craft-qty">×5</span>
+            <span class="craft-name">Demonic Cube</span>
+          </div>
+          <span class="craft-sep">+</span>
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicShard.png" alt="Demonic Shard">
+            <span class="craft-qty">×10</span>
+            <span class="craft-name">Demonic Shard</span>
+          </div>
+          <span class="craft-sep">→</span>
+          <div class="craft-result">
+            <img class="craft-result-img" src="../images/armor/DemoniteSet.png" alt="Demonic Helmet">
+            <span class="craft-result-name">Demonic Helmet</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="craft-panel">
+        <div class="craft-title">Demonic Chestplate — Crafting Recipe</div>
+        <div class="craft-row">
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicCube.png" alt="Demonic Cube">
+            <span class="craft-qty">×5</span>
+            <span class="craft-name">Demonic Cube</span>
+          </div>
+          <span class="craft-sep">+</span>
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicShard.png" alt="Demonic Shard">
+            <span class="craft-qty">×10</span>
+            <span class="craft-name">Demonic Shard</span>
+          </div>
+          <span class="craft-sep">→</span>
+          <div class="craft-result">
+            <img class="craft-result-img" src="../images/armor/DemonicChestplate.png" alt="Demonic Chestplate">
+            <span class="craft-result-name">Demonic Chestplate</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="craft-panel">
+        <div class="craft-title">Demonic Leggings — Crafting Recipe</div>
+        <div class="craft-row">
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicCube.png" alt="Demonic Cube">
+            <span class="craft-qty">×5</span>
+            <span class="craft-name">Demonic Cube</span>
+          </div>
+          <span class="craft-sep">+</span>
+          <div class="craft-item">
+            <img class="craft-img" src="../images/materials/DemonicShard.png" alt="Demonic Shard">
+            <span class="craft-qty">×10</span>
+            <span class="craft-name">Demonic Shard</span>
+          </div>
+          <span class="craft-sep">→</span>
+          <div class="craft-result">
+            <img class="craft-result-img" src="../images/armor/DemoniteSet.png" alt="Demonic Leggings">
+            <span class="craft-result-name">Demonic Leggings</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Ember particles
+    const ec = document.getElementById('embers');
+    for (let i = 0; i < 40; i++) {
+      const e = document.createElement('div');
+      e.className = 'ember';
+      const sz = Math.random() * 3 + 1;
+      const op = (Math.random() * 0.28 + 0.08).toFixed(2);
+      const dur = (Math.random() * 8 + 6).toFixed(1);
+      const delay = (Math.random() * 12).toFixed(1);
+      const dx = ((Math.random() - 0.5) * 130).toFixed(0);
+      const col = Math.random() > 0.5 ? '#ff4400' : '#ff8800';
+      e.style.cssText = `width:${sz}px;height:${sz}px;background:${col};left:${(Math.random()*100).toFixed(1)}%;bottom:0;--op:${op};--dx:${dx}px;animation-duration:${dur}s;animation-delay:-${delay}s;box-shadow:0 0 ${sz*2}px ${col}`;
+      ec.appendChild(e);
+    }
+
+    // Floor data
+    const FLOORS = Array.from({length:35}, (_,i) => {
+      const n = i + 1;
+      if (n === 5)  return { n, type:'boss',    label:'Cerberus' };
+      if (n === 15) return { n, type:'notable',  label:'Floor 15 — Demon Magic Amulet' };
+      if (n === 35) return { n, type:'final',    label:'Vulcan — Final Boss' };
+      return { n, type:'normal', label:`Floor ${n}` };
+    });
+
+    const DROPS = {
+      5: {
+        boss: 'Cerberus',
+        items: [
+          { name:'Demon Shard',      stat:'Crafting Material · Used for True DK Daggers & Demonic Armor', rate:'100% Drop', rateCls:'rate-sure', img:'../images/materials/DemonicShard.png', cls:'' },
+          { name:'Cerberus Key',     stat:'Key Item · Used to access deeper floors', rate:'100% Drop', rateCls:'rate-sure', img:'../images/materials/CerberusKey.png', cls:'gold' },
+          { name:'Evil Eye Amulet',  stat:'Mythic · 20% HP · 5% Luck · Shiny: 30% HP', rate:'5% Drop', rateCls:'rate-low', img:'../images/Artifacts/EvilEyeAmulet.png', cls:'' },
+        ]
+      },
+      15: {
+        boss: 'Floor 15',
+        items: [
+          { name:'Demon Magic Amulet', stat:'Epic · 15% Ability Dmg · Shiny: 22.5%', rate:'Floor Drop', rateCls:'rate-event', img:'../images/Artifacts/DemonMagicAmulet.png', cls:'' },
+        ]
+      },
+      35: {
+        boss: 'Vulcan',
+        items: [
+          { name:'Demon Shard',       stat:'Crafting Material · Used for True DK Daggers & Demonic Armor', rate:'100% Drop', rateCls:'rate-sure', img:'../images/materials/DemonicShard.png', cls:'' },
+          { name:'Vulcan Key',      stat:'Key Item · Used to access deeper floors', rate:'100% Drop', rateCls:'rate-sure', img:'../images/materials/VulcanKey.png', cls:'gold' },
+          { name:'Demon Beserk Ring', stat:'Mythic · 25% Melee Atk · +5% Speed stacking', rate:'5% Drop', rateCls:'rate-low', img:'../images/Artifacts/DemonBeserkRing.png', cls:'' },
+          { name:'Altar Ring',        stat:'Mythic · 10% HP · 5% Def · 30% Sword · 40% Magic', rate:'From Summoning', rateCls:'rate-sure', img:'../images/Artifacts/AltarRing.png', cls:'gold' },
+        ]
+      }
+    };
+
+    const tower = document.getElementById('tower');
+    const tagMap    = { boss:'ft-boss', final:'ft-final', notable:'ft-notable', normal:'ft-normal' };
+    const tagLabels = { boss:'Boss',    final:'Final Boss', notable:'Notable',  normal:'Floor' };
+
+    [...FLOORS].reverse().forEach((f, idx) => {
+      const isClickable = f.type !== 'normal';
+      const data = DROPS[f.n];
+
+      const floor = document.createElement('div');
+      floor.className = `floor ${f.type !== 'normal' ? f.type : ''}`;
+      floor.innerHTML = `
+        <div class="fl-num">${String(f.n).padStart(2,'0')}</div>
+        <div class="fl-bar"></div>
+        <div class="fl-content">
+          <span class="fl-name">${f.label}</span>
+          <span class="fl-tag ${tagMap[f.type]}">${tagLabels[f.type]}</span>
+          ${isClickable ? '<span class="fl-chev">›</span>' : ''}
+        </div>
+      `;
+
+      if (isClickable && data) {
+        const panel = document.createElement('div');
+        panel.className = 'drop-panel';
+        panel.innerHTML = `
+          <div class="dp-lbl">— Drops from ${data.boss} —</div>
+          ${data.items.map(d => `
+            <div class="drop-card ${d.cls}">
+              <img class="drop-img" src="${d.img}" alt="${d.name}">
+              <div>
+                <span class="drop-name">${d.name}</span>
+                <span class="drop-stat">${d.stat}</span>
+                <span class="drop-rate ${d.rateCls}">${d.rate}</span>
+              </div>
+            </div>
+          `).join('')}
+        `;
+
+        const wrap = document.createElement('div');
+        wrap.style.cssText = 'border:1px solid rgba(120,0,18,0.18);border-radius:2px;overflow:hidden;transition:border-color .2s';
+        floor.style.cssText += ';border:none;border-radius:0';
+        wrap.appendChild(floor);
+        wrap.appendChild(panel);
+
+        floor.addEventListener('click', () => {
+          const open = panel.classList.toggle('open');
+          const ch = floor.querySelector('.fl-chev');
+          if (ch) ch.style.transform = open ? 'rotate(90deg)' : '';
+          wrap.style.borderColor = open ? 'rgba(200,0,30,0.42)' : 'rgba(120,0,18,0.18)';
+        });
+
+        setTimeout(() => floor.classList.add('vis'), idx * 16);
+        tower.appendChild(wrap);
+        return;
+      }
+
+      setTimeout(() => floor.classList.add('vis'), idx * 16);
+      tower.appendChild(floor);
+    });
+
+    // Loot entrance
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('vis'); io.unobserve(e.target); }});
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.loot-card').forEach((c, i) => {
+      c.style.transitionDelay = (i * 65) + 'ms';
+      io.observe(c);
+    });
+  </script>
+</body>
+</html>

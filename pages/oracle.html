@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hunter Oracle | Solo Hunters System DB</title>
+  <title>Hunter Oracle | Solo Hunters</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -12,13 +12,12 @@
       --ice:#4db8ff;--cyan:#00c8ff;--glow:#2979ff;
       --purple:#8b20ff;--violet:#b94dff;--violet2:#d580ff;
       --white:#eef4ff;--silver:#a8c4e0;
+      --red:#ff2a4a;--gold:#ffd700;--green:#00ff88;
     }
     html,body{height:100%;background:var(--void);font-family:'Rajdhani',sans-serif;color:var(--silver);overflow:hidden;}
 
-    /* ─── DEEP SPACE BACKGROUND ─── */
+    /* ── COSMOS ── */
     .cosmos{position:fixed;inset:0;z-index:0;overflow:hidden;}
-
-    /* Layered nebula clouds */
     .nebula{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
     .nb1{width:900px;height:900px;top:50%;left:50%;transform:translate(-50%,-50%);
       background:radial-gradient(circle,rgba(139,32,255,0.14) 0%,rgba(41,121,255,0.07) 40%,transparent 70%);
@@ -29,49 +28,64 @@
     .nb3{width:500px;height:500px;bottom:10%;right:8%;
       background:radial-gradient(circle,rgba(185,77,255,0.09) 0%,transparent 65%);
       animation:nb-breathe 10s ease-in-out 4s infinite;}
-    @keyframes nb-breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.7}50%{transform:translate(-50%,-50%) scale(1.12);opacity:1}}
-
-    /* Grid */
+    @keyframes nb-breathe{0%,100%{opacity:.7}50%{opacity:1}}
     .cosmos-grid{position:fixed;inset:0;z-index:1;pointer-events:none;
-      background-image:
-        linear-gradient(rgba(41,121,255,0.04) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(41,121,255,0.04) 1px,transparent 1px);
-      background-size:60px 60px;
-      animation:grid-shift 80s linear infinite alternate;}
-    @keyframes grid-shift{from{background-position:0 0}to{background-position:60px 60px}}
-
-    /* Scan lines */
+      background-image:linear-gradient(rgba(41,121,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,0.04) 1px,transparent 1px);
+      background-size:60px 60px;}
     .cosmos-scan{position:fixed;inset:0;z-index:2;pointer-events:none;
       background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,20,0.06) 2px,rgba(0,0,20,0.06) 3px);}
-
-    /* Vignette */
     .cosmos-vignette{position:fixed;inset:0;z-index:3;pointer-events:none;
       background:radial-gradient(ellipse at center,transparent 20%,rgba(0,0,10,0.88) 100%);}
-
-    /* Star field */
     .stars{position:fixed;inset:0;z-index:1;pointer-events:none;}
     .star{position:absolute;border-radius:50%;animation:star-twinkle linear infinite;}
     @keyframes star-twinkle{0%,100%{opacity:var(--so);transform:scale(1)}50%{opacity:calc(var(--so)*.2);transform:scale(.5)}}
-
-    /* Particles */
     .particles{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
     .pt{position:absolute;border-radius:50%;animation:pt-rise linear infinite;}
     @keyframes pt-rise{0%{transform:translateY(0) translateX(0);opacity:0}8%{opacity:var(--po)}92%{opacity:calc(var(--po)*.3)}100%{transform:translateY(-100vh) translateX(var(--pdx));opacity:0}}
-
-    /* Horizontal sweeps */
     .sweeps{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
     .sw{position:absolute;left:0;right:0;height:1px;opacity:0;
       background:linear-gradient(90deg,transparent 0%,rgba(41,121,255,0.4) 30%,rgba(185,77,255,0.6) 50%,rgba(41,121,255,0.4) 70%,transparent 100%);
       animation:sw-pass linear forwards;}
     @keyframes sw-pass{0%{top:0%;opacity:0}3%{opacity:.7}97%{opacity:.2}100%{top:100%;opacity:0}}
-
-    /* Central energy pillar */
     .energy-pillar{position:fixed;left:50%;top:0;bottom:0;transform:translateX(-50%);width:2px;z-index:1;pointer-events:none;
       background:linear-gradient(180deg,transparent 0%,rgba(41,121,255,0.0) 8%,rgba(139,32,255,0.18) 30%,rgba(185,77,255,0.3) 50%,rgba(139,32,255,0.18) 70%,rgba(41,121,255,0.0) 92%,transparent 100%);
       animation:pillar-pulse 6s ease-in-out infinite;}
-    @keyframes pillar-pulse{0%,100%{opacity:.3;filter:blur(0px)}50%{opacity:1;filter:blur(1px)}}
+    @keyframes pillar-pulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-    /* ─── NAVBAR ─── */
+    /* ── ORBITAL ── */
+    .orbital{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;}
+    .ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+    .ring-d1{width:820px;height:820px;border:1px dashed rgba(139,32,255,0.06);animation:rspin 90s linear infinite;}
+    .ring-d2{width:660px;height:660px;border:1px solid rgba(41,121,255,0.05);animation:rspin 70s linear infinite reverse;}
+    .ring-d3{width:520px;height:520px;border:1px dashed rgba(185,77,255,0.06);animation:rspin 55s linear infinite;}
+    .ring-a1{width:390px;height:390px;border:1px solid rgba(139,32,255,0.18);animation:rspin 35s linear infinite reverse;}
+    .ring-a1::before,.ring-a1::after{content:'';position:absolute;background:rgba(185,77,255,0.7);border-radius:1px;}
+    .ring-a1::before{width:8px;height:1.5px;top:50%;left:-4px;transform:translateY(-50%);}
+    .ring-a1::after{width:8px;height:1.5px;top:50%;right:-4px;transform:translateY(-50%);}
+    .ring-a2{width:280px;height:280px;border:1px solid rgba(41,121,255,0.22);animation:rspin 22s linear infinite;}
+    .ring-a2::before,.ring-a2::after{content:'';position:absolute;background:rgba(77,184,255,0.7);border-radius:1px;}
+    .ring-a2::before{width:1.5px;height:8px;top:-4px;left:50%;transform:translateX(-50%);}
+    .ring-a2::after{width:1.5px;height:8px;bottom:-4px;left:50%;transform:translateX(-50%);}
+    .ring-a3{width:180px;height:180px;border:1px dashed rgba(185,77,255,0.28);animation:rspin 14s linear infinite reverse;}
+    @keyframes rspin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+    .core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;
+      background:radial-gradient(circle,rgba(185,77,255,0.25) 0%,rgba(139,32,255,0.12) 40%,rgba(41,121,255,0.06) 70%,transparent 85%);
+      box-shadow:0 0 30px rgba(185,77,255,0.2),0 0 60px rgba(139,32,255,0.1),inset 0 0 20px rgba(185,77,255,0.1);
+      animation:core-breathe 5s ease-in-out infinite;}
+    @keyframes core-breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.7}50%{transform:translate(-50%,-50%) scale(1.18);opacity:1}}
+    .core-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,255,255,0.5) 0%,rgba(185,77,255,0.6) 50%,transparent 80%);
+      animation:ci-pulse 2.5s ease-in-out infinite;}
+    @keyframes ci-pulse{0%,100%{transform:translate(-50%,-50%) scale(1);filter:blur(0px)}50%{transform:translate(-50%,-50%) scale(1.4);filter:blur(1px)}}
+    .node{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;margin:-4px 0 0 -4px;box-shadow:0 0 12px currentColor;}
+    .node-1{color:var(--violet);background:var(--violet);animation:orbit-1 22s linear infinite;}
+    .node-2{color:var(--ice);background:var(--ice);animation:orbit-2 35s linear infinite reverse;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;}
+    .node-3{color:rgba(255,200,100,0.8);background:rgba(255,200,100,0.8);animation:orbit-3 18s linear infinite;width:4px;height:4px;margin:-2px 0 0 -2px;}
+    @keyframes orbit-1{from{transform:rotate(0deg) translateX(140px) rotate(0deg)}to{transform:rotate(360deg) translateX(140px) rotate(-360deg)}}
+    @keyframes orbit-2{from{transform:rotate(45deg) translateX(195px) rotate(-45deg)}to{transform:rotate(405deg) translateX(195px) rotate(-405deg)}}
+    @keyframes orbit-3{from{transform:rotate(200deg) translateX(90px) rotate(-200deg)}to{transform:rotate(560deg) translateX(90px) rotate(-560deg)}}
+
+    /* ── NAVBAR ── */
     .navbar{position:relative;z-index:200;height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(0,0,10,0.9);border-bottom:1px solid rgba(139,32,255,0.12);backdrop-filter:blur(24px);}
     .navbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,32,255,0.4),rgba(41,121,255,0.3),transparent);}
     .nav-logo{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:4px;color:rgba(77,184,255,0.7);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:9px;}
@@ -82,72 +96,28 @@
     .nav-back{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(77,184,255,0.45);text-decoration:none;border:1px solid rgba(41,121,255,0.15);padding:4px 12px;border-radius:2px;background:rgba(41,121,255,0.03);transition:all .2s;}
     .nav-back:hover{border-color:rgba(41,121,255,0.4);color:var(--ice);}
 
-    /* ─── LAYOUT ─── */
+    /* ── LAYOUT ── */
     body{display:flex;flex-direction:column;}
-    .oracle-scene{position:relative;z-index:10;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 24px 28px;overflow:hidden;}
+    .oracle-scene{position:relative;z-index:10;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 24px 24px;overflow:hidden;}
 
-    /* ─── ORBITAL SYSTEM ─── */
-    .orbital{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0;}
-    .ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+    /* ── ORACLE PANEL ── */
+    .oracle-wrap{position:relative;z-index:20;width:100%;max-width:660px;display:flex;flex-direction:column;align-items:center;gap:0;}
 
-    /* Outer decorative rings */
-    .ring-d1{width:820px;height:820px;border:1px dashed rgba(139,32,255,0.06);animation:rspin 90s linear infinite;}
-    .ring-d2{width:660px;height:660px;border:1px solid rgba(41,121,255,0.05);animation:rspin 70s linear infinite reverse;}
-    .ring-d3{width:520px;height:520px;border:1px dashed rgba(185,77,255,0.06);animation:rspin 55s linear infinite;}
-
-    /* Active rings with tick marks */
-    .ring-a1{width:390px;height:390px;border:1px solid rgba(139,32,255,0.18);animation:rspin 35s linear infinite reverse;}
-    .ring-a1::before,.ring-a1::after{content:'';position:absolute;background:rgba(185,77,255,0.7);border-radius:1px;}
-    .ring-a1::before{width:8px;height:1.5px;top:50%;left:-4px;transform:translateY(-50%);}
-    .ring-a1::after{width:8px;height:1.5px;top:50%;right:-4px;transform:translateY(-50%);}
-
-    .ring-a2{width:280px;height:280px;border:1px solid rgba(41,121,255,0.22);animation:rspin 22s linear infinite;}
-    .ring-a2::before,.ring-a2::after{content:'';position:absolute;background:rgba(77,184,255,0.7);border-radius:1px;}
-    .ring-a2::before{width:1.5px;height:8px;top:-4px;left:50%;transform:translateX(-50%);}
-    .ring-a2::after{width:1.5px;height:8px;bottom:-4px;left:50%;transform:translateX(-50%);}
-
-    .ring-a3{width:180px;height:180px;border:1px dashed rgba(185,77,255,0.28);animation:rspin 14s linear infinite reverse;}
-
-    @keyframes rspin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
-
-    /* Core orb */
-    .core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;
-      background:radial-gradient(circle,rgba(185,77,255,0.25) 0%,rgba(139,32,255,0.12) 40%,rgba(41,121,255,0.06) 70%,transparent 85%);
-      box-shadow:0 0 30px rgba(185,77,255,0.2),0 0 60px rgba(139,32,255,0.1),inset 0 0 20px rgba(185,77,255,0.1);
-      animation:core-breathe 5s ease-in-out infinite;}
-    @keyframes core-breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.7}50%{transform:translate(-50%,-50%) scale(1.18);opacity:1}}
-    .core-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;
-      background:radial-gradient(circle,rgba(255,255,255,0.5) 0%,rgba(185,77,255,0.6) 50%,transparent 80%);
-      animation:ci-pulse 2.5s ease-in-out infinite;}
-    @keyframes ci-pulse{0%,100%{transform:translate(-50%,-50%) scale(1);filter:blur(0px)}50%{transform:translate(-50%,-50%) scale(1.4);filter:blur(1px)}}
-
-    /* Orbiting nodes */
-    .node{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;margin:-4px 0 0 -4px;box-shadow:0 0 12px currentColor;}
-    .node-1{color:var(--violet);background:var(--violet);animation:orbit-1 22s linear infinite;}
-    .node-2{color:var(--ice);background:var(--ice);animation:orbit-2 35s linear infinite reverse;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;}
-    .node-3{color:rgba(255,200,100,0.8);background:rgba(255,200,100,0.8);animation:orbit-3 18s linear infinite;width:4px;height:4px;margin:-2px 0 0 -2px;}
-    @keyframes orbit-1{from{transform:rotate(0deg) translateX(140px) rotate(0deg)}to{transform:rotate(360deg) translateX(140px) rotate(-360deg)}}
-    @keyframes orbit-2{from{transform:rotate(45deg) translateX(195px) rotate(-45deg)}to{transform:rotate(405deg) translateX(195px) rotate(-405deg)}}
-    @keyframes orbit-3{from{transform:rotate(200deg) translateX(90px) rotate(-200deg)}to{transform:rotate(560deg) translateX(90px) rotate(-560deg)}}
-
-    /* ─── MAIN ORACLE PANEL ─── */
-    .oracle-wrap{position:relative;z-index:20;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;gap:0;}
-
-    /* Title block */
-    .oracle-crown{text-align:center;margin-bottom:22px;}
-    .crown-sys{display:inline-flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:5px;text-transform:uppercase;color:rgba(185,77,255,0.7);border:1px solid rgba(185,77,255,0.18);padding:5px 18px;border-radius:2px;background:rgba(139,32,255,0.05);margin-bottom:16px;position:relative;animation:crown-in .9s ease-out both;}
+    /* Title */
+    .oracle-crown{text-align:center;margin-bottom:18px;}
+    .crown-sys{display:inline-flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:5px;text-transform:uppercase;color:rgba(185,77,255,0.7);border:1px solid rgba(185,77,255,0.18);padding:5px 18px;border-radius:2px;background:rgba(139,32,255,0.05);margin-bottom:14px;position:relative;animation:crown-in .9s ease-out both;}
     .crown-sys::before,.crown-sys::after{content:'';position:absolute;top:50%;transform:translateY(-50%);height:1px;width:30px;}
     .crown-sys::before{right:calc(100% + 8px);background:linear-gradient(90deg,transparent,rgba(185,77,255,0.5));}
     .crown-sys::after{left:calc(100% + 8px);background:linear-gradient(90deg,rgba(185,77,255,0.5),transparent);}
     @keyframes crown-in{from{opacity:0;letter-spacing:8px}to{opacity:1;letter-spacing:5px}}
     .cs-dot{width:4px;height:4px;border-radius:50%;background:var(--violet2);box-shadow:0 0 8px var(--violet2);animation:nct-blink 1.2s ease-in-out infinite;}
-    .oracle-title{font-family:'Cinzel',serif;font-size:clamp(32px,6vw,52px);font-weight:900;letter-spacing:8px;text-transform:uppercase;line-height:1;
+    .oracle-title{font-family:'Cinzel',serif;font-size:clamp(28px,5vw,48px);font-weight:900;letter-spacing:8px;text-transform:uppercase;line-height:1;
       background:linear-gradient(135deg,rgba(255,255,255,0.95) 0%,rgba(185,77,255,0.9) 40%,rgba(77,184,255,0.8) 100%);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
       filter:drop-shadow(0 0 20px rgba(185,77,255,0.4)) drop-shadow(0 0 40px rgba(139,32,255,0.2));
-      margin-bottom:8px;animation:title-emerge 1.2s ease-out .1s both;}
-    @keyframes title-emerge{from{opacity:0;transform:translateY(20px);letter-spacing:14px}to{opacity:1;transform:translateY(0);letter-spacing:8px}}
-    .oracle-rune-row{display:flex;align-items:center;gap:0;width:360px;max-width:90vw;margin:12px auto 10px;}
+      margin-bottom:6px;animation:title-emerge 1.2s ease-out .1s both;}
+    @keyframes title-emerge{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .oracle-rune-row{display:flex;align-items:center;gap:0;width:320px;max-width:90vw;margin:10px auto 8px;}
     .rune-line{flex:1;height:1px;}
     .rune-line.l{background:linear-gradient(90deg,transparent,rgba(185,77,255,0.5));}
     .rune-line.r{background:linear-gradient(90deg,rgba(185,77,255,0.5),transparent);}
@@ -159,34 +129,35 @@
     @keyframes rd-pulse{0%,100%{opacity:.5;transform:rotate(45deg) scale(1)}50%{opacity:1;transform:rotate(45deg) scale(1.4)}}
     .oracle-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3.5px;text-transform:uppercase;color:rgba(140,180,220,0.28);animation:title-emerge .8s ease-out .4s both;}
 
-    /* ─── ORACLE FRAME ─── */
+    /* ── ORACLE FRAME ── */
     .oracle-frame{width:100%;background:linear-gradient(135deg,rgba(2,2,18,0.97),rgba(4,1,22,0.97));
-      border:1px solid rgba(139,32,255,0.25);border-radius:6px;padding:22px 24px 20px;
+      border:1px solid rgba(139,32,255,0.25);border-radius:6px;padding:18px 20px 16px;
       position:relative;overflow:hidden;backdrop-filter:blur(12px);
       box-shadow:0 0 60px rgba(139,32,255,0.08),0 0 120px rgba(41,121,255,0.05),inset 0 0 40px rgba(139,32,255,0.03);}
     .of-top{position:absolute;top:0;left:0;right:0;height:1px;
       background:linear-gradient(90deg,transparent 0%,rgba(139,32,255,0.7) 30%,rgba(185,77,255,0.9) 50%,rgba(41,121,255,0.6) 70%,transparent 100%);}
-    .of-bot{position:absolute;bottom:0;left:0;right:0;height:1px;
-      background:linear-gradient(90deg,transparent,rgba(139,32,255,0.2),transparent);}
+    .of-bot{position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,32,255,0.2),transparent);}
     .fc{position:absolute;width:14px;height:14px;}
     .fc.tl{top:-1px;left:-1px;border-top:2px solid rgba(185,77,255,0.8);border-left:2px solid rgba(185,77,255,0.8);}
     .fc.tr{top:-1px;right:-1px;border-top:2px solid rgba(185,77,255,0.8);border-right:2px solid rgba(185,77,255,0.8);}
     .fc.bl{bottom:-1px;left:-1px;border-bottom:2px solid rgba(185,77,255,0.8);border-left:2px solid rgba(185,77,255,0.8);}
     .fc.br{bottom:-1px;right:-1px;border-bottom:2px solid rgba(185,77,255,0.8);border-right:2px solid rgba(185,77,255,0.8);}
-    /* Frame inner glow sweep */
     .of-sweep{position:absolute;top:0;left:0;right:0;height:2px;
       background:linear-gradient(90deg,transparent,rgba(185,77,255,0.5),transparent);
       animation:frame-sweep 4s ease-in-out infinite;}
     @keyframes frame-sweep{0%,100%{transform:translateX(-100%);opacity:0}50%{transform:translateX(100%);opacity:1}}
 
-    /* Suggestions */
-    .sugs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
-    .sug{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
-      padding:5px 11px;border:1px solid rgba(139,32,255,0.15);border-radius:2px;
-      background:rgba(139,32,255,0.04);color:rgba(185,77,255,0.5);cursor:pointer;transition:all .18s;white-space:nowrap;}
-    .sug:hover{border-color:rgba(185,77,255,0.5);color:var(--violet2);background:rgba(139,32,255,0.12);box-shadow:0 0 12px rgba(139,32,255,0.15);}
+    /* ── FAQ CHIPS ── */
+    .faq-section{margin-bottom:14px;}
+    .faq-row{display:flex;gap:6px;flex-wrap:wrap;}
+    .faq-chip{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+      padding:5px 12px;border:1px solid rgba(139,32,255,0.18);border-radius:2px;
+      background:rgba(139,32,255,0.04);color:rgba(185,77,255,0.55);cursor:pointer;transition:all .18s;white-space:nowrap;user-select:none;}
+    .faq-chip:hover{border-color:rgba(185,77,255,0.5);color:var(--violet2);background:rgba(139,32,255,0.12);box-shadow:0 0 12px rgba(139,32,255,0.15);}
+    .faq-chip.map-chip{border-color:rgba(0,200,255,0.2);color:rgba(77,184,255,0.6);}
+    .faq-chip.map-chip:hover{border-color:rgba(77,184,255,0.6);color:var(--ice);background:rgba(41,121,255,0.1);}
 
-    /* Input */
+    /* ── INPUT ── */
     .input-row{display:flex;gap:8px;}
     .qi{flex:1;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.5px;
       padding:11px 16px;background:rgba(0,0,18,0.75);border:1px solid rgba(139,32,255,0.2);border-radius:3px;
@@ -194,7 +165,7 @@
     .qi::placeholder{color:rgba(139,32,255,0.25);}
     .qi:focus{border-color:rgba(185,77,255,0.5);box-shadow:0 0 20px rgba(139,32,255,0.15),inset 0 0 10px rgba(139,32,255,0.04);}
     .qbtn{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;
-      padding:11px 22px;background:linear-gradient(135deg,rgba(139,32,255,0.22),rgba(41,121,255,0.14));
+      padding:11px 20px;background:linear-gradient(135deg,rgba(139,32,255,0.22),rgba(41,121,255,0.14));
       border:1px solid rgba(185,77,255,0.4);border-radius:3px;color:var(--violet2);cursor:pointer;
       white-space:nowrap;transition:all .2s;position:relative;overflow:hidden;}
     .qbtn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:1px;
@@ -203,7 +174,7 @@
     .qbtn:hover{background:linear-gradient(135deg,rgba(139,32,255,0.38),rgba(41,121,255,0.22));border-color:var(--violet2);box-shadow:0 0 24px rgba(139,32,255,0.3);}
     .qbtn:disabled{opacity:.35;cursor:not-allowed;}
 
-    /* Response */
+    /* ── RESPONSE ── */
     .resp{margin-top:14px;min-height:44px;}
     .thinking{display:none;align-items:center;gap:10px;padding:10px 0;}
     .thinking.on{display:flex;}
@@ -212,41 +183,284 @@
     .td:nth-child(2){animation-delay:.15s;background:var(--violet2);}
     .td:nth-child(3){animation-delay:.3s;background:var(--ice);}
     @keyframes td-b{0%,100%{transform:translateY(0);opacity:.3}50%{transform:translateY(-6px);opacity:1}}
-    .tlabel{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;
-      color:rgba(185,77,255,0.5);animation:tl-blink 1.5s ease-in-out infinite;}
+    .tlabel{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.5);animation:tl-blink 1.5s ease-in-out infinite;}
     @keyframes tl-blink{0%,100%{opacity:.3}50%{opacity:1}}
     .answer{display:none;border-top:1px solid rgba(139,32,255,0.15);padding-top:14px;margin-top:6px;}
     .answer.show{display:block;animation:ans-in .4s ease-out;}
     @keyframes ans-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    .ans-text{font-family:'Rajdhani',sans-serif;font-size:15px;line-height:1.75;color:rgba(220,210,255,0.9);}
-    .oerr{display:none;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;
-      color:rgba(255,80,80,0.6);padding:10px 0;border-top:1px solid rgba(255,30,60,0.1);margin-top:6px;}
+    .ans-text{font-family:'Rajdhani',sans-serif;font-size:15px;line-height:1.8;color:rgba(220,210,255,0.9);}
+    .ans-text strong{color:#d580ff;}
+    .ans-text .tag-weapon{color:#ff6b8a;font-weight:600;}
+    .ans-text .tag-armor{color:#4db8ff;font-weight:600;}
+    .ans-text .tag-ring{color:#c084fc;font-weight:600;}
+    .ans-text .tag-magic{color:#a78bfa;font-weight:600;}
+    .ans-text .tag-gate{color:#34d399;font-weight:600;}
+    .ans-text .tag-stat{color:#fbbf24;font-weight:600;}
+    .ans-map-btn{display:inline-flex;align-items:center;gap:8px;margin-top:4px;
+      font-family:'Share Tech Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;
+      padding:8px 16px;border-radius:3px;cursor:pointer;
+      background:rgba(41,121,255,0.07);border:1px solid rgba(77,184,255,0.25);color:rgba(77,184,255,0.8);
+      transition:all .2s;position:relative;overflow:hidden;}
+    .ans-map-btn::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(77,184,255,0.7),transparent);
+      animation:btn-sh 2.5s ease-in-out infinite;}
+    .ans-map-btn:hover{background:rgba(41,121,255,0.14);border-color:rgba(77,184,255,0.55);
+      color:var(--ice);box-shadow:0 0 18px rgba(41,121,255,0.2);transform:translateY(-1px);}
+    .oerr{display:none;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(255,80,80,0.6);padding:10px 0;border-top:1px solid rgba(255,30,60,0.1);margin-top:6px;}
     .oerr.show{display:block;}
 
-    /* History */
+    /* ── HISTORY ── */
     .hist-wrap{display:none;margin-top:14px;}
-    .hist-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;
-      color:rgba(185,77,255,0.3);margin-bottom:6px;}
-    .hist-list{display:flex;flex-direction:column;gap:5px;max-height:110px;overflow-y:auto;}
+    .hist-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.3);margin-bottom:6px;}
+    .hist-list{display:flex;flex-direction:column;gap:5px;max-height:100px;overflow-y:auto;}
     .hist-list::-webkit-scrollbar{width:2px;}
     .hist-list::-webkit-scrollbar-thumb{background:rgba(139,32,255,0.3);border-radius:1px;}
-    .hist-item{display:flex;align-items:center;gap:10px;padding:6px 12px;
-      background:rgba(139,32,255,0.03);border:1px solid rgba(139,32,255,0.08);border-radius:2px;
-      cursor:pointer;transition:all .16s;}
+    .hist-item{display:flex;align-items:center;gap:10px;padding:5px 10px;background:rgba(139,32,255,0.03);border:1px solid rgba(139,32,255,0.08);border-radius:2px;cursor:pointer;transition:all .16s;}
     .hist-item:hover{background:rgba(139,32,255,0.08);border-color:rgba(185,77,255,0.25);}
-    .hist-q{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;
-      color:rgba(185,77,255,0.5);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .hist-q{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:rgba(185,77,255,0.5);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .hist-t{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(140,180,220,0.2);flex-shrink:0;}
 
-    /* ─── LORE FOOTER ─── */
-    .oracle-lore{text-align:center;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.2);animation:title-emerge .8s ease-out .6s both;}
+    /* ── MAP MODAL ── */
+    .map-modal{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;
+      background:rgba(0,0,6,0.97);backdrop-filter:blur(32px);}
+    .map-modal.open{display:flex;}
+    .map-modal.open .map-box{animation:map-slam .5s cubic-bezier(.16,1,.3,1) both;}
+    .map-modal.open .map-hud-tl{animation:hud-tl .6s ease-out .1s both;}
+    .map-modal.open .map-hud-tr{animation:hud-tr .6s ease-out .15s both;}
+    .map-modal.open .map-hud-bl{animation:hud-bl .6s ease-out .2s both;}
+    .map-modal.open .map-hud-br{animation:hud-br .6s ease-out .2s both;}
+    @keyframes map-slam{
+      0%{opacity:0;transform:scale(1.06) translateY(-12px);filter:brightness(3) blur(4px);}
+      40%{filter:brightness(1.2) blur(0px);}
+      100%{opacity:1;transform:scale(1) translateY(0);filter:brightness(1) blur(0px);}
+    }
+    @keyframes hud-tl{from{opacity:0;transform:translate(-10px,-10px)}to{opacity:1;transform:translate(0,0)}}
+    @keyframes hud-tr{from{opacity:0;transform:translate(10px,-10px)}to{opacity:1;transform:translate(0,0)}}
+    @keyframes hud-bl{from{opacity:0;transform:translate(-10px,10px)}to{opacity:1;transform:translate(0,0)}}
+    @keyframes hud-br{from{opacity:0;transform:translate(10px,10px)}to{opacity:1;transform:translate(0,0)}}
 
-    /* Mobile */
+    .map-box{position:relative;width:min(640px,96vw);
+      background:rgba(2,1,14,0.98);
+      border:1px solid rgba(185,77,255,0.2);border-radius:4px;overflow:hidden;
+      box-shadow:
+        0 0 0 1px rgba(185,77,255,0.08),
+        0 0 80px rgba(139,32,255,0.3),
+        0 0 160px rgba(41,121,255,0.1),
+        0 60px 100px rgba(0,0,0,0.9);}
+
+    /* Animated top border beam */
+    .map-beam{position:absolute;top:0;left:0;right:0;height:2px;z-index:10;overflow:hidden;}
+    .map-beam::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(139,32,255,0.6),rgba(185,77,255,1),rgba(77,184,255,0.7),transparent);
+      animation:beam-slide 2.8s ease-in-out infinite;}
+    .map-beam::after{content:'';position:absolute;top:0;left:0;right:0;height:100%;
+      background:linear-gradient(90deg,transparent 0%,rgba(185,77,255,0.25) 30%,rgba(77,184,255,0.15) 70%,transparent 100%);}
+    @keyframes beam-slide{0%,100%{left:-100%;opacity:.6}50%{left:100%;opacity:1}}
+
+    /* HUD corner brackets — animated */
+    .map-hud{position:absolute;z-index:20;pointer-events:none;}
+    .map-hud-tl{top:0;left:0;}
+    .map-hud-tr{top:0;right:0;}
+    .map-hud-bl{bottom:0;left:0;}
+    .map-hud-br{bottom:0;right:0;}
+    .map-hud svg{display:block;}
+
+    /* Top bar */
+    .map-topbar{position:relative;z-index:5;display:flex;align-items:center;justify-content:space-between;
+      padding:14px 18px 12px;border-bottom:1px solid rgba(185,77,255,0.08);}
+    .map-topbar-left{display:flex;flex-direction:column;gap:2px;}
+    .map-topbar-eyebrow{font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:5px;
+      text-transform:uppercase;color:rgba(185,77,255,0.35);}
+    .map-topbar-title{font-family:'Cinzel',serif;font-size:16px;font-weight:900;letter-spacing:6px;
+      text-transform:uppercase;color:rgba(230,215,255,0.95);
+      text-shadow:0 0 20px rgba(185,77,255,0.5),0 0 40px rgba(139,32,255,0.25);line-height:1;}
+    .map-topbar-right{display:flex;align-items:center;gap:10px;}
+    .map-status-dot{width:6px;height:6px;border-radius:50%;background:#00ff88;
+      box-shadow:0 0 10px #00ff88;animation:nct-blink 1.4s ease-in-out infinite;}
+    .map-status-text{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(0,255,136,0.5);}
+    .map-close-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;
+      color:rgba(185,77,255,0.35);cursor:pointer;border:1px solid rgba(185,77,255,0.15);background:transparent;
+      padding:5px 11px;border-radius:2px;transition:all .18s;margin-left:14px;}
+    .map-close-btn:hover{color:rgba(255,100,130,0.9);border-color:rgba(255,80,120,0.4);
+      background:rgba(255,30,80,0.06);box-shadow:0 0 12px rgba(255,30,80,0.12);}
+
+    /* Image area */
+    .map-img-zone{position:relative;padding:14px 18px 18px;}
+    .map-img-outer{position:relative;border-radius:3px;overflow:hidden;
+      border:1px solid rgba(185,77,255,0.15);
+      box-shadow:0 0 40px rgba(139,32,255,0.18),inset 0 0 30px rgba(0,0,20,0.6);}
+    .map-img-outer img{display:block;width:100%;height:auto;
+      filter:saturate(1.15) contrast(1.08) brightness(1.02);}
+    /* CRT scanlines overlay */
+    .map-img-outer::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+      background:repeating-linear-gradient(0deg,rgba(0,0,20,0.07) 0px,rgba(0,0,20,0.07) 1px,transparent 1px,transparent 3px);}
+    /* Vignette overlay */
+    .map-img-outer::after{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
+      background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,20,0.55) 100%);}
+    /* Radar sweep line */
+    .map-radar-sweep{position:absolute;left:0;right:0;height:1.5px;z-index:4;pointer-events:none;
+      background:linear-gradient(90deg,transparent 0%,rgba(185,77,255,0.0) 15%,rgba(185,77,255,0.6) 40%,rgba(77,184,255,0.8) 50%,rgba(185,77,255,0.6) 60%,rgba(185,77,255,0.0) 85%,transparent 100%);
+      animation:radar-pass 4s cubic-bezier(.4,0,.6,1) infinite;box-shadow:0 0 8px rgba(185,77,255,0.4);}
+    @keyframes radar-pass{0%{top:0%;opacity:0}4%{opacity:1}95%{opacity:.3}100%{top:100%;opacity:0}}
+    /* Inner frame corners on image */
+    .mic{position:absolute;width:16px;height:16px;z-index:5;pointer-events:none;}
+    .mic.tl{top:8px;left:8px;border-top:1.5px solid rgba(77,184,255,0.6);border-left:1.5px solid rgba(77,184,255,0.6);}
+    .mic.tr{top:8px;right:8px;border-top:1.5px solid rgba(77,184,255,0.6);border-right:1.5px solid rgba(77,184,255,0.6);}
+    .mic.bl{bottom:8px;left:8px;border-bottom:1.5px solid rgba(77,184,255,0.6);border-left:1.5px solid rgba(77,184,255,0.6);}
+    .mic.br{bottom:8px;right:8px;border-bottom:1.5px solid rgba(77,184,255,0.6);border-right:1.5px solid rgba(77,184,255,0.6);}
+
+    /* Bottom HUD bar */
+    .map-footer-hud{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 14px;}
+    .map-footer-tag{display:flex;align-items:center;gap:7px;}
+    .mft-diamond{width:4px;height:4px;border-radius:1px;transform:rotate(45deg);background:rgba(185,77,255,0.6);box-shadow:0 0 6px rgba(185,77,255,0.4);}
+    .mft-text{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.3);}
+    .map-footer-coords{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;color:rgba(77,184,255,0.2);}
+    .map-footer-sig{font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:2px;color:rgba(185,77,255,0.18);}
+
+    /* ── CODES MODAL ── */
+    .codes-modal{display:none;position:fixed;inset:0;z-index:1000;align-items:center;justify-content:center;
+      background:rgba(0,0,6,0.97);backdrop-filter:blur(32px);}
+    .codes-modal.open{display:flex;}
+    .codes-modal.open .codes-box{animation:map-slam .45s cubic-bezier(.16,1,.3,1) both;}
+    .codes-box{position:relative;width:min(480px,95vw);
+      background:rgba(2,1,14,0.99);
+      border:1px solid rgba(185,77,255,0.2);border-radius:4px;overflow:hidden;
+      box-shadow:0 0 0 1px rgba(185,77,255,0.06),0 0 80px rgba(139,32,255,0.28),0 60px 100px rgba(0,0,0,0.9);}
+    .codes-beam{position:absolute;top:0;left:0;right:0;height:2px;z-index:10;overflow:hidden;}
+    .codes-beam::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(0,200,255,0.5),rgba(77,184,255,1),rgba(139,32,255,0.6),transparent);
+      animation:beam-slide 3s ease-in-out infinite;}
+    .codes-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;
+      border-bottom:1px solid rgba(185,77,255,0.08);}
+    .codes-topbar-left{display:flex;flex-direction:column;gap:2px;}
+    .codes-eyebrow{font-family:'Share Tech Mono',monospace;font-size:6.5px;letter-spacing:5px;
+      text-transform:uppercase;color:rgba(77,184,255,0.35);}
+    .codes-title{font-family:'Cinzel',serif;font-size:15px;font-weight:900;letter-spacing:5px;
+      text-transform:uppercase;color:rgba(230,215,255,0.95);
+      text-shadow:0 0 18px rgba(77,184,255,0.45),0 0 36px rgba(41,121,255,0.2);line-height:1;}
+    .codes-close-btn{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;
+      color:rgba(185,77,255,0.35);cursor:pointer;border:1px solid rgba(185,77,255,0.15);background:transparent;
+      padding:5px 11px;border-radius:2px;transition:all .18s;}
+    .codes-close-btn:hover{color:rgba(255,100,130,0.9);border-color:rgba(255,80,120,0.4);background:rgba(255,30,80,0.06);}
+    .codes-body{padding:16px 18px 6px;display:flex;flex-direction:column;gap:10px;}
+    /* NPC row */
+    .codes-npc-row{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;
+      background:rgba(77,184,255,0.03);border:1px solid rgba(77,184,255,0.12);border-radius:3px;
+      position:relative;overflow:hidden;}
+    .codes-npc-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+      background:linear-gradient(180deg,rgba(77,184,255,0.6),rgba(139,32,255,0.4));}
+    .codes-npc-icon{width:38px;height:38px;border-radius:3px;border:1px solid rgba(77,184,255,0.25);
+      background:rgba(77,184,255,0.06);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .codes-npc-info{flex:1;}
+    .codes-npc-name{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(77,184,255,0.9);margin-bottom:3px;}
+    .codes-npc-desc{font-family:'Rajdhani',sans-serif;font-size:13px;line-height:1.6;color:rgba(180,210,255,0.65);}
+    .codes-npc-loc{display:inline-flex;align-items:center;gap:5px;margin-top:6px;
+      font-family:'Share Tech Mono',monospace;font-size:7.5px;letter-spacing:2px;text-transform:uppercase;
+      color:rgba(0,255,136,0.7);border:1px solid rgba(0,255,136,0.2);padding:3px 9px;border-radius:2px;
+      background:rgba(0,255,136,0.04);}
+    .codes-npc-loc-dot{width:4px;height:4px;border-radius:50%;background:#00ff88;box-shadow:0 0 6px #00ff88;animation:nct-blink 1.4s ease-in-out infinite;}
+    /* View map btn */
+    .codes-map-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+      padding:10px 16px;background:rgba(139,32,255,0.06);border:1px solid rgba(185,77,255,0.2);
+      border-radius:3px;cursor:pointer;transition:all .2s;font-family:'Share Tech Mono',monospace;
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.5);position:relative;overflow:hidden;}
+    .codes-map-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(185,77,255,0.8),transparent);animation:btn-sh 2.5s ease-in-out infinite;}
+    .codes-map-btn:hover{background:rgba(139,32,255,0.14);border-color:rgba(185,77,255,0.45);
+      color:var(--violet2);box-shadow:0 0 20px rgba(139,32,255,0.2);}
+    .codes-map-btn-icon{font-size:14px;}
+    /* Active codes block */
+    .codes-active{padding:12px 16px;background:rgba(139,32,255,0.04);border:1px solid rgba(139,32,255,0.12);border-radius:3px;}
+    .codes-active-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:4px;text-transform:uppercase;
+      color:rgba(185,77,255,0.35);margin-bottom:8px;}
+    .codes-active-code{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;
+      background:rgba(255,215,0,0.04);border:1px solid rgba(255,215,0,0.15);border-radius:2px;}
+    .codes-active-val{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:2px;
+      color:rgba(255,215,0,0.9);text-shadow:0 0 12px rgba(255,215,0,0.3);}
+    .codes-active-tag{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;
+      color:rgba(0,255,136,0.55);border:1px solid rgba(0,255,136,0.15);padding:2px 7px;border-radius:2px;}
+    .codes-footer{padding:10px 18px 16px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;
+      text-transform:uppercase;color:rgba(185,77,255,0.2);border-top:1px solid rgba(185,77,255,0.06);margin-top:4px;}
+
+
+    /* ── BUILD MODAL ── */
+    .build-modal{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;
+      background:rgba(0,0,8,0.96);backdrop-filter:blur(28px);}
+    .build-modal.open{display:flex;animation:modal-in .35s cubic-bezier(.16,1,.3,1);}
+    .build-modal-inner{position:relative;width:min(500px,96vw);max-height:92vh;overflow-y:auto;
+      border-radius:8px;scrollbar-width:thin;scrollbar-color:rgba(185,77,255,0.3) transparent;}
+    .build-modal-inner::-webkit-scrollbar{width:3px;}
+    .build-modal-inner::-webkit-scrollbar-thumb{background:rgba(185,77,255,0.3);border-radius:2px;}
+    .build-modal-close{position:fixed;top:18px;right:20px;z-index:2001;font-family:'Share Tech Mono',monospace;
+      font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(185,77,255,0.45);
+      border:1px solid rgba(185,77,255,0.2);background:rgba(0,0,10,0.9);padding:6px 12px;
+      border-radius:2px;cursor:pointer;transition:all .18s;}
+    .build-modal-close:hover{color:#ff6080;border-color:rgba(255,60,100,0.5);}
+    .bc{position:relative;background:linear-gradient(135deg,rgba(8,12,28,0.99) 0%,rgba(12,8,24,0.99) 100%);
+      border-radius:8px;overflow:hidden;font-family:'Share Tech Mono',monospace;}
+    .bc::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;z-index:1;}
+    .bc.physical{border:1px solid rgba(255,42,74,0.45);
+      box-shadow:0 0 40px rgba(255,42,74,0.25),inset 0 0 50px rgba(255,42,74,0.05);
+      animation:bc-phys 3.5s ease-in-out infinite alternate;}
+    .bc.physical::before{background:linear-gradient(90deg,transparent,rgba(255,42,74,0.6),transparent);}
+    @keyframes bc-phys{from{box-shadow:0 0 28px rgba(255,42,74,0.18),inset 0 0 40px rgba(255,42,74,0.04)}
+      to{box-shadow:0 0 55px rgba(255,42,74,0.38),inset 0 0 60px rgba(255,42,74,0.09)}}
+    .bc.magic{border:1px solid rgba(162,89,255,0.45);
+      box-shadow:0 0 40px rgba(162,89,255,0.25),inset 0 0 50px rgba(162,89,255,0.05);
+      animation:bc-mag 3.5s ease-in-out infinite alternate;}
+    .bc.magic::before{background:linear-gradient(90deg,transparent,rgba(162,89,255,0.6),transparent);}
+    @keyframes bc-mag{from{box-shadow:0 0 28px rgba(162,89,255,0.18),inset 0 0 40px rgba(162,89,255,0.04)}
+      to{box-shadow:0 0 55px rgba(162,89,255,0.38),inset 0 0 60px rgba(162,89,255,0.09)}}
+    .bc-corner{position:absolute;width:10px;height:10px;pointer-events:none;z-index:2;}
+    .bc-corner.tl{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid;}
+    .bc-corner.tr{top:-1px;right:-1px;border-top:2px solid;border-right:2px solid;}
+    .bc-corner.bl{bottom:-1px;left:-1px;border-bottom:2px solid;border-left:2px solid;}
+    .bc-corner.br{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid;}
+    .bc.physical .bc-corner{border-color:rgba(255,42,74,0.7)!important;}
+    .bc.magic .bc-corner{border-color:rgba(162,89,255,0.7)!important;}
+    .bc-head{padding:22px 22px 16px;border-bottom:1px solid rgba(0,212,255,0.08);}
+    .bc-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:900;letter-spacing:3px;
+      text-transform:uppercase;color:#fff;margin-bottom:5px;}
+    .bc.physical .bc-title{text-shadow:0 0 12px rgba(255,42,74,0.5);}
+    .bc.magic .bc-title{text-shadow:0 0 12px rgba(162,89,255,0.5);}
+    .bc-playstyle{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.5);}
+    .bc-preview{display:flex;align-items:center;justify-content:center;gap:18px;
+      padding:18px 22px;border-bottom:1px solid rgba(0,212,255,0.06);background:rgba(0,0,0,0.18);}
+    .bc-preview-item{display:flex;flex-direction:column;align-items:center;gap:5px;}
+    .bc-preview-item img{width:60px;height:60px;object-fit:contain;}
+    .bc.physical .bc-preview-item img{filter:drop-shadow(0 0 10px rgba(255,42,74,0.6));}
+    .bc.magic .bc-preview-item img{filter:drop-shadow(0 0 10px rgba(162,89,255,0.6));}
+    .bc-preview-label{font-size:7px;letter-spacing:1px;text-transform:uppercase;color:rgba(140,180,220,0.45);text-align:center;}
+    .bc-body{padding:18px 22px 22px;display:flex;flex-direction:column;gap:14px;}
+    .bc-section-label{font-size:7.5px;letter-spacing:2.5px;text-transform:uppercase;
+      color:rgba(140,180,220,0.38);margin-bottom:7px;}
+    .bc-tags{display:flex;flex-wrap:wrap;gap:5px;}
+    .bc-tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;
+      padding:5px 11px;border-radius:3px;border:1px solid rgba(0,212,255,0.2);
+      color:rgba(140,180,220,0.7);background:rgba(0,212,255,0.04);}
+    .bc.physical .bc-tag.weapon{border-color:rgba(255,42,74,0.3);color:rgba(255,120,140,0.85);background:rgba(255,42,74,0.07);}
+    .bc.magic .bc-tag.weapon{border-color:rgba(162,89,255,0.3);color:rgba(180,130,255,0.85);background:rgba(162,89,255,0.07);}
+    .bc-tag.classtag{border-color:#00d4ff;color:#00d4ff;background:rgba(0,212,255,0.08);}
+    .bc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;}
+    .bc-stat{display:flex;flex-direction:column;gap:3px;}
+    .bc-stat-name{font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(140,180,220,0.38);line-height:1;}
+    .bc-stat-val{font-size:13px;font-weight:bold;color:#00d4ff;line-height:1;}
+    .bc.physical .bc-stat-val.hl{color:#ff4e6b;text-shadow:0 0 8px rgba(255,78,107,0.5);}
+    .bc.magic .bc-stat-val.hl{color:#a259ff;text-shadow:0 0 8px rgba(162,89,255,0.5);}
+
+    /* ── FOOTER ── */
+    .oracle-lore{text-align:center;margin-top:14px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(185,77,255,0.2);animation:title-emerge .8s ease-out .6s both;}
+
+    /* ── MOBILE ── */
     @media(max-width:600px){
       html,body{height:auto;overflow:auto;}
-      .oracle-scene{padding:14px 16px 20px;justify-content:flex-start;overflow-y:auto;}
+      .oracle-scene{padding:12px 14px 18px;justify-content:flex-start;overflow-y:auto;}
       .orbital{display:none;}
-      .oracle-title{font-size:28px;letter-spacing:4px;}
+      .oracle-title{font-size:26px;letter-spacing:4px;}
+      .faq-row{gap:4px;}
+      .faq-chip{font-size:7px;padding:4px 9px;}
     }
   </style>
 </head>
@@ -265,7 +479,6 @@
   <div class="energy-pillar"></div>
   <div class="cosmos-vignette"></div>
 
-  <!-- ORBITAL SYSTEM (behind everything) -->
   <div class="orbital">
     <div class="core"><div class="core-inner"></div></div>
     <div class="ring ring-d1"></div>
@@ -279,9 +492,124 @@
     <div class="node node-3"></div>
   </div>
 
+  <!-- CODES MODAL -->
+  <div class="codes-modal" id="codesModal">
+    <div class="codes-box">
+      <div class="codes-beam"></div>
+
+      <div class="codes-topbar">
+        <div class="codes-topbar-left">
+          <div class="codes-eyebrow">System · Code Redemption</div>
+          <div class="codes-title">Enter Codes</div>
+        </div>
+        <button class="codes-close-btn" id="codesClose">✕ Close</button>
+      </div>
+
+      <div class="codes-body">
+        <!-- Malt NPC -->
+        <div class="codes-npc-row">
+          <div class="codes-npc-icon">🧙</div>
+          <div class="codes-npc-info">
+            <div class="codes-npc-name">Malt — Code Redeemer NPC</div>
+            <div class="codes-npc-desc">Find Malt in the <strong style="color:#4db8ff">Snow Forest</strong> zone. Talk to him to redeem active codes for free rerolls, gold, and EXP boosts.</div>
+            <span class="codes-npc-loc"><span class="codes-npc-loc-dot"></span>📍 Snow Forest</span>
+          </div>
+        </div>
+
+        <!-- View Map button -->
+        <button class="codes-map-btn" id="codesViewMapBtn">
+          <span class="codes-map-btn-icon">🗺</span>
+          View Dungeon Map
+        </button>
+
+        <!-- Active Codes -->
+        <div class="codes-active">
+          <div class="codes-active-label">Known Active Code</div>
+          <div class="codes-active-code">
+            <span class="codes-active-val">cursedcommander</span>
+            <span class="codes-active-tag">✓ Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="codes-footer">New codes drop at milestone likes · Check Trello &amp; Discord for latest</div>
+    </div>
+  </div>
+
+  <!-- MAP MODAL -->
+  <div class="map-modal" id="mapModal">
+    <div class="map-box">
+      <div class="map-beam"></div>
+
+      <!-- Animated HUD corner brackets -->
+      <div class="map-hud map-hud-tl">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M2 14 L2 2 L14 2" stroke="rgba(185,77,255,0.8)" stroke-width="1.5"/>
+          <circle cx="2" cy="2" r="1.5" fill="rgba(185,77,255,0.9)"/>
+        </svg>
+      </div>
+      <div class="map-hud map-hud-tr">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M26 14 L26 2 L14 2" stroke="rgba(185,77,255,0.8)" stroke-width="1.5"/>
+          <circle cx="26" cy="2" r="1.5" fill="rgba(185,77,255,0.9)"/>
+        </svg>
+      </div>
+      <div class="map-hud map-hud-bl">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M2 14 L2 26 L14 26" stroke="rgba(77,184,255,0.6)" stroke-width="1.5"/>
+          <circle cx="2" cy="26" r="1.5" fill="rgba(77,184,255,0.7)"/>
+        </svg>
+      </div>
+      <div class="map-hud map-hud-br">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M26 14 L26 26 L14 26" stroke="rgba(77,184,255,0.6)" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="1.5" fill="rgba(77,184,255,0.7)"/>
+        </svg>
+      </div>
+
+      <!-- Top bar -->
+      <div class="map-topbar">
+        <div class="map-topbar-left">
+          <div class="map-topbar-eyebrow">System · Cartography Module · v1.0</div>
+          <div class="map-topbar-title">Dungeon Map</div>
+        </div>
+        <div class="map-topbar-right">
+          <div class="map-status-dot"></div>
+          <span class="map-status-text">Live</span>
+          <button class="map-close-btn" id="mapClose">✕ Close</button>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="map-img-zone">
+        <div class="map-img-outer">
+          <img src="../images/MAP/map.png" alt="Dungeon Map"/>
+          <div class="map-radar-sweep"></div>
+          <div class="mic tl"></div><div class="mic tr"></div>
+          <div class="mic bl"></div><div class="mic br"></div>
+        </div>
+      </div>
+
+      <!-- Footer HUD -->
+      <div class="map-footer-hud">
+        <div class="map-footer-tag">
+          <div class="mft-diamond"></div>
+          <span class="mft-text">Solo Hunters · World Map</span>
+        </div>
+        <span class="map-footer-coords">SYS·MAP·v1.0·CLASSIFIED</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUILD MODAL -->
+  <div class="build-modal" id="buildModal">
+    <button class="build-modal-close" id="buildModalClose">✕ Close</button>
+    <div class="build-modal-inner" id="buildModalInner"></div>
+  </div>
+
   <nav class="navbar">
     <a href="../index.html" class="nav-logo">
-      <span class="nav-logo-icon">&#x2694;</span>
+      <span class="nav-logo-icon">⚔</span>
       SH System DB
     </a>
     <div class="nav-center-tag">
@@ -289,7 +617,7 @@
       Oracle Intelligence
       <span class="nct-dot"></span>
     </div>
-    <a href="../index.html" class="nav-back">&#x2190; Home</a>
+    <a href="../index.html" class="nav-back">← Home</a>
   </nav>
 
   <main class="oracle-scene">
@@ -323,21 +651,27 @@
         <div class="fc tl"></div><div class="fc tr"></div>
         <div class="fc bl"></div><div class="fc br"></div>
 
-        <!-- Suggestions -->
-        <div class="sugs">
-          <span class="sug" data-q="Best weapon?">Best weapon?</span>
-          <span class="sug" data-q="Best build?">Best build?</span>
-          <span class="sug" data-q="Best magic?">Best magic?</span>
-          <span class="sug" data-q="Best class?">Best class?</span>
-          <span class="sug" data-q="Best artifact ring?">Best ring?</span>
-          <span class="sug" data-q="How do red gates work?">Red gates?</span>
-          <span class="sug" data-q="Best armor?">Best armor?</span>
-          <span class="sug" data-q="How to get the Commander Set?">Commander Set?</span>
+        <!-- FAQ Chips -->
+        <div class="faq-section">
+          <div class="faq-row">
+            <span class="faq-chip map-chip" id="codesBtn">📍 Where do I enter codes?</span>
+            <span class="faq-chip map-chip" id="mapBtn">🗺 Dungeon Map</span>
+            <span class="faq-chip" data-q="What is the best melee build?">Best melee build?</span>
+            <span class="faq-chip" data-q="What is the best magic build?">Best magic build?</span>
+            <span class="faq-chip" data-q="What is the best class?">Best class?</span>
+            <span class="faq-chip" data-q="What gate should I be running at 50000 power?">Gate for my power?</span>
+            <span class="faq-chip" data-q="How do I get the Commander Set?">Get Commander Set?</span>
+            <span class="faq-chip" data-q="What is the Demon Castle?">Demon Castle?</span>
+            <span class="faq-chip" data-q="What is a Red Gate?">What's a Red Gate?</span>
+            <span class="faq-chip" data-q="What is the best ring for melee build?">Best melee ring?</span>
+            <span class="faq-chip" data-q="How do I craft True Demon King Daggers?">Craft True DK Daggers?</span>
+            <span class="faq-chip" id="matsBtn">📦 Material Locations</span>
+          </div>
         </div>
 
         <!-- Input -->
         <div class="input-row">
-          <input class="qi" id="qi" type="text" placeholder="Ask the Oracle..." autocomplete="off" autofocus/>
+          <input class="qi" id="qi" type="text" placeholder="Ask anything — builds, rings, weapons, gates, classes..." autocomplete="off" autofocus/>
           <button class="qbtn" id="qbtn">Ask</button>
         </div>
 
@@ -360,44 +694,361 @@
         </div>
       </div>
 
-      <div class="oracle-lore">All game data indexed &mdash; weapons &middot; builds &middot; gates &middot; magic &middot; classes &middot; artifacts</div>
+      <div class="oracle-lore">Weapons &middot; Armor &middot; Magic &middot; Artifacts &middot; Builds &middot; Classes &middot; Gates &middot; Red Gates &middot; Materials</div>
     </div>
   </main>
 
   <script>
-  const GAME_KB = "\n\n=== WEAPONS ===\nWeapons | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List [ DATABASE \u2014 WEAPONS MODULE ] Weapons Swords \u00b7 Daggers \u00b7 Axes \u00b7 Scythes \u00b7 Katanas \u00b7 Tridents Type: All Sword Katana Scythe Dagger Axe Trident WEAPONS FOUND: 10 Mythic Sword Rocket Sword Range Long Damage SS AOE S Weapon Info Mythic Sword Knights Edge Range Mid-Long Damage SS AOE B Weapon Info Mythic Scythe Shadow Scythe Range Short\u2013Long Damage SS AOE S Weapon Info Mythic Axe Thunder Axe Range Extreme Long Damage S+ AOE A+ Weapon Info Mythic Katana Carmsei Katana Range Mid-Long Damage S AOE A Weapon Info Mythic Dagger Venom Fang Range Short-Mid Damage SS+ AOE B Weapon Info Mythic Dagger Dual Dagger Range Short Damage SS AOE S Weapon Info Mythic Trident King's Trident Range Extreme Long Damage S++ AOE B Weapon Info Mythic Sword Link Sword Range Short Damage C AOE C Weapon Info Legendary Dagger Demon King Daggers Source All Gates Role Starter Beginner Guide\n\n=== ARMOR ===\nArmor | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List [ DATABASE \u2014 ARMOR MODULE ] Armor Mythic & Epic Sets \u00b7 Click a card for full stats Rarity: All Mythic Epic SETS FOUND: 8 Mythic Armor Commander Set Set Info Mythic Armor Oathkeeper Set Set Info Mythic Armor Sunforge Set Set Info Mythic Armor Serpent Set Set Info Mythic Armor Venomspike Set Set Info Mythic Armor Astral Set Set Info Mythic Armor Bloodsteel Set Set Info Epic Armor Iron Set Set Info\n\n=== MAGIC ===\nMagic | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List [ DATABASE \u2014 MAGIC MODULE ] Magic All abilities sorted by rarity \u00b7 Click for full stats Rarity: All Mythic Legendary Epic Rare Uncommon ABILITIES FOUND: 9 Mythic Magic Werewolf Tier S Damage S AOE SS I-Frame 3 Ability Info Mythic Magic Divine Blade Tier S Damage SS AOE A I-Frame All Ability Info Legendary Magic Goliath Tier S Damage S AOE B I-Frame 2 Ability Info Legendary Magic Light Tier S Damage B AOE B I-Frame No Ability Info Epic Magic Crimson Tier A Damage A AOE A I-Frame 1 Ability Info Epic Magic Dark Tier A Damage A AOE S I-Frame No Ability Info Rare Magic Nature Tier B Damage A AOE B I-Frame 1 Ability Info Uncommon Magic Lightning Tier C Damage C AOE B I-Frame No Ability Info Uncommon Magic Vines Tier C Damage C AOE B I-Frame No Ability Info\n\n=== ARTIFACTS ===\nArtifacts | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List [ DATABASE \u2014 ARTIFACTS MODULE ] Artifacts Rings & Relics \u00b7 Mythic \u00b7 Legendary \u00b7 Rare Rarity: All Mythic Legendary Rare ARTIFACTS FOUND: 12 Mythic Ring Conquerors Tier: S Base: 20% Melee Dmg + 10% Master EXP Shiny: 30% Melee Dmg + 15% Master EXP Materials Mythic Ring Deathwing Tier: S Base: 10% Boss Dmg + 18% Ability Dmg Shiny: 15% Boss Dmg + 27% Ability Dmg Materials Mythic Ring Guardian Tier: A Base: 5% Critter Dmg + 20% HP Shiny: 8% Critter Dmg + 30% HP Materials Mythic Ring HeartBound Tier: A Base: 22% HP Shiny: 33% HP Materials Mythic Ring ShadowFang Tier: S Base: 18% Melee Dmg + 15% Critter Dmg Shiny: 27% Melee Dmg + 23% Critter Dmg Materials Legendary Ring Black Iron Ring Tier: S Base: 20% Melee Dmg Shiny: 30% Melee Dmg Legendary Ring Dark Heart Tier: S Base: 22% Ability Dmg Shiny: 33% Ability Dmg Legendary Ring Wanwood Tier: S Base: 20% Melee Dmg Shiny: 30% Melee Dmg Legendary Ring Ring Of Fire Tier: A Base: 20% Ability Dmg Shiny: 30% Ability Dmg Legendary Ring Ring Of Fire V2 Tier: A Base: 21% Ability Dmg Shiny: 31.5% Ability Dmg Legendary Ring Serpant Ring Tier: A Base: 20% HP Shiny: 30% HP Rare Ring EarthRing V2 Drops from all gates . Starter ring for beginners. Beginner Guide\n\n=== BUILDS ===\nBest Builds | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List [ DATABASE \u2014 BUILDS MODULE ] Best Builds Optimized Hunter Configurations \u00b7 Armor \u00b7 Weapons \u00b7 Strategy Physical Build Playstyle: Heavy-hitting tank Shadow Scythe Commander Set ShadowFang Recommended Weapons Shadow Scythe Dual Daggers Thunder Axe Recommended Armor Commander Set Recommended Artifacts Shadow Fang Wanwood Target Stats Strength 1000 Defence 700\u2013800 Energy 50\u2013100 Agility 1\u2013100 Magic 1 Best Class Tank Magic Build Playstyle: High magic burst Werewolf Astral Set Dark Heart Recommended Magic Werewolf Divine Blade Recommended Armor Astral Set Recommended Artifacts Dark Heart Target Stats Magic 1000 Energy 100\u2013200 Defence 400\u2013600 Agility 1\u2013100 Strength 1\u2013100 Best Class Mage\n\n=== CLASSES ===\nClasses Info | SH System DB \u2694 SH System DB \u2b05 Home Builds Gate Info Beginner Guide Database \u2014 Classes Module Classes Stats \u00b7 Rarity \u00b7 Drop Chance \u2014 Roll your destiny Rare Knight Drop Chance 60% Bonuses \u2694 +10% M1 Damage \u2764 +10% HP \u2728 +10% Magic Epic Summoner Drop Chance 25% Bonuses \u2764 +20% HP \u2728 +20% Magic Damage Epic Elf Drop Chance 25% Bonuses \u2728 +25% Magic Damage \ud83c\udfb2 +25% Drop Chance Legendary Tank Drop Chance 10% Bonuses \u2764 +40% HP \u2694 +20% M1 Damage Legendary Mage Drop Chance 10% Bonuses \u2728 +40% Magic Damage Mythic Assassin Drop Chance 5% Bonuses \u2694 +20% M1 Damage \u2728 +20% Magic Damage \u2764 +20% HP \u25c8 Stat Glossary M1 = Main attack (physical damage) Magic = Magic attack or ability damage Drop Chance = Probability from a class box or roll \u26a0 Getting Rerolls Complete the Zood Quest Redeem active Codes Purchase with Robux only\n\n=== LEVELGUIDE ===\nGate Info | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Tier List Database \u2014 Gate Module Gate Info Dungeon Power \u00b7 EXP \u00b7 Gold \u00b7 Progression \u25c8 Power Recommender \u2014 Enter your Power stat Scan \u2715 Subway Lv 0+ \u00b7 No requirement \u25be Min Power 0 Max EXP 3.7M Armor Drop Serpent Set Rank Power EXP Gold F 0 320 50 F+ 250 467 112 E 550 639 187 E+ 1,000 898 306 D 1,400 1,267 437 D+ 1,900 1,825 650 C 2,300 2,295 1,000 C+ 2,600 2,636 750 B 16,000 37,100 14,875 B+ 22,000 56,771 18,125 A 30,000 116,488 21,500 A+ 40,000 203,232 24,666 S 55,000 351,642 27,833 S+ 115,000 602,870 36,000 S++ 175,000 1,363,650 40,000 S+++ 405,000 3,699,496 49,208 \u2b21 View Gate Drops Caves Lv 20+ \u00b7 Power 2,600+ \u25be Min Power 2,600 Max EXP 5.2M Armor Drop Venomspike Set Rank Power EXP Gold F 2,600 2,080 750 F+ 3,800 3,354 1,600 E 5,000 5,250 2,625 E+ 6,200 8,104 4,000 D 7,400 11,346 5,600 D+ 8,600 11,820 6,650 C 9,800 16,480 9,400 C+ 11,000 18,396 11,000 B 25,000 68,333 19,833 B+ 50,000 300,704 27,000 A 90,000 500,960 33,000 A+ 160,000 1,181,650 39,500 S 275,000 2,752,145 45,000 S+ 380,000 3,570,586 48,500 S++ 480,000 5,200,800 50,000 S+++ \u2014 \u2014 \u2014 \u2b21 View Gate Drops Jungle Lv 80+ \u00b7 Power 11,000+ \u25be Min Power 11,000 Max EXP 5.2M Armor Drop Bloodsteel Set Rank Power EXP Gold F 11,000 18,160 11,000 F+ 14,000 28,815 13,500 E 17,000 40,192 15,500 E+ 20,000 49,505 17,250 D 23,000 60,224 18,750 D+ 26,000 72,530 20,250 C 29,000 85,256 21,000 C+ 32,000 125,476 22,500 B 52,000 320,288 27,333 B+ 85,000 480,794 32,500 A 140,000 950,520 38,250 A+ 230,000 2,400,840 43,000 S 355,000 3,463,160 47,625 S+ 435,000 5,000,528 50,000 S++ 520,000 5,200,836 50,000 S+++ \u2014 \u2014 \u2014 \u2b21 View Gate Drops Desert Lv 200+ \u00b7 Power 32,000+ \u25be Min Power 32,000 Max EXP 5.2M Armor Drop Oathkeeper Set Rank Power EXP Gold F 32,000 125,240 22,500 F+ 39,000 193,663 24,333 E 46,000 261,954 26,166 E+ 53,000 330,390 27,500 D 59,000 390,756 29,000 D+ 66,000 451,536 30,133 C 73,000 456,197 31,066 C+ 80,000 460,986 32,000 B 110,000 581,116 35,500 B+ 155,000 1,120,988 39,000 A 220,000 2,241,800 42,600 A+ 310,000 3,042,058 46,500 S 420,000 5,201,672 50,000 S+ 440,000 5,202,162 50,000 S++ \u2014 \u2014 \u2014 S+++ \u2014 \u2014 \u2014 \u2b21 View Gate Drops Snow Forest Lv 300+ \u00b7 Power 80,000+ \u25be Min Power 80,000 Max EXP 3.6M Armor Drop Astral Set Rank Power EXP Gold F 80,000 460,020 32,000 F+ 87,000 488,242 32,700 E 94,000 516,288 33,800 E+ 101,000 544,000 34,600 D 108,000 572,588 35,300 D+ 116,000 604,030 36,100 C 123,000 632,928 36,800 C+ 130,000 661,020 37,500 B 170,000 1,301,044 40,000 B+ 205,000 2,000,456 42,000 A 255,000 2,594,924 44,388 A+ 320,000 3,306,441 46,547 S 395,000 3,629,650 48,791 S+ \u2014 \u2014 \u2014 S++ \u2014 \u2014 \u2014 S+++ \u2014 \u2014 \u2014 \u2b21 View Gate Drops Spider Cave Lv 380+ \u00b7 Power 145,000+ \u25be Min Power 145,000 Max EXP 5.0M Armor Drop Sunforge Set Rank Power EXP Gold F 145,000 1,000,240 38,500 F+ 162,000 1,060,022 39,500 E 179,000 1,180,000 40,000 E+ 196,000 1,300,026 41,300 D 218,000 1,420,000 42,500 D+ 238,000 1,520,690 43,444 C 250,000 2,400,672 44,111 C+ 265,000 2,540,748 44,500 B 300,000 2,680,036 45,888 B+ 340,000 2,820,836 47,500 A 385,000 2,970,440 48,500 A+ 440,000 3,040,000 50,000 S 490,000 3,400,000 50,000 S+ 530,000 3,600,000 50,000 S++ 565,000 3,651,768 50,000 S+++ 600,000 5,001,792 50,000 \u2b21 View Gate Drops \u26a1 Red (Supercharged) Gates 5% chance to spawn when a normal gate closes. EXP reward is identical to the normal gate \u2014 but the dungeon is harder and more intense. Worth it for the challenge. \ud83d\udc80 Igris Raid Boss Once you reach 350,000 Power, you can attempt the Igris Raid Boss. Clearing it drops the Commander Set \u2014 one of the best armors in the game. Gate Drops No drop image available. Red Gates\n\n=== REDGATES ===\nRed Gates | SH System DB \u2694 SH System DB \u2b05 Home Normal Gates Builds Red Gates \u26a0 Danger Zone \u2014 Supercharged Gates Red Gates Supercharged dungeons \u00b7 5% spawn chance \u00b7 Required power thresholds \u26a1 Red Gates spawn when a normal gate closes \u2014 5% chance per closure. Power requirements are 1.5\u00d7 higher than normal gates. EXP reward is identical to the normal version. High risk, same reward \u2014 but the challenge counts. \u25c8 Enter your Power \u2014 find which Red Gate ranks you can attempt Scan \u2715 Clear Subway Lv 0+ \u00b7 Red variant \u25be Rank Power Required D 2,100 D+ 2,850 C 3,450 C+ 3,900 B 24,000 B+ 33,000 A 45,000 A+ 60,000 S 82,500 S+ 172,500 S++ 262,500 S+++ 607,500 Caves Lv 20+ \u00b7 Red variant \u25be Rank Power Required D 11,100 D+ 12,900 C 14,700 C+ 16,500 B 37,500 B+ 75,000 A 135,000 A+ 240,000 S 412,500 S+ 570,000 S++ 720,000 S+++ 800,000 Jungle Lv 80+ \u00b7 Red variant \u25be Rank Power Required D 34,500 D+ 39,000 C 43,500 C+ 48,000 B 78,000 B+ 127,500 A 210,000 A+ 345,000 S 532,500 S+ 652,500 S++ 780,000 S+++ 900,000 Desert Lv 200+ \u00b7 Red variant \u25be Rank Power Required D 88,500 D+ 99,000 C 109,500 C+ 120,000 B 165,000 B+ 232,500 A 330,000 A+ 465,000 S 630,000 S+ 660,000 S++ 750,000 S+++ 825,000 Snow Forest Lv 300+ \u00b7 Red variant \u25be Rank Power Required D 162,000 D+ 174,000 C 184,500 C+ 195,000 B 255,000 B+ 307,500 A 382,500 A+ 480,000 S 592,500 S+ 675,000 S++ 775,000 S+++ 875,000 Spider Cave Lv 380+ \u00b7 Red variant \u25be Rank Power Required D 327,000 D+ 357,000 C 375,000 C+ 397,500 B 450,000 B+ 510,000 A 577,500 A+ 660,000 S 735,000 S+ 795,000 S++ 847,500 S+++ 900,000 \u2b21 Normal Gates\n\n=== MATERIALS ===\nMaterial Locations | Solo Hunters System DB \u2694 SH System DB \u2b05 Home Artifacts Gate Info Database \u2014 Crafting Module Material Locations Find where to farm materials for every craftable artifact ring \u25c8 By Artifact \u2b21 By Dungeon Guardian Spider Cave Jungle ShadowFang Caves Spider Cave Bloodmoons Deathwing Subway Desert Conqurers Caves Desert HeartBound Snow Forest Jungle Subway Caves Jungle Desert Snow Forest Spider Cave Bloodmoons";
-  const SYS = `You are the Hunter Oracle. Answer using the game data below.
+  // ═══════════════════════════════════════════════════════════
+  // SELF-CONTAINED ORACLE ENGINE — NO API REQUIRED
+  // ═══════════════════════════════════════════════════════════
 
-STRICT RULES:
-- MAX 2 lines. Never more unless user says "explain", "detail", or "tell me more".
-- Format: [Name] — [3-5 word reason]. That is it.
-- No bullet points, no paragraphs, no intro phrases.
-- Numbers only for number questions.
-- Unknown = "No data on that."
+  // ── Knowledge Base ──────────────────────────────────────────
+  const KB = {
+    builds: { melee: null, magic: null },
+    weapons: [
+      { name: "King's Trident",    type: 'Trident', range: 'Extreme Long', dmg: 'S++', aoe: 'B',  rarity: 'Mythic',    note: 'Highest raw damage in the game' },
+      { name: 'Shadow Scythe',     type: 'Scythe',  range: 'Short–Long',  dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Best AoE melee weapon — recommended for melee build' },
+      { name: 'Venom Fang',        type: 'Dagger',  range: 'Short–Mid',   dmg: 'SS+', aoe: 'B',  rarity: 'Mythic',    note: 'Best single-target dagger damage' },
+      { name: 'Dual Dagger',       type: 'Dagger',  range: 'Short',       dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'High AoE dagger' },
+      { name: 'Knights Edge',      type: 'Sword',   range: 'Mid-Long',    dmg: 'SS+', aoe: 'B',  rarity: 'Mythic',    note: 'Drops from Cursed Commander boss — highest overall power rating' },
+      { name: 'Rocket Sword',      type: 'Sword',   range: 'Long',        dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Obtained via Special Summon only' },
+      { name: 'Thunder Axe',       type: 'Axe',     range: 'Extreme Long',dmg: 'S+',  aoe: 'A+', rarity: 'Mythic',    note: '' },
+      { name: 'Carmsei Katana',    type: 'Katana',  range: 'Mid–Long',    dmg: 'S',   aoe: 'A',  rarity: 'Mythic',    note: '' },
+      { name: 'Demon King Daggers',     type: 'Dagger',  range: 'Short',  dmg: 'B',   aoe: 'B',  rarity: 'Legendary', note: 'Starter weapon — drops from all gates. Upgradeable.' },
+      { name: 'True Demon King Daggers', type: 'Dagger', range: 'Short', dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Crafted S-tier — upgrade from Demon King Daggers at Demon Castle' },
+      { name: 'Link Sword',        type: 'Sword',   range: 'Short',       dmg: 'C',   aoe: 'C',  rarity: 'Common',    note: 'Starter only — replace ASAP' },
+    ],
+    armor: [
+      { name: 'Commander Set',  rarity: 'Mythic',    how: 'Defeat Igris Raid Boss (need 350,000 Power)',         note: 'Best armor in the game' },
+      { name: 'Sunforge Set',   rarity: 'Mythic',    how: 'Spider Cave gate (Lv 380+, 145k Power)',              note: 'Top tier late game' },
+      { name: 'Astral Set',     rarity: 'Mythic',    how: 'Snow Forest gate (Lv 300+, 80k Power)',               note: 'Best for magic build' },
+      { name: 'Oathkeeper Set', rarity: 'Mythic',    how: 'Desert gate (Lv 200+, 32k Power)',                    note: '' },
+      { name: 'Bloodsteel Set', rarity: 'Mythic',    how: 'Jungle gate (Lv 80+, 11k Power)',                     note: '' },
+      { name: 'Venomspike Set', rarity: 'Mythic',    how: 'Caves gate (Lv 20+, 2.6k Power)',                     note: '' },
+      { name: 'Serpent Set',    rarity: 'Mythic',    how: 'Subway gate (Lv 0+, no min power)',                   note: 'First armor set' },
+      { name: 'Iron Set',       rarity: 'Epic',      how: 'Drop from early gates',                               note: 'Beginner set — use Fortune enchant to farm it' },
+    ],
+    magic: [
+      { name: 'Werewolf',     rarity: 'Mythic',    tier: 'S',  dmg: 'S',  aoe: 'SS', iframe: '3',   note: 'Has M1. Top AoE choice. Transformation only.' },
+      { name: 'Divine Blade', rarity: 'Mythic',    tier: 'S',  dmg: 'SS', aoe: 'A',  iframe: 'All', note: 'Has M1. Best for bosses. Highest ability damage.' },
+      { name: 'Goliath',      rarity: 'Legendary', tier: 'S',  dmg: 'S',  aoe: 'B',  iframe: '2',   note: 'Buff weapon ability.' },
+      { name: 'Light',        rarity: 'Legendary', tier: 'S',  dmg: 'B',  aoe: 'B',  iframe: 'No',  note: 'Fast. Lacks single-target damage.' },
+      { name: 'Crimson',      rarity: 'Epic',      tier: 'A',  dmg: 'A',  aoe: 'A',  iframe: '1',   note: '' },
+      { name: 'Dark',         rarity: 'Epic',      tier: 'A',  dmg: 'A',  aoe: 'S',  iframe: 'No',  note: 'Amazing AoE but low damage output.' },
+      { name: 'Nature',       rarity: 'Rare',      tier: 'B',  dmg: 'A',  aoe: 'B',  iframe: '1',   note: '' },
+      { name: 'Lightning',    rarity: 'Uncommon',  tier: 'C',  dmg: 'C',  aoe: 'B',  iframe: 'No',  note: 'Lightning Nova is the only good skill.' },
+      { name: 'Vines',        rarity: 'Uncommon',  tier: 'C',  dmg: 'C',  aoe: 'B',  iframe: 'No',  note: 'Not recommended.' },
+    ],
+    artifacts: [
+      { name: 'Conquerors Ring',    rarity: 'Mythic',    tier: 'S', stat: '20% Melee Dmg + 10% Master EXP',             shiny: '30% + 15%',       how: 'Craft — farm Caves + Desert',                       tag: 'melee' },
+      { name: 'ShadowFang Ring',    rarity: 'Mythic',    tier: 'S', stat: '18% Melee Dmg + 15% Critter Dmg',            shiny: '27% + 23%',       how: 'Craft — farm Caves + Spider Cave + Bloodmoons',      tag: 'melee' },
+      { name: 'Black Iron Ring',    rarity: 'Mythic',    tier: 'S', stat: '20% Melee Dmg',                              shiny: '30%',             how: 'Craft',                                              tag: 'melee' },
+      { name: 'Wanwood Ring',       rarity: 'Mythic',    tier: 'S', stat: '20% Melee Dmg',                              shiny: '30%',             how: 'Craft',                                              tag: 'melee' },
+      { name: 'Dark Heart Ring',    rarity: 'Mythic',    tier: 'S', stat: '22% Ability Dmg',                            shiny: '33%',             how: 'Craft',                                              tag: 'magic' },
+      { name: 'Deathwing Ring',     rarity: 'Mythic',    tier: 'S', stat: '10% Boss Dmg + 18% Ability Dmg',             shiny: '15% + 27%',       how: 'Craft — farm Subway + Desert',                       tag: 'magic' },
+      { name: 'Ring Of Fire V2',    rarity: 'Mythic',    tier: 'A', stat: '21% Ability Dmg',                            shiny: '31.5%',           how: 'Craft',                                              tag: 'magic' },
+      { name: 'Ring Of Fire',       rarity: 'Mythic',    tier: 'A', stat: '20% Ability Dmg',                            shiny: '30%',             how: 'Craft',                                              tag: 'magic' },
+      { name: 'Altar Ring',         rarity: 'Mythic',    tier: 'S', stat: '10% HP + 5% Def + 30% Sword Dmg + 40% Magic Dmg', shiny: '15% HP',    how: 'Demon Castle — acquired by summoning',               tag: 'hybrid' },
+      { name: 'Demon Beserk Ring',  rarity: 'Mythic',    tier: 'S', stat: '25% Melee Attack + 5% Speed (stacking on hit)', shiny: '37.5%',        how: '5% drop from Vulcan boss',                           tag: 'melee' },
+      { name: 'Evil Eye Amulet',    rarity: 'Mythic',    tier: 'A', stat: '20% HP + 5% Luck',                           shiny: '30% HP',          how: 'Drops in Subway/Snow Forest/Caves/Spider Cave. 5% drop from Cerberus.', tag: 'hp' },
+      { name: 'Guardian Ring',      rarity: 'Mythic',    tier: 'A', stat: '5% Critter Dmg + 20% HP',                    shiny: '8% + 30%',        how: 'Craft — farm Spider Cave + Jungle',                  tag: 'hp' },
+      { name: 'HeartBound Ring',    rarity: 'Mythic',    tier: 'A', stat: '22% HP',                                     shiny: '33% HP',          how: 'Craft — farm Snow Forest + Jungle + Subway + Caves + Desert + Spider Cave + Bloodmoons', tag: 'hp' },
+      { name: 'Serpant Ring',       rarity: 'Mythic',    tier: 'A', stat: '20% HP',                                     shiny: '30% HP',          how: 'Craft',                                              tag: 'hp' },
+      { name: 'Demon Magic Amulet', rarity: 'Epic',      tier: 'A', stat: '15% Ability Dmg',                            shiny: '22.5%',           how: 'Demon Castle — Floor 15',                            tag: 'magic' },
+      { name: 'Heartless Ring',     rarity: 'Legendary', tier: 'B', stat: '15% HP (+20% HP bonus in Demon Castle)',      shiny: '22.5%',           how: 'Demon Castle drop',                                  tag: 'hp' },
+      { name: 'Soulless Ring',      rarity: 'Legendary', tier: 'B', stat: '10% Ability Dmg (+5% Def in Demon Castle)',   shiny: '15%',             how: 'Demon Castle drop',                                  tag: 'magic' },
+      { name: 'EarthRing V2',       rarity: 'Rare',      tier: 'D', stat: 'Basic stats',                                shiny: '—',               how: 'Drops from all gates. Beginner ring.',               tag: 'beginner' },
+    ],
+    classes: [
+      { name: 'Assassin', rarity: 'Mythic',    drop: '5%',  stats: '+20% M1 Dmg, +20% Magic Dmg, +20% HP',  note: 'Best all-rounder / hybrid' },
+      { name: 'Tank',     rarity: 'Legendary', drop: '10%', stats: '+40% HP, +20% M1 Damage',               note: 'Best for melee build' },
+      { name: 'Mage',     rarity: 'Legendary', drop: '10%', stats: '+40% Magic Damage',                      note: 'Best for magic build' },
+      { name: 'Elf',      rarity: 'Epic',      drop: '25%', stats: '+25% Magic Dmg, +25% Drop Chance',       note: 'Best for farming drops' },
+      { name: 'Summoner', rarity: 'Epic',      drop: '25%', stats: '+20% HP, +20% Magic Damage',             note: '' },
+      { name: 'Knight',   rarity: 'Rare',      drop: '60%', stats: '+10% M1 Dmg, +10% HP, +10% Magic',      note: 'Most common class' },
+    ],
+    gates: [
+      { name: 'Subway',      lv: 0,   power: 0,       exp: '3.7M', armor: 'Serpent Set' },
+      { name: 'Caves',       lv: 20,  power: 2600,    exp: '5.2M', armor: 'Venomspike Set' },
+      { name: 'Jungle',      lv: 80,  power: 11000,   exp: '5.2M', armor: 'Bloodsteel Set' },
+      { name: 'Desert',      lv: 200, power: 32000,   exp: '5.2M', armor: 'Oathkeeper Set' },
+      { name: 'Snow Forest', lv: 300, power: 80000,   exp: '3.6M', armor: 'Astral Set' },
+      { name: 'Spider Cave', lv: 380, power: 145000,  exp: '5.0M', armor: 'Sunforge Set' },
+    ],
+    enchants: [
+      { name: 'Fortune',      note: 'Increases drop rates — use if farming Iron Set or specific drops' },
+      { name: 'Deadly',       note: 'Increases damage — best general enchant' },
+      { name: 'Sharpshooter', note: 'Crit damage — combine with Deadly for max DPS' },
+      { name: 'Capitalist',   note: 'More gold from enemies' },
+      { name: 'Critical',     note: 'Crit chance boost' },
+      { name: 'Efficient',    note: 'Reduces cooldowns' },
+    ],
+    codes: {
+      npc: 'Malt NPC',
+      location: 'Main hub area — open the map to find exact location',
+      active: ['cursedcommander'],
+      note: 'New codes drop at milestone likes on the Roblox page. Always check the game Discord or Trello for latest codes.',
+      rerolls: 'Get class rerolls by: completing the Zood Quest (free) | redeeming codes | buying with Robux'
+    },
+    bosses: [
+      { name: 'Igris Raid Boss', req: '350,000 Power', drops: 'Commander Set (best armor)' },
+      { name: 'Cerberus',        req: 'Unknown',        drops: 'Evil Eye Amulet (5% drop rate)' },
+      { name: 'Vulcan',          req: 'Unknown',        drops: 'Demon Beserk Ring (5% drop rate)' },
+    ],
+    materials: [
+      { name: 'Serpant Scale', gate: 'Subway',      gateReq: 'Lv 0+, no power needed' },
+      { name: 'Serpant Ore',   gate: 'Subway',      gateReq: 'Lv 0+, no power needed' },
+      { name: 'Crystal',       gate: 'Caves',       gateReq: 'Lv 20+, 2,600 Power' },
+      { name: 'Wolf Tooth',    gate: 'Caves',       gateReq: 'Lv 20+, 2,600 Power' },
+      { name: 'Frog Legs',     gate: 'Jungle',      gateReq: 'Lv 80+, 11,000 Power' },
+      { name: 'Ruby',          gate: 'Jungle',      gateReq: 'Lv 80+, 11,000 Power' },
+      { name: 'Eye',           gate: 'Desert',      gateReq: 'Lv 200+, 32,000 Power' },
+      { name: 'Bones',         gate: 'Desert',      gateReq: 'Lv 200+, 32,000 Power' },
+      { name: 'Fur',           gate: 'Snow Forest', gateReq: 'Lv 300+, 80,000 Power' },
+      { name: 'Snow Silk',     gate: 'Spider Cave', gateReq: 'Lv 380+, 145,000 Power' },
+      { name: 'Magic Spores',  gate: 'Spider Cave', gateReq: 'Lv 380+, 145,000 Power' },
+      { name: 'Evil Amulet',   gate: 'Bloodmoon',   gateReq: 'Any level — only drops during Bloodmoon event from any mob' },
+    ],
+  };
 
-GAME DATA:
-` + GAME_KB;
+  // ── Answer Engine ────────────────────────────────────────────
+  function queryOracle(q) {
+    const raw = q.toLowerCase().trim();
+    const has = (...words) => words.some(w => raw.includes(w));
 
-  /* Stars */
+    // ── BUILDS ──────────────────────────────────────────────
+    if (has('melee build', 'physical build', 'melee setup', 'strength build', 'best melee')) {
+      const b = KB.builds.melee;
+      if (!b) return 'Build data is still loading — try again in a moment.';
+      return `**${b.name}**\n${b.playstyle}\n\n**Weapons:** ${b.weapons.join(', ')}\n**Armor:** ${b.armor}\n**Artifacts:** ${b.artifacts.join(', ')}\n**Stats:** ${Object.entries(b.stats).map(([k,v])=>k+' '+v).join(' · ')}\n**Best Class:** ${b.bestClass}`;
+    }
+    if (has('magic build', 'magic setup', 'best magic build', 'mage build', 'ability build')) {
+      const b = KB.builds.magic;
+      if (!b) return 'Build data is still loading — try again in a moment.';
+      return `**${b.name}**\n${b.playstyle}\n\n**Magic/Weapons:** ${b.weapons.join(', ')}\n**Armor:** ${b.armor}\n**Artifacts:** ${b.artifacts.join(', ')}\n**Stats:** ${Object.entries(b.stats).map(([k,v])=>k+' '+v).join(' · ')}\n**Best Class:** ${b.bestClass}`;
+    }
+    if (has('best build', 'what build', 'which build', 'starter build')) {
+      const m = KB.builds.melee, mg = KB.builds.magic;
+      if (!m || !mg) return 'Build data is still loading — try again in a moment.';
+      return `Two main builds in Solo Hunters:\n\n**${m.name}** — ${m.playstyle}\nWeapons: ${m.weapons.slice(0,2).join(', ')} · Armor: ${m.armor} · Class: ${m.bestClass}\n\n**${mg.name}** — ${mg.playstyle}\nMagic: ${mg.weapons.slice(0,2).join(', ')} · Armor: ${mg.armor} · Class: ${mg.bestClass}\n\nFor beginners: start Melee — easier to gear up early.`;
+    }
+
+    // ── WEAPONS ──────────────────────────────────────────────
+    if (has('best weapon', 'strongest weapon', 'top weapon')) {
+      return `**Best overall:** Knights Edge (98% power, drops from Cursed Commander)\n**Best AoE:** Shadow Scythe or Rocket Sword\n**Best single target dagger:** Venom Fang (SS+ damage)\n**Best crafted weapon:** True Demon King Daggers — craft at Demon Castle\n**Best for melee build:** Shadow Scythe — huge AoE, SS damage\n**Starter:** Demon King Daggers — drops from all gates`;
+    }
+    if (has('all weapon', 'list weapon', 'every weapon')) {
+      return `REDIRECT:allweapons`;
+    }
+    for (const w of KB.weapons) {
+      if (raw.includes(w.name.toLowerCase())) {
+        return `**${w.name}** (${w.rarity} ${w.type})\nDamage: ${w.dmg} · AoE: ${w.aoe} · Range: ${w.range}${w.note ? '\n' + w.note : ''}${w.name === 'Demon King Daggers' ? '\n**How to get:** Drops from all gates — good starter weapon.' : ''}`;
+      }
+    }
+    if (has('how', 'get', 'where', 'obtain', 'find', 'drop') && has('weapon')) {
+      return `Most weapons drop from gates or bosses as loot.\n**Demon King Daggers** — drops from all gates (good beginner weapon)\n**All other Mythic weapons** — drop from specific gates or purchased from the Merchant NPC in the main hub.\nCheck the Weapons page for exact drop sources per weapon.`;
+    }
+
+    // ── ARMOR ──────────────────────────────────────────────
+    if (has('best armor', 'top armor', 'strongest armor')) {
+      return `**Best armor:** Commander Set (Mythic)\n**How to get:** Defeat the Igris Raid Boss — requires 350,000 Power\n\n**Runner up:** Sunforge Set — drops from Spider Cave (145k Power)\n**Best for magic build:** Astral Set — drops from Snow Forest (80k Power)`;
+    }
+    if (has('all armor', 'list armor', 'every armor', 'all set', 'armor set')) {
+      return `REDIRECT:armor`;
+    }
+    for (const a of KB.armor) {
+      if (raw.includes(a.name.toLowerCase().replace(' set',''))) {
+        return `**${a.name}** (${a.rarity})\n**How to get:** ${a.how}${a.note ? '\n' + a.note : ''}`;
+      }
+    }
+
+    // ── ARTIFACTS / RINGS ──────────────────────────────────
+    if (has('best ring', 'best artifact', 'top ring', 'best melee ring')) {
+      if (has('magic', 'ability', 'spell')) {
+        return `**Best magic rings:**\n**Dark Heart Ring** (Mythic S) — 22% Ability Dmg · Craft it\n**Deathwing Ring** (Mythic S) — 10% Boss Dmg + 18% Ability Dmg · Craft from Subway + Desert\n**Ring of Fire V2** (Mythic A) — 21% Ability Dmg · Craft it`;
+      }
+      if (has('hp', 'health', 'tank')) {
+        return `**Best HP rings:**\n**HeartBound Ring** (Mythic A) — 22% HP · Craft from multiple gates\n**Evil Eye Amulet** (Mythic A) — 20% HP + 5% Luck · Drop from Cerberus or gates\n**Serpant Ring** (Mythic A) — 20% HP · Craft it`;
+      }
+      return `**Best melee rings:**\n**ShadowFang Ring** (Mythic S) — 18% Melee + 15% Critter Dmg · Craft from Caves + Spider Cave\n**Conquerors Ring** (Mythic S) — 20% Melee + 10% Master EXP · Craft from Caves + Desert\n**Demon Beserk Ring** (Mythic S) — 25% Melee + 5% Speed · 5% drop from Vulcan boss\n\n**Best magic rings:** Dark Heart Ring (22% Ability) or Deathwing Ring (18% Ability + 10% Boss)`;
+    }
+    if (has('all ring', 'all artifact', 'every ring', 'list ring', 'list artifact')) {
+      return `REDIRECT:artifacts`;
+    }
+    for (const a of KB.artifacts) {
+      if (raw.includes(a.name.toLowerCase())) {
+        return `**${a.name}** (${a.rarity} · Tier ${a.tier})\n**Stats:** ${a.stat}\n**Shiny:** ${a.shiny}\n**How to get:** ${a.how}`;
+      }
+    }
+    if (has('how', 'get', 'where', 'obtain', 'find', 'drop') && has('ring', 'artifact', 'amulet')) {
+      return `Most rings are **crafted** — farm materials from the listed gates then craft at the Crafting NPC.\n\nDrop-only rings:\n• **Demon Beserk Ring** — 5% drop from Vulcan boss\n• **Evil Eye Amulet** — 5% drop from Cerberus, also drops in Subway/Caves/Snow Forest/Spider Cave\n• **Altar Ring** — Demon Castle, acquired by summoning\n• **Heartless Ring / Soulless Ring** — Demon Castle drops\n• **Demon Magic Amulet** — Demon Castle, Floor 15\n• **EarthRing V2** — drops from all gates (beginner ring)`;
+    }
+
+    // ── CLASSES ──────────────────────────────────────────────
+    if (has('best class', 'what class', 'which class')) {
+      if (has('melee', 'physical', 'strength', 'tank')) return `**Best class for melee: Tank** (Legendary, 10% drop)\n+40% HP · +20% M1 Damage\nMassively boosts survivability and physical damage output.`;
+      if (has('magic', 'mage', 'ability', 'spell'))     return `**Best class for magic: Mage** (Legendary, 10% drop)\n+40% Magic Damage\nStraight 40% damage multiplier on all your magic abilities.`;
+      if (has('farm', 'drop', 'loot'))                  return `**Best class for farming: Elf** (Epic, 25% drop)\n+25% Magic Dmg · +25% Drop Chance\nThe +25% Drop Chance makes farming materials and gear much faster.`;
+      return `**Best classes:**\n**Tank** (Legendary) — best for melee build. +40% HP, +20% M1 Dmg.\n**Mage** (Legendary) — best for magic build. +40% Magic Dmg.\n**Assassin** (Mythic) — best hybrid. +20% M1, +20% Magic, +20% HP.\n**Elf** (Epic) — best for farming. +25% Drop Chance.\n\nRerolls: Complete Zood Quest (free) · Redeem codes via Malt · Buy with Robux.`;
+    }
+    if (has('all class', 'list class', 'every class', 'class list')) {
+      return `REDIRECT:classes`;
+    }
+    for (const c of KB.classes) {
+      if (raw.includes(c.name.toLowerCase())) {
+        return `**${c.name} Class** (${c.rarity} · ${c.drop} chance to drop)\n**Stats:** ${c.stats}\n${c.note}`;
+      }
+    }
+    if (has('reroll', 'class reroll', 'how to reroll')) {
+      return `**How to get class rerolls:**\n1. Complete the **Zood Quest** — free rerolls\n2. Redeem codes via **Malt NPC** in the main hub\n3. Purchase with **Robux** only\n\nActive code: **cursedcommander** — redeem at Malt.`;
+    }
+
+    // ── GATES ──────────────────────────────────────────────
+    if (has('what gate', 'which gate', 'gate for my', 'gate should i', 'what dungeon', 'what power', 'my power')) {
+      // Try to extract a power number from the question
+      const numMatch = raw.match(/[\d,]+/);
+      if (numMatch) {
+        const power = parseInt(numMatch[0].replace(/,/g,''));
+        const gate = [...KB.gates].reverse().find(g => power >= g.power) || KB.gates[0];
+        const next = KB.gates[KB.gates.indexOf(gate) + 1];
+        const igris = power >= 350000 ? '\n\n⚔ **Also:** You can now farm **Igris Raid Boss** for the Commander Set!' : '';
+        return `At **${power.toLocaleString()} Power** you should run: **${gate.name}**\n(Lv ${gate.lv}+ · Min ${gate.power.toLocaleString()} Power · Max EXP ${gate.exp})\n**Armor drop:** ${gate.armor}${next ? `\n\n**Next gate:** ${next.name} unlocks at ${next.power.toLocaleString()} Power` : ''}${igris}`;
+      }
+      return KB.gates.map(g => `**${g.name}** — Lv ${g.lv}+ · Min ${g.power.toLocaleString()} Power · Max ${g.exp} EXP · Drops ${g.armor}`).join('\n');
+    }
+    if (has('all gate', 'list gate', 'every gate', 'gate list', 'dungeon list')) {
+      return `REDIRECT:levelguide`;
+    }
+    for (const g of KB.gates) {
+      if (raw.includes(g.name.toLowerCase())) {
+        return `**${g.name} Gate**\nLevel: ${g.lv}+ · Min Power: ${g.power.toLocaleString()} · Max EXP: ${g.exp}\n**Armor drop:** ${g.armor}`;
+      }
+    }
+
+    // ── RED GATES ──────────────────────────────────────────
+    if (has('red gate', 'red dungeon')) {
+      return `**Red Gates** spawn when a normal gate closes — 5% chance per closure.\nPower required = 1.5× the normal gate's minimum.\nEXP reward = same as normal gate.\n\n**Worth doing?** Same EXP as normal gates — only run them if you enjoy the challenge or need to flex.\n\n**Red Gate power requirements (minimums):**\nSubway: D(2.1k) B(24k) S(82.5k) S+++(607.5k)\nCaves: D(11.1k) B(37.5k) S(412.5k) S+++(800k)\nJungle: D(34.5k) B(78k) S(532.5k) S+++(900k)\nDesert: D(88.5k) B(165k) S(630k) S+++(825k)\nSnow Forest: D(162k) B(255k) S(592.5k) S+++(875k)\nSpider Cave: D(327k) B(450k) S(735k) S+++(900k)`;
+    }
+
+    // ── MAGIC ABILITIES ──────────────────────────────────────
+    if (has('best magic ability', 'best ability', 'best magic power', 'top magic', 'best spell')) {
+      return `**Best magic abilities:**\n**Werewolf** (Mythic S) — Best AoE, 3 I-Frames, Transformation. Great for clears.\n**Divine Blade** (Mythic S) — Highest damage (SS), All I-Frames. Best for bosses.\n\nBoth acquired through Summoning. Werewolf for mobs, Divine Blade for raids.`;
+    }
+    if (has('all magic', 'list magic', 'every magic', 'magic list')) {
+      return `REDIRECT:magic`;
+    }
+    for (const m of KB.magic) {
+      if (raw.includes(m.name.toLowerCase())) {
+        return `**${m.name}** (${m.rarity} · Tier ${m.tier})\nDamage: ${m.dmg} · AoE: ${m.aoe} · I-Frames: ${m.iframe}\n${m.note}\n**How to get:** Acquired from Summoning.`;
+      }
+    }
+
+    // ── ENCHANTS ──────────────────────────────────────────
+    if (has('enchant', 'enchantment')) {
+      return `**Enchants:**\n**Fortune** — Better drop rates. Use when farming Iron Set or specific gear.\n**Deadly** — More damage. Best general enchant.\n**Sharpshooter** — Crit damage. Combine with Deadly for max DPS.\n**Capitalist** — More gold per kill.\n**Critical** — Increases crit chance.\n**Efficient** — Reduces cooldowns.\n\n💡 Beginners: use Fortune if you need Iron Set. Otherwise go Deadly + Sharpshooter.`;
+    }
+
+    // ── CODES ──────────────────────────────────────────────
+    if (has('code', 'redeem', 'malt', 'free reward')) {
+      return `**Codes** are redeemed at **Malt NPC** in the main hub. Open the map to find his exact location.\n\n**Active code:** \`cursedcommander\`\nNew codes drop at milestone likes on the Roblox page.\n\n**How to get more rerolls:**\n• Complete the **Zood Quest** (free)\n• Redeem codes via Malt\n• Buy with Robux`;
+    }
+
+    // ── BOSSES ──────────────────────────────────────────────
+    if (has('boss', 'bosses', 'raid')) {
+      return KB.bosses.map(b => `**${b.name}** — Requires: ${b.req}\nDrops: ${b.drops}`).join('\n\n');
+    }
+    for (const b of KB.bosses) {
+      if (raw.includes(b.name.toLowerCase())) {
+        return `**${b.name}**\nRequires: ${b.req}\nDrops: ${b.drops}`;
+      }
+    }
+
+    // ── DEMON CASTLE ──────────────────────────────────────
+    if (has('demon castle', 'demon castle')) {
+      return `**Demon Castle** is a special area containing:\n• **Altar Ring** (Mythic S) — from Summoning\n• **Heartless Ring** (Legendary) — +15% HP (+20% bonus inside Demon Castle)\n• **Soulless Ring** (Legendary) — +10% Ability Dmg (+5% Def inside Demon Castle)\n• **Demon Magic Amulet** (Epic) — Floor 15\n• **Demon Beserk Ring** — drop from Vulcan boss (5%)\n\nBest rings for Demon Castle runs: Heartless Ring + Soulless Ring stack their bonuses inside.`;
+    }
+
+    // ── BEGINNER / STARTER ─────────────────────────────────
+    if (has('beginner', 'starter', 'start', 'new player', 'new to', 'how to start', 'early game')) {
+      return `**Beginner Setup:**\n**Weapon:** Demon King Daggers (Legendary) — drops from all gates\n**Armor:** Iron Set (Epic) — use Fortune enchant to farm it faster\n**Ring:** EarthRing V2 (Rare) — drops from all gates\n**Stats:** 10 Strength · 8 Defence · 1 Energy · 1 Agility\n**Class:** Any to start\n\n**Tips:**\n• Run Subway gate first (no power required)\n• Upgrade gear as fast as possible\n• Don't ignore rings — huge stat bonuses\n• Switch to Melee Build once you have Caves gear`;
+    }
+
+    // ── MATERIALS ──────────────────────────────────────────
+    // Specific material lookups
+    if (has('serpant scale', 'serpent scale')) return `**Serpant Scale** drops from mobs in the **Subway** gate (Lv 0+, no power needed).`;
+    if (has('serpant ore', 'serpent ore'))     return `**Serpant Ore** drops from mobs in the **Subway** gate (Lv 0+, no power needed).`;
+    if (has('wolf tooth', 'wolftooth'))         return `**Wolf Tooth** drops from mobs in the **Caves** gate (Lv 20+, 2,600 Power).`;
+    if (has('frog leg'))                        return `**Frog Legs** drop from mobs in the **Jungle** gate (Lv 80+, 11,000 Power).`;
+    if (has('magic spore'))                     return `**Magic Spores** drop from mobs in **Spider Cave** (Lv 380+, 145,000 Power).`;
+    if (has('snow silk', 'snowsilk'))           return `**Snow Silk** drops from mobs in **Spider Cave** (Lv 380+, 145,000 Power).`;
+    if (has('evil amulet'))                     return `**Evil Amulet** only drops during a **Bloodmoon** event — any mob in any gate can drop it while the Bloodmoon is active.`;
+    if (has('crystal') && has('drop','farm','get','where')) return `**Crystal** drops from mobs in the **Caves** gate (Lv 20+, 2,600 Power).`;
+    if (has('ruby') && has('drop','farm','get','where'))    return `**Ruby** drops from mobs in the **Jungle** gate (Lv 80+, 11,000 Power).`;
+    if (has('bone') && has('drop','farm','get','where'))    return `**Bones** drop from mobs in the **Desert** gate (Lv 200+, 32,000 Power).`;
+    if (has('fur') && has('drop','farm','get','where'))     return `**Fur** drops from mobs in the **Snow Forest** gate (Lv 300+, 80,000 Power).`;
+    if (has(' eye') && has('drop','farm','get','where'))    return `**Eye** drops from mobs in the **Desert** gate (Lv 200+, 32,000 Power).`;
+
+    // What drops from a specific gate?
+    if (has('drop','material','farm') && has('subway'))
+      return `**Subway** material drops:\n• Serpant Scale\n• Serpant Ore\n\n(Lv 0+, no power required)`;
+    if (has('drop','material','farm') && has('cave') && !has('spider'))
+      return `**Caves** material drops:\n• Crystal\n• Wolf Tooth\n\n(Lv 20+, 2,600 Power)`;
+    if (has('drop','material','farm') && has('jungle'))
+      return `**Jungle** material drops:\n• Frog Legs\n• Ruby\n\n(Lv 80+, 11,000 Power)`;
+    if (has('drop','material','farm') && has('desert'))
+      return `**Desert** material drops:\n• Eye\n• Bones\n\n(Lv 200+, 32,000 Power)`;
+    if (has('drop','material','farm') && has('snow'))
+      return `**Snow Forest** material drops:\n• Fur\n\n(Lv 300+, 80,000 Power)`;
+    if (has('drop','material','farm') && has('spider'))
+      return `**Spider Cave** material drops:\n• Snow Silk\n• Magic Spores\n\n(Lv 380+, 145,000 Power)`;
+    if (has('drop','material','farm') && has('blood','bloodmoon'))
+      return `**Bloodmoon** material drops:\n• Evil Amulet — drops from any mob during a Bloodmoon event\n\nBloodmoons are a special event. Any gate, any level.`;
+
+    // General material / crafting query
+    if (has('material', 'farming material', 'where to farm', 'what drop')) {
+      return `**All material drop locations:**\n🔵 **Subway** → Serpant Scale, Serpant Ore\n🟢 **Caves** → Crystal, Wolf Tooth\n🌿 **Jungle** → Frog Legs, Ruby\n🏜️ **Desert** → Eye, Bones\n❄️ **Snow Forest** → Fur\n🕷️ **Spider Cave** → Snow Silk, Magic Spores\n🩸 **Bloodmoon** → Evil Amulet (any mob, event only)\n\n**Ring crafting sources:**\nGuardian Ring → Spider Cave + Jungle\nShadowFang Ring → Caves + Spider Cave + Bloodmoon\nDeathwing Ring → Subway + Desert\nConquerors Ring → Caves + Desert\nHeartBound Ring → All gates + Bloodmoon\n\nBring materials to the Crafting NPC to craft rings.`;
+    }
+    if (has('craft') && !has('true demon','truedk')) {
+      return `**Ring crafting material sources:**\n**Guardian Ring** → Spider Cave + Jungle\n**ShadowFang Ring** → Caves + Spider Cave + Bloodmoon\n**Deathwing Ring** → Subway + Desert\n**Conquerors Ring** → Caves + Desert\n**HeartBound Ring** → All gates + Bloodmoon\n\nFor weapon crafting: True Demon King Daggers requires ×25 Demonic Cubes + ×20 Demonic Shards + ×1 Demon King Daggers (all from Demon Castle).`;
+    }
+
+    // ── RED GATES ──────────────────────────────────────────
+    if (has('red gate', 'redgate')) {
+      return `**Red Gates** are rare, high-difficulty versions of normal gates.\n\n🩸 They have a **5% spawn chance** when a normal gate closes.\n\n**Red Gate power thresholds:**\n• Subway Red → 2,100 Power\n• Caves Red → 11,100 Power\n• Jungle Red → 34,500 Power\n• Desert Red → 88,500 Power\n• Snow Forest Red → 162,000 Power\n• Spider Cave Red → 327,000 Power\n\nRed Gates give better loot and more challenge. Check the Red Gates page for full details.`;
+    }
+
+    // ── POWER ──────────────────────────────────────────────
+    if (has('increase power', 'raise power', 'more power', 'how to get stronger', 'level up', 'power up', 'gain power')) {
+      return `**How to increase your Power:**\n• Upgrade your **armor** — each tier gives a big power jump\n• Upgrade your **weapon** — higher tier weapons add power\n• Equip better **rings / artifacts**\n• Level up **stats** (Strength, Defence, Magic etc.)\n• Run higher-tier gates for better gear drops\n\n**Power milestones:**\n2.6k → Caves · 11k → Jungle · 32k → Desert · 80k → Snow Forest · 145k → Spider Cave · 350k → Igris Raid`;
+    }
+
+    // ── STATS ──────────────────────────────────────────────
+    if (has('what stats', 'which stats', 'stats for', 'stat build', 'how to spend', 'stat point')) {
+      if (has('magic', 'mage', 'ability')) return `**Magic build stats:** Magic 1000 · Energy 100–200 · Defence 400–600 · Agility 1–100 · Strength minimal (1–100)`;
+      if (has('melee', 'physical', 'tank', 'strength')) return `**Melee build stats:** Strength 1000 · Defence 700–800 · Energy 50–100 · Agility 1–100 · Magic minimal (1)`;
+      return `**Stats depend on your build:**\n**Melee:** Max Strength (1000) → then Defence (700–800)\n**Magic:** Max Magic (1000) → then Energy (100–200)\n\nDon't split stats. Pick one build and commit.`;
+    }
+
+    // ── FALLBACK ──────────────────────────────────────────
+    return `UNKNOWN_QUERY`;
+  }
+
+  /* ── Background FX ── */
   const sf = document.getElementById('stars');
   for(let i=0;i<120;i++){
     const s=document.createElement('div');s.className='star';
-    const sz=.5+Math.random()*1.5;
-    const so=.1+Math.random()*.6;
+    const sz=.5+Math.random()*1.5,so=.1+Math.random()*.6;
     s.style.cssText=`left:${Math.random()*100}vw;top:${Math.random()*100}vh;width:${sz}px;height:${sz}px;background:#fff;--so:${so};animation-duration:${2+Math.random()*5}s;animation-delay:-${Math.random()*6}s;`;
     sf.appendChild(s);
   }
-
-  /* Particles */
-  const pf = document.getElementById('particles');
+  const pf=document.getElementById('particles');
   for(let i=0;i<20;i++){
     const p=document.createElement('div');p.className='pt';
-    const iv=Math.random()>.5;const sz=1+Math.random()*1.8;
+    const iv=Math.random()>.5,sz=1+Math.random()*1.8;
     p.style.cssText=`left:${Math.random()*100}vw;top:${50+Math.random()*50}vh;width:${sz}px;height:${sz}px;background:${iv?'#b94dff':'#4db8ff'};box-shadow:0 0 5px ${iv?'#b94dff':'#4db8ff'};--po:${.15+Math.random()*.35};--pdx:${Math.random()*30-15}px;animation-duration:${14+Math.random()*16}s;animation-delay:-${Math.random()*20}s;`;
     pf.appendChild(p);
   }
-
-  /* Sweeps */
   function sweep(){
     const s=document.createElement('div');s.className='sw';
     s.style.animationDuration=(10+Math.random()*14)+'s';
@@ -406,11 +1057,30 @@ GAME DATA:
   }
   sweep(); setInterval(sweep,7000+Math.random()*8000);
 
-  /* History */
+  /* ── Codes Modal ── */
+  const codesModal = document.getElementById('codesModal');
+  document.getElementById('codesBtn').addEventListener('click',()=>codesModal.classList.add('open'));
+  document.getElementById('codesClose').addEventListener('click',()=>codesModal.classList.remove('open'));
+  codesModal.addEventListener('click',e=>{if(e.target===codesModal)codesModal.classList.remove('open');});
+  document.getElementById('codesViewMapBtn').addEventListener('click',()=>{
+    codesModal.classList.remove('open');
+    document.getElementById('mapModal').classList.add('open');
+  });
+
+  /* ── Map Modal ── */
+  document.getElementById('mapBtn').addEventListener('click',()=>document.getElementById('mapModal').classList.add('open'));
+  document.getElementById('mapClose').addEventListener('click',()=>{
+    document.getElementById('mapModal').classList.remove('open');
+  });
+  document.getElementById('mapModal').addEventListener('click',e=>{
+    if(e.target===document.getElementById('mapModal'))
+      document.getElementById('mapModal').classList.remove('open');
+  });
+
+  /* ── History ── */
   let hist=[];
   function updateHist(){
-    const w=document.getElementById('hist-wrap');
-    const l=document.getElementById('hist-list');
+    const w=document.getElementById('hist-wrap'),l=document.getElementById('hist-list');
     if(!hist.length){w.style.display='none';return;}
     w.style.display='block';
     l.innerHTML=hist.slice(0,6).map((h,i)=>`<div class="hist-item" data-i="${i}"><span class="hist-q">${h.q}</span><span class="hist-t">${h.t}</span></div>`).join('');
@@ -420,47 +1090,289 @@ GAME DATA:
     }));
   }
 
-  function showAns(text){
+  function showAns(text, query){
     const a=document.getElementById('answer'),t=document.getElementById('ans-text');
     document.getElementById('oerr').classList.remove('show');
-    t.innerHTML=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    let safe=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    // Bold **text**
+    safe=safe.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    // Colour-code categories
+    safe=safe.replace(/(True Demon King Daggers|Shadow Scythe|Thunder Axe|Dual Dagger|King's Trident|Venom Fang|Carmsei Katana|Rocket Sword|Knights Edge|Demon King Daggers|Link Sword)/g,'<span class="tag-weapon">$1</span>');
+    safe=safe.replace(/\b(Commander Set|Oathkeeper Set|Sunforge Set|Astral Set|Bloodsteel Set|Venomspike Set|Serpent Set|Iron Set)\b/g,'<span class="tag-armor">$1</span>');
+    safe=safe.replace(/\b(ShadowFang Ring|Conquerors Ring|Deathwing Ring|Guardian Ring|HeartBound Ring|Dark Heart Ring|Wanwood Ring|Black Iron Ring|Ring Of Fire V2|Ring Of Fire|Serpant Ring|Altar Ring|Demon Beserk Ring|Heartless Ring|Soulless Ring|EarthRing V2|Evil Eye Amulet|Demon Magic Amulet)\b/g,'<span class="tag-ring">$1</span>');
+    safe=safe.replace(/\b(Werewolf|Divine Blade|Goliath|Light|Crimson|Dark|Nature|Lightning|Vines)\b/g,'<span class="tag-magic">$1</span>');
+    safe=safe.replace(/\b(Subway|Caves|Jungle|Desert|Snow Forest|Spider Cave|Red Gate)\b/g,'<span class="tag-gate">$1</span>');
+    safe=safe.replace(/\b(Tank|Mage|Assassin|Elf|Summoner|Knight)\b/g,'<span class="tag-stat">$1</span>');
+    safe=safe.replace(/\n/g,'<br>');
+    // Inject map button if answer is about codes / Malt
+    const lc=(text+" "+(query||"")).toLowerCase();
+    if(lc.includes('malt')||lc.includes('code')||lc.includes('redeem')){
+      safe+=`<br><br><button class="ans-map-btn" onclick="document.getElementById('mapModal').classList.add('open')">🗺 View Dungeon Map — Find Malt in Snow Forest</button>`;
+    }
+
+    t.innerHTML=safe;
     a.classList.remove('show');void a.offsetWidth;a.classList.add('show');
   }
 
-  async function ask(q){
-    if(!q.trim())return;
-    const th=document.getElementById('thinking'),b=document.getElementById('qbtn');
-    const a=document.getElementById('answer'),e=document.getElementById('oerr');
-    a.classList.remove('show');e.classList.remove('show');
-    th.classList.add('on');b.disabled=true;
-    try{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:SYS,messages:[{role:'user',content:q}]})
-      });
-      if(!r.ok){const er=await r.json();throw new Error(er.error?.message||'Error');}
-      const d=await r.json();
-      const text=d.content?.map(b=>b.text||'').join('')||'';
-      th.classList.remove('on');
-      showAns(text);
-      const now=new Date();
-      hist.unshift({q,a:text,t:now.getHours()+':'+String(now.getMinutes()).padStart(2,'0')});
-      if(hist.length>10)hist.pop();
-      updateHist();
-    }catch(err){
-      th.classList.remove('on');
-      const e=document.getElementById('oerr');
-      e.textContent='Oracle unavailable — '+(err.message||'connection failed');
-      e.classList.add('show');
+  // Page redirect map
+  const PAGE_REDIRECTS = {
+    'allweapons':      './weapons/allweapons.html',
+    'armor':           './armor.html',
+    'artifacts':       './artifacts.html',
+    'classes':         './classes.html',
+    'levelguide':      './levelguide.html',
+    'magic':           './magic.html',
+    'demoncastle':     './demoncastle.html',
+    'materiallocations': './materiallocations.html',
+  };
+
+  const PAGE_LABELS = {
+    'allweapons':      '⚔ View All Weapons Page',
+    'armor':           '🛡 View All Armor Page',
+    'artifacts':       '💍 View All Artifacts & Rings Page',
+    'classes':         '🧬 View All Classes Page',
+    'levelguide':      '🗺 View Gate & Level Guide',
+    'magic':           '✨ View All Magic Page',
+    'demoncastle':     '🏰 View Demon Castle Page',
+    'materiallocations': '📦 View Material Locations Page',
+  };
+
+  function ask(q) {
+    if (!q.trim()) return;
+
+    // ── SECRET ──
+    if (q.trim().toLowerCase() === 'asianstud') {
+      const existing = document.getElementById('easter-overlay');
+      if (existing) existing.remove();
+      const ov = document.createElement('div');
+      ov.id = 'easter-overlay';
+      ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;cursor:pointer;animation:easter-in .3s ease both;';
+      ov.innerHTML = `
+        <style>@keyframes easter-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}</style>
+        <img src="https://media.tenor.com/Fq4GHDmL_xsAAAAM/asian-stud-giribiogger.gif"
+             style="max-width:90vw;max-height:85vh;border-radius:8px;box-shadow:0 0 60px rgba(0,212,255,0.3);"
+             alt="AsianStud"/>
+      `;
+      ov.addEventListener('click', () => ov.remove());
+      document.body.appendChild(ov);
+      document.getElementById('qi').value = '';
+      return;
     }
-    b.disabled=false;
+
+    const th = document.getElementById('thinking'), b = document.getElementById('qbtn');
+    const a = document.getElementById('answer'), e = document.getElementById('oerr');
+    a.classList.remove('show'); e.classList.remove('show');
+    th.classList.add('on'); b.disabled = true;
+
+    setTimeout(() => {
+      try {
+        const text = queryOracle(q);
+        th.classList.remove('on');
+
+        // Handle redirect tokens
+        if (text.startsWith('REDIRECT:')) {
+          const key = text.replace('REDIRECT:', '').trim();
+          const url = PAGE_REDIRECTS[key];
+          const label = PAGE_LABELS[key] || 'View Page';
+          window.location.href = url;
+          return;
+        }
+
+        // Handle unknown query
+        if (text === 'UNKNOWN_QUERY') {
+          const unknown = `Can\'t find that one. Check your **spelling**, or head to the **Questions channel** in the Discord and ask there.\n\nYou can also **@sleepy.atef** to request that this question or feature gets added to the Oracle.`;
+          showAns(unknown, q);
+          hist.unshift({ q, a: unknown, t: new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2,'0') });
+          if (hist.length > 10) hist.pop();
+          updateHist();
+          b.disabled = false;
+          return;
+        }
+
+        showAns(text, q);
+        const now = new Date();
+        hist.unshift({ q, a: text, t: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') });
+        if (hist.length > 10) hist.pop();
+        updateHist();
+      } catch(err) {
+        th.classList.remove('on');
+        document.getElementById('oerr').textContent = 'Oracle error — ' + err.message;
+        document.getElementById('oerr').classList.add('show');
+      }
+      b.disabled = false;
+    }, 420);
   }
 
   document.getElementById('qbtn').addEventListener('click',()=>ask(document.getElementById('qi').value));
   document.getElementById('qi').addEventListener('keydown',e=>{if(e.key==='Enter')ask(e.target.value);});
-  document.querySelectorAll('.sug').forEach(s=>s.addEventListener('click',()=>{
+  document.querySelectorAll('.faq-chip[data-q]').forEach(s=>s.addEventListener('click',()=>{
     document.getElementById('qi').value=s.dataset.q;ask(s.dataset.q);
   }));
+  document.getElementById('matsBtn').addEventListener('click',()=>{ window.location.href='./materiallocations.html'; });
+
+  // ── Live build parser — reads builds.html and populates KB.builds ──
+  function parseBuildCard(article) {
+    const txt = t => (article.querySelector(t)||{}).textContent||'';
+    const all = sel => [...article.querySelectorAll(sel)].map(el=>el.textContent.trim()).filter(Boolean);
+
+    const name = txt('h2.build-name, .build-name').trim();
+    const playstyle = txt('.build-playstyle').replace('Playstyle:','').trim();
+    const statEls = all('.build-stat');
+    const stats = {};
+    statEls.forEach(s => {
+      const [k,v] = s.split(':');
+      if(k&&v) stats[k.trim()] = v.trim();
+    });
+    const classEl = all('.build-section-label + div .build-tag, .build-items .build-tag');
+    // Collect all section labels and their following items
+    const sections = {};
+    article.querySelectorAll('.build-section-label').forEach(label => {
+      const key = label.textContent.trim().toLowerCase();
+      const items = [];
+      let el = label.nextElementSibling;
+      if(el) el.querySelectorAll('.build-tag, .build-stat').forEach(t=>items.push(t.textContent.trim()));
+      sections[key] = items.filter(Boolean);
+    });
+
+    const isMagic = name.toLowerCase().includes('magic');
+    return {
+      name,
+      playstyle,
+      weapons: sections['recommended weapon'] || sections['recommended magic'] || [],
+      armor: (sections['recommended armor']||[])[0] || '',
+      artifacts: sections['recommended artifact'] || [],
+      stats,
+      bestClass: (sections['best class']||[])[0] || '',
+      isMagic
+    };
+  }
+
+  // Builds initialized synchronously — always available immediately
+  KB.builds.melee = {
+    name: 'Physical Build',
+    playstyle: 'High-damage melee fighter focused on raw power and survivability.',
+    weapons: ['Shadow Scythe', 'Rocket Sword', 'Knights Edge', 'Dual Dagger', 'Venom Fang'],
+    armor: 'Commander Set',
+    artifacts: ['ShadowFang Ring', 'Conquerors Ring', 'Demon Beserk Ring', 'Wanwood Ring'],
+    stats: { Strength: '1000', Defence: '700-800', Energy: '50-100', Magic: '1' },
+    bestClass: 'Tank',
+    isMagic: false
+  };
+  KB.builds.magic = {
+    name: 'Magic Build',
+    playstyle: 'Burst-damage caster that nukes groups with powerful magical abilities.',
+    weapons: ['Divine Blade', 'Werewolf', 'Goliath', 'Light', 'Dark'],
+    armor: 'Astral Set',
+    artifacts: ['Dark Heart Ring', 'Deathwing Ring', 'Ring Of Fire V2', 'Altar Ring'],
+    stats: { Magic: '1000', Defence: '400-600', Energy: '100-200', Strength: '1-100' },
+    bestClass: 'Mage',
+    isMagic: true
+  };
+
+  function loadBuilds() {
+    fetch('./builds.html')
+      .then(r => { if(!r.ok) throw new Error(); return r.text(); })
+      .then(html => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const cards = doc.querySelectorAll('article.build-card');
+        cards.forEach(card => {
+          const build = parseBuildCard(card);
+          if (build && build.name) {
+            if (build.isMagic) KB.builds.magic = build;
+            else KB.builds.melee = build;
+          }
+        });
+      })
+      .catch(() => {});
+  }
+
+  loadBuilds();
+
+  // ── Build card renderer — mirrors builds.html card exactly ──
+  function renderBuildCard(type) {
+    const b = KB.builds[type];
+    if (!b) return;
+
+    const isMelee = type === 'melee';
+    const cls     = isMelee ? 'physical' : 'magic';
+    const imgBase  = '../images/';
+
+    // Build preview images from what we fetched, or use known defaults
+    const previews = isMelee
+      ? [
+          { src: imgBase + 'weapons/ShadowScythe.png',    label: 'Shadow Scythe' },
+          { src: imgBase + 'armor/CursedCommander.png',   label: 'Commander Set' },
+          { src: imgBase + 'Artifacts/ShadowFang.png',    label: 'ShadowFang' },
+        ]
+      : [
+          { src: imgBase + 'magic/Werewolf.png',          label: 'Werewolf' },
+          { src: imgBase + 'armor/Astral.png',            label: 'Astral Set' },
+          { src: imgBase + 'Artifacts/DarkHeart.png',     label: 'Dark Heart' },
+        ];
+
+    const previewHTML = previews.map(p => `
+      <div class="bc-preview-item">
+        <img src="${p.src}" alt="${p.label}" onerror="this.style.display='none'"/>
+        <span class="bc-preview-label">${p.label}</span>
+      </div>`).join('');
+
+    const weaponTags = b.weapons.map(w => `<span class="bc-tag weapon">${w}</span>`).join('');
+    const armorTag   = `<span class="bc-tag" style="${isMelee?'border-color:rgba(255,42,74,0.3);color:rgba(255,120,140,0.8)':'border-color:rgba(162,89,255,0.3);color:rgba(180,130,255,0.8)'}">${b.armor}</span>`;
+    const artifactTags = b.artifacts.map(a => `<span class="bc-tag">${a}</span>`).join('');
+    const statsHTML  = Object.entries(b.stats).map(([k,v]) => {
+      const isHighlight = isMelee ? k==='Strength' : k==='Magic';
+      return `<div class="bc-stat"><span class="bc-stat-name">${k}</span><span class="bc-stat-val${isHighlight?' hl':''}">${v}</span></div>`;
+    }).join('');
+
+    const html = `
+      <div class="bc ${cls}">
+        <div class="bc-corner tl"></div><div class="bc-corner tr"></div>
+        <div class="bc-corner bl"></div><div class="bc-corner br"></div>
+        <div class="bc-head">
+          <div class="bc-title">${b.name}</div>
+          <div class="bc-playstyle">${b.playstyle}</div>
+        </div>
+        <div class="bc-preview">${previewHTML}</div>
+        <div class="bc-body">
+          <div>
+            <div class="bc-section-label">${isMelee ? 'Recommended Weapons' : 'Recommended Magic'}</div>
+            <div class="bc-tags">${weaponTags}</div>
+          </div>
+          <div>
+            <div class="bc-section-label">Recommended Armor</div>
+            <div class="bc-tags">${armorTag}</div>
+          </div>
+          <div>
+            <div class="bc-section-label">Recommended Artifacts</div>
+            <div class="bc-tags">${artifactTags}</div>
+          </div>
+          <div>
+            <div class="bc-section-label">Target Stats</div>
+            <div class="bc-stats">${statsHTML}</div>
+          </div>
+          <div>
+            <div class="bc-section-label">Best Class</div>
+            <div class="bc-tags"><span class="bc-tag classtag">${b.bestClass}</span></div>
+          </div>
+        </div>
+      </div>`;
+
+    document.getElementById('buildModalInner').innerHTML = html;
+    document.getElementById('buildModal').classList.add('open');
+  }
+
+  // ── Wire build chips directly to card modal ──
+  document.querySelector('[data-q="What is the best melee build?"]')
+    ?.addEventListener('click', e => { e.stopPropagation(); renderBuildCard('melee'); }, true);
+  document.querySelector('[data-q="What is the best magic build?"]')
+    ?.addEventListener('click', e => { e.stopPropagation(); renderBuildCard('magic'); }, true);
+
+  document.getElementById('buildModalClose').addEventListener('click', () =>
+    document.getElementById('buildModal').classList.remove('open'));
+  document.getElementById('buildModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('buildModal'))
+      document.getElementById('buildModal').classList.remove('open');
+  });
   </script>
 </body>
 </html>

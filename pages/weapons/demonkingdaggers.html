@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>King's Trident | Solo Hunters System DB</title>
+  <title>Demon King Daggers | Solo Hunters System DB</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -13,14 +13,14 @@
       --purple: #7b2fff;
       --red: #ff2a4a;
       --gold: #ffd700;
-      --accent: #ffd700; --accent-rgb: 255,215,0;
+      --accent: #7b2fff; --accent-rgb: 123,47,255;
       --text: rgba(180,210,240,0.85);
       --text-dim: rgba(120,160,200,0.5);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
     .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
-    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(123,47,255,0.16) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
+    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(123,47,255,0.18) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
     .bg-grid{background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:48px 48px;animation:grid-drift 40s linear infinite alternate;}
     @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
     .bg-scanlines{background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);opacity:.5;}
@@ -39,14 +39,12 @@
     @keyframes orb-pulse{from{transform:scale(.95);opacity:.6}to{transform:scale(1.05);opacity:1}}
     .weapon-img-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(var(--accent-rgb),.55)) drop-shadow(0 0 8px rgba(255,255,255,.15));animation:weapon-float 5s ease-in-out infinite alternate;position:relative;z-index:1;}
     @keyframes weapon-float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-    .weapon-name{font-family:'Orbitron',monospace;font-size:clamp(24px,5vw,42px);font-weight:900;letter-spacing:4px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(var(--accent-rgb),.45),0 0 80px rgba(var(--accent-rgb),.2);margin-bottom:6px;}
-    .weapon-type-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px;}
+    .weapon-name{font-family:'Orbitron',monospace;font-size:clamp(20px,4vw,38px);font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(var(--accent-rgb),.45),0 0 80px rgba(var(--accent-rgb),.2);margin-bottom:6px;}
+    .weapon-type-row{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:10px;}
     .tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:2px;}
     .tag-type{color:var(--cyan);border:1px solid rgba(0,212,255,.35);background:rgba(0,212,255,.07);}
-    .tag-s{color:#ff4e6b;border:1px solid rgba(255,78,107,.4);background:rgba(255,78,107,.08);}
     .tag-a{color:#6e7fff;border:1px solid rgba(110,127,255,.4);background:rgba(110,127,255,.08);}
-    .tag-b{color:#ffd700;border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.07);}
-    .tag-f{color:#7fd8ff;border:1px solid rgba(127,216,255,.35);background:rgba(127,216,255,.07);}
+    .tag-legend{color:#bf5fff;border:1px solid rgba(138,43,226,.3);background:rgba(138,43,226,.07);}
     .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
     @media(max-width:600px){.content-grid{grid-template-columns:1fr;}}
     .panel{background:linear-gradient(135deg,rgba(6,10,22,.97),rgba(10,6,20,.97));border:1px solid var(--border);border-radius:6px;padding:22px;position:relative;overflow:hidden;}
@@ -76,9 +74,8 @@
     .desc-text{font-size:13px;line-height:1.85;color:rgba(180,210,240,.75);letter-spacing:.3px;}
     .obtain-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
     .obtain-chip{display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:4px;font-size:11px;letter-spacing:1px;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
-    .location-wrap{margin-top:14px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,212,255,.15);position:relative;}
-    .location-wrap img{width:100%;display:block;}
-    .location-label{position:absolute;bottom:0;left:0;right:0;padding:8px 14px;background:linear-gradient(0deg,rgba(2,4,8,.9),transparent);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
+    .craft-note{margin-top:14px;padding:12px 16px;background:rgba(123,47,255,.06);border:1px solid rgba(123,47,255,.2);border-radius:4px;}
+    .craft-note-text{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(185,130,255,.75);line-height:1.6;}
     .back-row{text-align:center;margin-top:40px;}
     .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,.3);border-radius:4px;padding:10px 24px;background:rgba(0,212,255,.05);transition:all .2s;}
     .back-btn:hover{background:rgba(0,212,255,.12);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,212,255,.25);}
@@ -102,14 +99,15 @@
 
   <div class="page">
     <div class="weapon-hero fade-up">
-      <div class="rank-badge">[ B — RANK WEAPON ]</div>
+      <div class="rank-badge">[ A — RANK WEAPON ]</div>
       <div class="weapon-img-wrap">
-        <img src="../../images/weapons/KingsTrident.png" alt="King's Trident"/>
+        <img src="../../images/weapons/DemonKingDaggers.png" alt="Demon King Daggers"/>
       </div>
-      <h1 class="weapon-name">King's Trident</h1>
+      <h1 class="weapon-name">Demon King Daggers</h1>
       <div class="weapon-type-row">
-        <span class="tag tag-type">Trident</span>
-        <span class="tag tag-b">B Rank</span>
+        <span class="tag tag-type">Daggers</span>
+        <span class="tag tag-a">A Rank</span>
+        <span class="tag tag-legend">Legendary</span>
       </div>
     </div>
 
@@ -118,11 +116,11 @@
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Combat Stats</div>
-        <div class="stat-row"><span class="stat-name">Damage</span><span class="stat-val high">High</span></div>
+        <div class="stat-row"><span class="stat-name">Damage</span><span class="stat-val normal">Medium</span></div>
         <div class="stat-row"><span class="stat-name">Attack Speed</span><span class="stat-val good">Fast</span></div>
-        <div class="stat-row"><span class="stat-name">Range</span><span class="stat-val high">Extreme Long</span></div>
+        <div class="stat-row"><span class="stat-name">Range</span><span class="stat-val low">Short</span></div>
         <div class="stat-row"><span class="stat-name">AOE</span><span class="stat-val normal">B</span></div>
-        <div class="stat-row"><span class="stat-name">Power Rating</span><span class="stat-val high">B+</span></div>
+        <div class="stat-row"><span class="stat-name">Power Rating</span><span class="stat-val normal">A</span></div>
       </div>
 
       <div class="panel fade-up d2">
@@ -130,14 +128,14 @@
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Performance</div>
         <div class="power-bar-wrap">
-          <div class="power-label-row"><span class="power-label">Damage</span><span class="power-val">80%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:80%;background:linear-gradient(90deg,#ff4e6b,#ff8fa0);animation-delay:0.4s"></div></div>
-          <div class="power-label-row"><span class="power-label">Speed</span><span class="power-val">70%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:70%;background:linear-gradient(90deg,#00d4ff,#7fffff);animation-delay:0.5s"></div></div>
-          <div class="power-label-row"><span class="power-label">AOE</span><span class="power-val">55%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:55%;background:linear-gradient(90deg,#ffd700,#ffe680);animation-delay:0.6s"></div></div>
-          <div class="power-label-row"><span class="power-label">Overall Power</span><span class="power-val">78%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:78%;background:linear-gradient(90deg,#7b2fff,#b47fff);animation-delay:0.7s"></div></div>
+          <div class="power-label-row"><span class="power-label">Damage</span><span class="power-val">52%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:52%;background:linear-gradient(90deg,#ff4e6b,#ff8fa0);animation-delay:0.4s"></div></div>
+          <div class="power-label-row"><span class="power-label">Speed</span><span class="power-val">68%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:68%;background:linear-gradient(90deg,#00d4ff,#7fffff);animation-delay:0.5s"></div></div>
+          <div class="power-label-row"><span class="power-label">AOE</span><span class="power-val">48%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:48%;background:linear-gradient(90deg,#ffd700,#ffe680);animation-delay:0.6s"></div></div>
+          <div class="power-label-row"><span class="power-label">Overall Power</span><span class="power-val">55%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:55%;background:linear-gradient(90deg,#7b2fff,#b47fff);animation-delay:0.7s"></div></div>
         </div>
       </div>
 
@@ -145,7 +143,7 @@
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Weapon Analysis</div>
-        <p class="desc-text">Skill F exceeds axe and katana in damage but has a small hitbox — extreme range and good cooldown compensate. Skill C is very high damage at mid range with a fast cooldown and I-frame, though it takes practice to land consistently.</p>
+        <p class="desc-text">The go-to starter weapon for new hunters. Drops from every gate in the game, making it highly accessible right from the beginning. Solid speed and decent mid-game damage — reliable for clearing early and mid-tier gates. Its main value is as a stepping stone: farm it early, use it through the mid-game, then craft it into the <strong style="color:#ff4e6b;">True Demon King Daggers</strong> once you have the materials for a massive power spike.</p>
       </div>
 
       <div class="panel fade-up d4">
@@ -153,10 +151,13 @@
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Acquisition</div>
         <div class="obtain-list">
-          <div class="obtain-chip">🌨️ Snow Forest</div>
+          <div class="obtain-chip">🌀 All Gates</div>
+        </div>
+        <div class="craft-note">
+          <p class="craft-note-text">⚗️ Can be upgraded into <strong style="color:#ff2a4a;">True Demon King Daggers</strong> via crafting at the Demon Castle using Demonic Cubes ×25 + Demonic Shards ×20.</p>
         </div>
       </div>
-      
+
     </div>
 
     <div class="back-row fade-up d5">

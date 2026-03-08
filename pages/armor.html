@@ -254,15 +254,15 @@
 
   <script>
     const armorInfo = {
-      "Iron Set":        { Location:"ALL Gate",              BaseHealth:"18% Health",    MaxHealth:"56.8% Health",  Bonus2:"20% Melee Dmg", Bonus3:"20% Melee Dmg",  Rarity:"epic" },
-      "Sunforge Set":    { Location:"Spider Cave",           BaseHealth:"57% Health",    MaxHealth:"243% Health",   Bonus2:"15% Extra HP",   Bonus3:"20% Melee Dmg",  Rarity:"mythic" },
-      "Bloodsteel Set":  { Location:"Jungle",                BaseHealth:"32% Health",    MaxHealth:"146.8% Health", Bonus2:"8% Extra HP",    Bonus3:"20% Melee Dmg",  Rarity:"mythic" },
-      "Oathkeeper Set":  { Location:"Desert",                BaseHealth:"78% Health",    MaxHealth:"347.1% Health", Bonus2:"18% Extra HP",   Bonus3:"Burn Passive",   Rarity:"mythic" },
-      "Serpent Set":     { Location:"Subway",                BaseHealth:"48% Health",    MaxHealth:"220.2% Health", Bonus2:"12% Extra HP",   Bonus3:"25% Melee Dmg",  Rarity:"mythic" },
-      "Venomspike Set":  { Location:"Caves",                 BaseHealth:"46% Health",    MaxHealth:"218.2% Health", Bonus2:"10% Extra HP",   Bonus3:"25% Melee Dmg",  Rarity:"mythic" },
-      "Astral Set":      { Location:"Snow Forest",           BaseHealth:"44% Health",    MaxHealth:"187.5% Health", Bonus2:"14% Extra HP",   Bonus3:"20% Magic Dmg",  Rarity:"mythic" },
-      "Commander Set":   { Location:"Cursed Commander Boss", BaseHealth:"63% Health",    MaxHealth:"362% Health",   Bonus2:"30% Melee Dmg",  Bonus3:"Burn Passive",   Rarity:"mythic" },
-      "Demonite Set":    { Location:"Demon Castle Tower",    BaseHealth:"27% Health",    MaxHealth:"~165% Health",  Bonus2:"18% Extra HP + Burn Passive", Bonus3:"18% Extra HP + Burn Passive (w/ Carmsei Katana)", Rarity:"mythic",
+      "Iron Set":        { Location:"ALL Gate",              BaseHealth:"18% Health",    MaxHealth:"56.8% Health",  Bonus3:"20% Melee Dmg",                              Rarity:"epic" },
+      "Sunforge Set":    { Location:"Spider Cave",           BaseHealth:"57% Health",    MaxHealth:"243% Health",   Bonus3:"15% Extra HP · 20% Melee Dmg",               Rarity:"mythic" },
+      "Bloodsteel Set":  { Location:"Jungle",                BaseHealth:"32% Health",    MaxHealth:"146.8% Health", Bonus3:"8% Extra HP · 20% Melee Dmg",                Rarity:"mythic" },
+      "Oathkeeper Set":  { Location:"Desert",                BaseHealth:"78% Health",    MaxHealth:"347.1% Health", Bonus3:"18% Extra HP · Burn Passive",                Rarity:"mythic" },
+      "Serpent Set":     { Location:"Subway",                BaseHealth:"48% Health",    MaxHealth:"220.2% Health", Bonus3:"12% Extra HP · 25% Melee Dmg",               Rarity:"mythic" },
+      "Venomspike Set":  { Location:"Caves",                 BaseHealth:"46% Health",    MaxHealth:"218.2% Health", Bonus3:"10% Extra HP · 25% Melee Dmg",               Rarity:"mythic" },
+      "Astral Set":      { Location:"Snow Forest",           BaseHealth:"44% Health",    MaxHealth:"187.5% Health", Bonus3:"14% Extra HP · 20% Magic Dmg",               Rarity:"mythic" },
+      "Commander Set":   { Location:"Cursed Commander Boss", BaseHealth:"63% Health",    MaxHealth:"362% Health",   Bonus3:"30% Melee Dmg · Burn Passive",               Rarity:"mythic" },
+      "Demonite Set":    { Location:"Demon Castle Tower",    BaseHealth:"27% Health",    MaxHealth:"~165% Health",  Bonus3:"18% Extra HP · Burn Passive (w/ Carmsei Katana)", Rarity:"mythic",
                            Recipe: "Each piece: 5 Demon Cubes + 10 Demon Shards &nbsp;|&nbsp; Full set: 15 Demon Cubes + 30 Demon Shards" },
     };
 
@@ -277,10 +277,10 @@
           <div class="modal-title">${name}</div>
           <span class="modal-rarity ${rarityClass}" style="border-color:currentColor;">${rarityLabel}</span>
           <table class="modal-table">
-            <thead><tr><th>Location</th><th>Base HP</th><th>Max HP</th><th>2-Piece</th><th>3-Piece</th></tr></thead>
+            <thead><tr><th>Location</th><th>Base HP</th><th>Max HP</th><th>3-Piece Bonus</th></tr></thead>
             <tbody><tr>
               <td>${info.Location}</td><td>${info.BaseHealth}</td><td>${info.MaxHealth}</td>
-              <td>${info.Bonus2}</td><td>${info.Bonus3}</td>
+              <td>${info.Bonus3}</td>
             </tr></tbody>
           </table>
           ${info.Recipe ? `<div class="modal-recipe"><span class="recipe-label">Crafting Recipe</span>${info.Recipe}</div>` : ''}

@@ -352,14 +352,14 @@
   <script>
     /* ── Data ── */
     const armorInfo = {
-      "Iron Set":       { Location:"ALL Gate",              BaseHP:"18% HP",    MaxHP:"56.8% HP",   Bonus2:"20% Melee Dmg", Bonus3:"20% Melee Dmg", Rarity:"epic"   },
-      "Sunforge Set":   { Location:"Spider Cave",           BaseHP:"57% HP",    MaxHP:"243% HP",    Bonus2:"15% Extra HP",  Bonus3:"20% Melee Dmg", Rarity:"mythic" },
-      "Bloodsteel Set": { Location:"Jungle",                BaseHP:"32% HP",    MaxHP:"146.8% HP",  Bonus2:"8% Extra HP",   Bonus3:"20% Melee Dmg", Rarity:"mythic" },
-      "Oathkeeper Set": { Location:"Desert",                BaseHP:"78% HP",    MaxHP:"347.1% HP",  Bonus2:"18% Extra HP",  Bonus3:"Burn Passive",  Rarity:"mythic" },
-      "Serpent Set":    { Location:"Subway",                BaseHP:"48% HP",    MaxHP:"220.2% HP",  Bonus2:"12% Extra HP",  Bonus3:"25% Melee Dmg", Rarity:"mythic" },
-      "Venomspike Set": { Location:"Caves",                 BaseHP:"46% HP",    MaxHP:"218.2% HP",  Bonus2:"10% Extra HP",  Bonus3:"25% Melee Dmg", Rarity:"mythic" },
-      "Astral Set":     { Location:"Snow Forest",           BaseHP:"44% HP",    MaxHP:"187.5% HP",  Bonus2:"14% Extra HP",  Bonus3:"20% Magic Dmg", Rarity:"mythic" },
-      "Commander Set":  { Location:"Cursed Commander Boss", BaseHP:"63% HP",    MaxHP:"362% HP",    Bonus2:"30% Melee Dmg", Bonus3:"Burn Passive",  Rarity:"mythic" },
+      "Iron Set":       { Location:"ALL Gate",              BaseHP:"18% HP",    MaxHP:"56.8% HP",   Bonus3:"20% Melee Dmg",                Rarity:"epic"   },
+      "Sunforge Set":   { Location:"Spider Cave",           BaseHP:"57% HP",    MaxHP:"243% HP",    Bonus3:"15% Extra HP · 20% Melee Dmg", Rarity:"mythic" },
+      "Bloodsteel Set": { Location:"Jungle",                BaseHP:"32% HP",    MaxHP:"146.8% HP",  Bonus3:"8% Extra HP · 20% Melee Dmg",  Rarity:"mythic" },
+      "Oathkeeper Set": { Location:"Desert",                BaseHP:"78% HP",    MaxHP:"347.1% HP",  Bonus3:"18% Extra HP · Burn Passive",  Rarity:"mythic" },
+      "Serpent Set":    { Location:"Subway",                BaseHP:"48% HP",    MaxHP:"220.2% HP",  Bonus3:"12% Extra HP · 25% Melee Dmg", Rarity:"mythic" },
+      "Venomspike Set": { Location:"Caves",                 BaseHP:"46% HP",    MaxHP:"218.2% HP",  Bonus3:"10% Extra HP · 25% Melee Dmg", Rarity:"mythic" },
+      "Astral Set":     { Location:"Snow Forest",           BaseHP:"44% HP",    MaxHP:"187.5% HP",  Bonus3:"14% Extra HP · 20% Magic Dmg", Rarity:"mythic" },
+      "Commander Set":  { Location:"Cursed Commander Boss", BaseHP:"63% HP",    MaxHP:"362% HP",    Bonus3:"30% Melee Dmg · Burn Passive", Rarity:"mythic" },
     };
 
     const magicData = {
@@ -387,10 +387,10 @@
           <div class="modal-title">${el.dataset.armor}</div>
           <span class="modal-rarity rarity-${info.Rarity}">${label}</span>
           <table class="modal-table">
-            <thead><tr><th>Location</th><th>Base HP</th><th>Max HP</th><th>2-Piece</th><th>3-Piece</th></tr></thead>
+            <thead><tr><th>Location</th><th>Base HP</th><th>Max HP</th><th>3-Piece Bonus</th></tr></thead>
             <tbody><tr>
               <td>${info.Location}</td><td>${info.BaseHP}</td><td>${info.MaxHP}</td>
-              <td>${info.Bonus2}</td><td>${info.Bonus3}</td>
+              <td>${info.Bonus3}</td>
             </tr></tbody>
           </table>`;
         document.getElementById('armor-modal').classList.add('open');
