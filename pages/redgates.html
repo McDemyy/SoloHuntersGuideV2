@@ -2,152 +2,637 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Red Gates - Solo Hunters</title>
-  <link rel="stylesheet" href="../style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Red Gates | SH System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
-    body {
-      background: linear-gradient(135deg,#1a1a2c 80%,#ff3c3c22 100%);
-      color: #fff;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
+    :root {
+      --cyan:   #00d4ff;
+      --purple: #7b2fff;
+      --red:    #ff2a4a;
+      --red2:   #ff3c3c;
+      --gold:   #ffd700;
+      --dark:   #04060f;
     }
-    .redgates-container {
-      margin-top: 4.5em;
-      background: rgba(10,18,40,0.98);
-      border-radius: 1.2em;
-      box-shadow: 0 0 32px #ff3c3c88;
-      padding: 1.2em 1.2em 1em 1.2em;
-      max-width: 750px;
-      width: 97vw;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--dark); font-family: 'Share Tech Mono', monospace; color: #c8deff; overflow-x: hidden; min-height: 100vh; }
+
+    /* ── BG — red tinted for this page ── */
+    .bg-grid { position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,42,74,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,42,74,0.04) 1px,transparent 1px);background-size:48px 48px;animation:grid-drift 40s linear infinite alternate; }
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
+    .bg-vignette { position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(255,42,74,0.14) 0%,transparent 55%),radial-gradient(ellipse at 50% 100%,rgba(123,47,255,0.07) 0%,transparent 55%); }
+    .scanlines { position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background:repeating-linear-gradient(0deg,#000 0,#000 1px,transparent 1px,transparent 3px); }
+
+    /* Pulsing red warning flicker */
+    .bg-alert {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 50%, rgba(255,42,74,0.04) 0%, transparent 70%);
+      animation: alert-pulse 2.2s ease-in-out infinite alternate;
     }
-    .redgates-title {
-      color: #ff3c3c;
-      font-size: 2em;
-      font-weight: 700;
-      margin-bottom: 1.2em;
-      letter-spacing: 0.04em;
-      text-shadow: 0 0 8px #ff3c3c99;
+    @keyframes alert-pulse {
+      from { opacity: 0.4; }
+      to   { opacity: 1; }
     }
-    .redgates-info {
-      color: #fff;
-      text-align: left;
-      width: 100%;
-      font-size: 1.08em;
-      line-height: 1.6;
+
+    /* ── NAVBAR ── */
+    .navbar { position:fixed;top:0;left:0;right:0;z-index:1000;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(4,6,15,0.92);border-bottom:1px solid rgba(255,42,74,0.2);backdrop-filter:blur(16px); }
+    .nav-logo { font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:3px;color:var(--red);text-decoration:none;text-transform:uppercase;text-shadow:0 0 16px rgba(255,42,74,0.6); }
+    .nav-links { display:flex;gap:6px;flex-wrap:wrap; }
+    .nav-btn { font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;color:rgba(200,220,255,0.7);text-decoration:none;border:1px solid rgba(255,255,255,0.1);border-radius:3px;background:rgba(255,255,255,0.03);transition:all 0.2s;white-space:nowrap; }
+    .nav-btn:hover { background:rgba(255,42,74,0.1);border-color:rgba(255,42,74,0.4);color:#fff; }
+    .nav-btn.active { color:var(--red);border-color:rgba(255,42,74,0.4);background:rgba(255,42,74,0.08); }
+
+    /* ── LAYOUT ── */
+    .page { position:relative;z-index:1;padding:80px 0 100px;min-height:100vh; }
+    .container { max-width:1100px;margin:0 auto;padding:0 20px; }
+
+    /* ── HEADER ── */
+    .page-header { text-align:center;padding:0 0 48px; }
+    .system-tag {
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:9px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--red);border:1px solid rgba(255,42,74,0.35);
+      padding:4px 16px;border-radius:2px;margin-bottom:18px;
+      background:rgba(255,42,74,0.06);
+      animation:tag-blink 1.5s ease-in-out infinite;
     }
-    .redgates-grid {
+    .tag-dot { width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);animation:tag-blink 0.8s ease-in-out infinite; }
+    @keyframes tag-blink{0%,100%{opacity:1}50%{opacity:0.4}}
+    .page-title {
+      font-family:'Orbitron',monospace;
+      font-size:clamp(28px,9vw,64px);font-weight:900;
+      letter-spacing:clamp(4px,2vw,10px);text-transform:uppercase;
+      color:#fff;
+      text-shadow:0 0 30px rgba(255,42,74,0.7),0 0 70px rgba(255,42,74,0.3),0 0 120px rgba(255,42,74,0.1);
+      margin-bottom:10px;
+    }
+    .page-subtitle { font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,150,160,0.5); }
+    .header-line { width:200px;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--red),rgba(255,42,74,0.4),transparent); }
+
+    /* ── ALERT BANNER ── */
+    .alert-banner {
+      display: flex; align-items: center; gap: 14px;
+      max-width: 780px; margin: 0 auto 44px;
+      padding: 14px 20px;
+      border: 1px solid rgba(255,42,74,0.35);
+      border-radius: 5px;
+      background: rgba(255,42,74,0.06);
+      position: relative; overflow: hidden;
+    }
+    .alert-banner::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--red),transparent); }
+    .alert-icon { font-size:20px;flex-shrink:0; }
+    .alert-text { font-size:10px;letter-spacing:1px;line-height:1.7;color:rgba(255,180,185,0.8); }
+    .alert-text strong { color:var(--red);font-weight:bold; }
+
+    /* ── GATE GRID ── */
+    .gates-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2em;
-      width: 100%;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
     }
-    .redgates-area {
-      margin-bottom: 1.5em;
+
+    /* ── GATE BLOCK ── */
+    .gate-block {
+      position: relative;
+      background: linear-gradient(135deg, rgba(8,12,28,0.97), rgba(16,4,8,0.97));
+      border: 1px solid rgba(255,42,74,0.2);
+      border-radius: 6px;
+      overflow: hidden;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.2s, box-shadow 0.2s;
+      animation: gate-breathe 3.5s ease-in-out infinite alternate;
     }
-    .redgates-area-title {
-      color: #ff3c3c;
-      font-weight: 600;
-      font-size: 1.13em;
-      margin-bottom: 0.3em;
+    .gate-block:hover { border-color: rgba(255,42,74,0.5); box-shadow: 0 8px 32px rgba(255,42,74,0.15); }
+    .gate-block::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,42,74,0.5),transparent); }
+    @keyframes gate-breathe {
+      from { box-shadow: 0 0 10px rgba(255,42,74,0.05); }
+      to   { box-shadow: 0 0 22px rgba(255,42,74,0.14); }
     }
-    .redgates-area-title span {
-      color: #00d4ff;
-      font-size: 0.95em;
-      font-weight: 400;
+
+    /* Corners */
+    .gc { position:absolute;width:8px;height:8px;pointer-events:none;z-index:2;border-color:rgba(255,42,74,0.5) !important; }
+    .gc.tl{top:-1px;left:-1px;border-top:1.5px solid;border-left:1.5px solid;}
+    .gc.tr{top:-1px;right:-1px;border-top:1.5px solid;border-right:1.5px solid;}
+    .gc.bl{bottom:-1px;left:-1px;border-bottom:1.5px solid;border-left:1.5px solid;}
+    .gc.br{bottom:-1px;right:-1px;border-bottom:1.5px solid;border-right:1.5px solid;}
+
+    /* Gate header */
+    .gate-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid rgba(255,42,74,0.1);
+      background: rgba(255,42,74,0.04);
+      cursor: pointer;
+      user-select: none;
     }
-    ul {
-      margin: 0 0 1em 1em;
-      padding: 0;
-      list-style: none;
+    .gate-header-left { display: flex; align-items: center; gap: 10px; }
+    .gate-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1.5px solid var(--red);
+      position: relative; flex-shrink: 0;
+      animation: dot-pulse 1.8s ease-in-out infinite;
     }
-    @media (max-width: 700px) {
-      .redgates-grid { grid-template-columns: 1fr; }
-      .redgates-container { padding: 1em 0.5em; }
+    .gate-dot::after { content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;border-radius:50%;background:var(--red); }
+    @keyframes dot-pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,42,74,0.5)}50%{box-shadow:0 0 0 5px rgba(255,42,74,0)}}
+    .gate-name { font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);text-shadow:0 0 10px rgba(255,42,74,0.4); }
+    .gate-lv { font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,150,160,0.45);margin-top:2px; }
+    .gate-arrow { font-size:13px;color:rgba(255,42,74,0.5);transition:transform 0.3s; }
+    .gate-block.open .gate-arrow { transform: rotate(180deg); }
+
+    /* Collapsible table */
+    .gate-table-wrap { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    .gate-block.open .gate-table-wrap { max-height: 600px; }
+
+    /* Rank table */
+    .rank-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .rank-table th { font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;border-bottom:1px solid rgba(255,42,74,0.1);text-align:right;color:rgba(255,150,160,0.4);font-weight:normal; }
+    .rank-table th:first-child { text-align:left; }
+    .rank-table td { padding:7px 14px;border-bottom:1px solid rgba(255,255,255,0.025);text-align:right;color:rgba(200,180,185,0.75);font-size:10px; }
+    .rank-table td:first-child { text-align:left; }
+    .rank-table tr:last-child td { border-bottom: none; }
+    .rank-table tr:hover td { background: rgba(255,42,74,0.04); }
+
+    /* Rank badges — same system as levelguide */
+    .rb { display:inline-block;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 6px;border-radius:2px;border:1px solid; }
+    .r-d   { color:#6e7fff;border-color:rgba(110,127,255,0.3);background:rgba(110,127,255,0.06); }
+    .r-dp  { color:#8888ff;border-color:rgba(136,136,255,0.3);background:rgba(136,136,255,0.06); }
+    .r-c   { color:#00d4ff;border-color:rgba(0,212,255,0.3);background:rgba(0,212,255,0.06); }
+    .r-cp  { color:#00e5ff;border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.06); }
+    .r-b   { color:#ffd700;border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.06); }
+    .r-bp  { color:#ffe040;border-color:rgba(255,224,64,0.3);background:rgba(255,224,64,0.06); }
+    .r-a   { color:#ff9d3d;border-color:rgba(255,157,61,0.3);background:rgba(255,157,61,0.06); }
+    .r-ap  { color:#ffb347;border-color:rgba(255,179,71,0.3);background:rgba(255,179,71,0.06); }
+    .r-s   { color:#ff4e6b;border-color:rgba(255,78,107,0.3);background:rgba(255,78,107,0.06); }
+    .r-sp  { color:#ff2a4a;border-color:rgba(255,42,74,0.4);background:rgba(255,42,74,0.08); }
+    .r-spp { color:#ff0033;border-color:rgba(255,0,51,0.4);background:rgba(255,0,51,0.08); }
+    .r-sppp{ color:#c800ff;border-color:rgba(200,0,255,0.4);background:rgba(200,0,255,0.1);text-shadow:0 0 8px rgba(200,0,255,0.5); }
+
+    /* Power value — highlight red */
+    .power-val { color: rgba(255,180,185,0.9); font-weight: bold; }
+
+    /* ── POWER SEARCH ── */
+    .power-search {
+      max-width: 620px; margin: 0 auto 44px;
+      padding: 20px 24px;
+      border: 1px solid rgba(255,42,74,0.2);
+      border-radius: 6px;
+      background: rgba(255,42,74,0.04);
+      position: relative; overflow: hidden;
+    }
+    .power-search::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,42,74,0.5),transparent); }
+    .power-search-label { display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,150,160,0.5);margin-bottom:14px;text-align:center; }
+    .power-search-row { display:flex;gap:8px;flex-wrap:wrap; }
+    .power-input {
+      flex:1;min-width:140px;
+      font-family:'Share Tech Mono',monospace;font-size:13px;
+      padding:10px 14px;
+      background:rgba(0,0,0,0.35);
+      border:1px solid rgba(255,42,74,0.25);
+      border-radius:4px; color:#ffaaaa; outline:none;
+      transition:border-color 0.2s,box-shadow 0.2s;
+    }
+    .power-input::placeholder { color:rgba(255,100,120,0.3); }
+    .power-input:focus { border-color:var(--red);box-shadow:0 0 14px rgba(255,42,74,0.2); }
+    .power-input::-webkit-inner-spin-button { display:none; }
+    .power-search-btn {
+      font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+      padding:10px 20px;
+      background:linear-gradient(90deg,rgba(255,42,74,0.15),rgba(200,0,60,0.15));
+      border:1px solid rgba(255,42,74,0.4); border-radius:4px;
+      color:var(--red);cursor:pointer;transition:all 0.2s;white-space:nowrap;
+    }
+    .power-search-btn:hover { background:linear-gradient(90deg,rgba(255,42,74,0.28),rgba(200,0,60,0.25));box-shadow:0 0 14px rgba(255,42,74,0.3); }
+    .power-clear-btn {
+      font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;
+      padding:10px 14px; background:rgba(255,255,255,0.04);
+      border:1px solid rgba(255,255,255,0.1); border-radius:4px;
+      color:rgba(200,180,185,0.5);cursor:pointer;transition:all 0.2s;white-space:nowrap;
+    }
+    .power-clear-btn:hover { border-color:rgba(255,255,255,0.2);color:rgba(200,180,185,0.9); }
+    .power-result { margin-top:14px;font-size:10px;letter-spacing:1px;line-height:1.9;min-height:0;transition:all 0.3s; }
+    .power-result.has-result { color:rgba(200,220,255,0.8); }
+    .power-result .res-gate-name { font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;color:var(--red); }
+    .power-result .res-rank { font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px; }
+    .power-result .res-max { color:rgba(0,255,100,0.8); }
+    .power-result .res-none { color:rgba(255,150,160,0.5);font-size:9px;letter-spacing:2px;text-transform:uppercase; }
+
+    /* Highlight matched rows */
+    .rank-table tr.matched td { background:rgba(0,255,100,0.06) !important; }
+    .rank-table tr.matched td .power-val { color:#00ff9f; text-shadow:0 0 8px rgba(0,255,159,0.4); }
+    .rank-table tr.over-power td { opacity:0.35; }
+
+    /* ── NORMAL GATE FAB ── */
+    .normal-fab {
+      position: fixed; bottom: 20px; right: 20px; z-index: 1100;
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 18px;
+      background: linear-gradient(90deg, rgba(0,212,255,0.15), rgba(0,255,159,0.12));
+      border: 1px solid rgba(0,212,255,0.4);
+      border-radius: 4px;
+      color: var(--cyan); font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: 0 0 20px rgba(0,212,255,0.15);
+      animation: fab-breathe 2s ease-in-out infinite alternate;
+      transition: box-shadow 0.2s;
+    }
+    .normal-fab:hover { box-shadow: 0 0 36px rgba(0,212,255,0.35); }
+    @keyframes fab-breathe {
+      from { box-shadow: 0 0 14px rgba(0,212,255,0.12); }
+      to   { box-shadow: 0 0 28px rgba(0,212,255,0.28); }
+    }
+
+    /* ── MOBILE ── */
+    @media(max-width:700px) {
+      .gates-grid { grid-template-columns: 1fr; }
+    }
+    @media(max-width:480px) {
+      .rank-table th, .rank-table td { padding: 6px 10px; font-size: 9px; }
     }
   </style>
 </head>
 <body>
-    <nav class="navbar">
-      <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
-      <ul class="nav-links">
-        <li><a href="../index.html" class="nav-back">⬅ Home</a></li>
-        <li><a href="armor.html">Armor</a></li>
-        <li><a href="weapons.html">Weapons</a></li>
-        <li><a href="builds.html">Builds</a></li>
-        <li><a href="redgates.html" class="active">Red Gates</a></li>
-        <li><a href="levelguide.html">Gate Info</a></li>
-      </ul>
-    </nav>
-  <div class="redgates-container">
-    <div class="redgates-title">Red Gates</div>
-    <div class="redgates-info">
-      <div class="redgates-grid">
-        <div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Subway <span>(Lv 0+)</span></div>
-            <ul>
-              <li>D: 2,100</li><li>D+: 2,850</li><li>C: 3,450</li><li>C+: 3,900</li><li>B: 24,000</li><li>B+: 33,000</li><li>A: 45,000</li><li>A+: 60,000</li><li>S: 82,500</li><li>S+: 172,500</li><li>S++: 262,500</li><li>S+++: 607,500</li>
-            </ul>
-          </div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Caves <span>(Lv 20+)</span></div>
-            <ul>
-              <li>D: 11,100</li><li>D+: 12,900</li><li>C: 14,700</li><li>C+: 16,500</li><li>B: 37,500</li><li>B+: 75,000</li><li>A: 135,000</li><li>A+: 240,000</li><li>S: 412,500</li><li>S+: 570,000</li><li>S++: 720,000</li><li>S+++: 800,000</li>
-            </ul>
-          </div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Jungle <span>(Lv 80+)</span></div>
-            <ul>
-              <li>D: 34,500</li><li>D+: 39,000</li><li>C: 43,500</li><li>C+: 48,000</li><li>B: 78,000</li><li>B+: 127,500</li><li>A: 210,000</li><li>A+: 345,000</li><li>S: 532,500</li><li>S+: 652,500</li><li>S++: 780,000</li><li>S+++: 900,000</li>
-            </ul>
-          </div>
-        </div>
-        <div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Desert <span>(Lv 200+)</span></div>
-            <ul>
-              <li>D: 88,500</li><li>D+: 99,000</li><li>C: 109,500</li><li>C+: 120,000</li><li>B: 165,000</li><li>B+: 232,500</li><li>A: 330,000</li><li>A+: 465,000</li><li>S: 630,000</li><li>S+: 660,000</li><li>S++: 750,000</li><li>S+++: 825,000</li>
-            </ul>
-          </div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Snow Forest <span>(Lv 300+)</span></div>
-            <ul>
-              <li>D: 162,000</li><li>D+: 174,000</li><li>C: 184,500</li><li>C+: 195,000</li><li>B: 255,000</li><li>B+: 307,500</li><li>A: 382,500</li><li>A+: 480,000</li><li>S: 592,500</li><li>S+: 675,000</li><li>S++: 775,000</li><li>S+++: 875,000</li>
-            </ul>
-          </div>
-          <div class="redgates-area">
-            <div class="redgates-area-title">Spider Cave <span>(Lv 380+)</span></div>
-            <ul>
-              <li>D: 327,000</li><li>D+: 357,000</li><li>C: 375,000</li><li>C+: 397,500</li><li>B: 450,000</li><li>B+: 510,000</li><li>A: 577,500</li><li>A+: 660,000</li><li>S: 735,000</li><li>S+: 795,000</li><li>S++: 847,500</li><li>S+++: 900,000</li>
-            </ul>
-          </div>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="bg-alert"></div>
+  <div class="scanlines"></div>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">⬅ Home</a>
+      <a href="levelguide.html" class="nav-btn">Normal Gates</a>
+      <a href="builds.html" class="nav-btn">Builds</a>
+      <a href="redgates.html" class="nav-btn active">Red Gates</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="container">
+
+      <header class="page-header">
+        <div class="system-tag"><span class="tag-dot"></span>⚠ Danger Zone — Supercharged Gates<span class="tag-dot"></span></div>
+        <h1 class="page-title">Red Gates</h1>
+        <p class="page-subtitle">Supercharged dungeons · 5% spawn chance · Required power thresholds</p>
+        <div class="header-line"></div>
+      </header>
+
+      <!-- Alert banner -->
+      <div class="alert-banner">
+        <span class="alert-icon">⚡</span>
+        <div class="alert-text">
+          <strong>Red Gates spawn when a normal gate closes</strong> — 5% chance per closure.<br>
+          Power requirements are <strong>1.5× higher</strong> than normal gates. EXP reward is identical to the normal version. High risk, same reward — but the challenge counts.
         </div>
       </div>
+
+      <!-- Power Search -->
+      <div class="power-search" id="power-search">
+        <span class="power-search-label">◈ Enter your Power — find which Red Gate ranks you can attempt</span>
+        <div class="power-search-row">
+          <input class="power-input" id="power-input" type="number" min="0" placeholder="e.g. 450,000" />
+          <button class="power-search-btn" id="power-search-btn">Scan</button>
+          <button class="power-clear-btn" id="power-clear-btn" style="display:none">✕ Clear</button>
+        </div>
+        <div class="power-result" id="power-result"></div>
+      </div>
+
+      <!-- Gates grid — all collapsible, first open by default -->
+      <div class="gates-grid" id="gates-grid">
+
+        <!-- SUBWAY -->
+        <div class="gate-block open">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Subway</div><div class="gate-lv">Lv 0+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">2,100</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">2,850</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">3,450</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">3,900</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">24,000</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">33,000</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">45,000</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">60,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">82,500</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">172,500</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">262,500</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">607,500</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CAVES -->
+        <div class="gate-block">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Caves</div><div class="gate-lv">Lv 20+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">11,100</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">12,900</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">14,700</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">16,500</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">37,500</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">75,000</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">135,000</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">240,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">412,500</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">570,000</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">720,000</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">800,000</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- JUNGLE -->
+        <div class="gate-block">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Jungle</div><div class="gate-lv">Lv 80+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">34,500</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">39,000</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">43,500</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">48,000</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">78,000</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">127,500</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">210,000</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">345,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">532,500</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">652,500</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">780,000</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">900,000</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- DESERT -->
+        <div class="gate-block">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Desert</div><div class="gate-lv">Lv 200+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">88,500</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">99,000</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">109,500</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">120,000</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">165,000</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">232,500</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">330,000</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">465,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">630,000</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">660,000</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">750,000</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">825,000</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SNOW FOREST -->
+        <div class="gate-block">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Snow Forest</div><div class="gate-lv">Lv 300+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">162,000</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">174,000</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">184,500</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">195,000</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">255,000</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">307,500</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">382,500</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">480,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">592,500</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">675,000</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">775,000</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">875,000</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- SPIDER CAVE -->
+        <div class="gate-block">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="gate-header" onclick="toggleGate(this.parentElement)">
+            <div class="gate-header-left">
+              <div class="gate-dot"></div>
+              <div><div class="gate-name">Spider Cave</div><div class="gate-lv">Lv 380+ · Red variant</div></div>
+            </div>
+            <span class="gate-arrow">▾</span>
+          </div>
+          <div class="gate-table-wrap">
+            <table class="rank-table">
+              <thead><tr><th>Rank</th><th>Power Required</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rb r-d">D</span></td><td><span class="power-val">327,000</span></td></tr>
+                <tr><td><span class="rb r-dp">D+</span></td><td><span class="power-val">357,000</span></td></tr>
+                <tr><td><span class="rb r-c">C</span></td><td><span class="power-val">375,000</span></td></tr>
+                <tr><td><span class="rb r-cp">C+</span></td><td><span class="power-val">397,500</span></td></tr>
+                <tr><td><span class="rb r-b">B</span></td><td><span class="power-val">450,000</span></td></tr>
+                <tr><td><span class="rb r-bp">B+</span></td><td><span class="power-val">510,000</span></td></tr>
+                <tr><td><span class="rb r-a">A</span></td><td><span class="power-val">577,500</span></td></tr>
+                <tr><td><span class="rb r-ap">A+</span></td><td><span class="power-val">660,000</span></td></tr>
+                <tr><td><span class="rb r-s">S</span></td><td><span class="power-val">735,000</span></td></tr>
+                <tr><td><span class="rb r-sp">S+</span></td><td><span class="power-val">795,000</span></td></tr>
+                <tr><td><span class="rb r-spp">S++</span></td><td><span class="power-val">847,500</span></td></tr>
+                <tr><td><span class="rb r-sppp">S+++</span></td><td><span class="power-val">900,000</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /.gates-grid -->
     </div>
   </div>
+
+  <!-- Normal Gates FAB -->
+  <a href="levelguide.html" class="normal-fab">⬡ Normal Gates</a>
+
+  <script>
+    /* ── Gate data for power search ── */
+    const gateData = [
+      { id: 'subway',     name: 'Subway',      rows: [
+        {rank:'D',cls:'r-d',power:2100},{rank:'D+',cls:'r-dp',power:2850},
+        {rank:'C',cls:'r-c',power:3450},{rank:'C+',cls:'r-cp',power:3900},
+        {rank:'B',cls:'r-b',power:24000},{rank:'B+',cls:'r-bp',power:33000},
+        {rank:'A',cls:'r-a',power:45000},{rank:'A+',cls:'r-ap',power:60000},
+        {rank:'S',cls:'r-s',power:82500},{rank:'S+',cls:'r-sp',power:172500},
+        {rank:'S++',cls:'r-spp',power:262500},{rank:'S+++',cls:'r-sppp',power:607500}
+      ]},
+      { id: 'caves',      name: 'Caves',       rows: [
+        {rank:'D',cls:'r-d',power:11100},{rank:'D+',cls:'r-dp',power:12900},
+        {rank:'C',cls:'r-c',power:14700},{rank:'C+',cls:'r-cp',power:16500},
+        {rank:'B',cls:'r-b',power:37500},{rank:'B+',cls:'r-bp',power:75000},
+        {rank:'A',cls:'r-a',power:135000},{rank:'A+',cls:'r-ap',power:240000},
+        {rank:'S',cls:'r-s',power:412500},{rank:'S+',cls:'r-sp',power:570000},
+        {rank:'S++',cls:'r-spp',power:720000},{rank:'S+++',cls:'r-sppp',power:800000}
+      ]},
+      { id: 'jungle',     name: 'Jungle',      rows: [
+        {rank:'D',cls:'r-d',power:34500},{rank:'D+',cls:'r-dp',power:39000},
+        {rank:'C',cls:'r-c',power:43500},{rank:'C+',cls:'r-cp',power:48000},
+        {rank:'B',cls:'r-b',power:78000},{rank:'B+',cls:'r-bp',power:127500},
+        {rank:'A',cls:'r-a',power:210000},{rank:'A+',cls:'r-ap',power:345000},
+        {rank:'S',cls:'r-s',power:532500},{rank:'S+',cls:'r-sp',power:652500},
+        {rank:'S++',cls:'r-spp',power:780000},{rank:'S+++',cls:'r-sppp',power:900000}
+      ]},
+      { id: 'desert',     name: 'Desert',      rows: [
+        {rank:'D',cls:'r-d',power:88500},{rank:'D+',cls:'r-dp',power:99000},
+        {rank:'C',cls:'r-c',power:109500},{rank:'C+',cls:'r-cp',power:120000},
+        {rank:'B',cls:'r-b',power:165000},{rank:'B+',cls:'r-bp',power:232500},
+        {rank:'A',cls:'r-a',power:330000},{rank:'A+',cls:'r-ap',power:465000},
+        {rank:'S',cls:'r-s',power:630000},{rank:'S+',cls:'r-sp',power:660000},
+        {rank:'S++',cls:'r-spp',power:750000},{rank:'S+++',cls:'r-sppp',power:825000}
+      ]},
+      { id: 'snowforest',  name: 'Snow Forest', rows: [
+        {rank:'D',cls:'r-d',power:162000},{rank:'D+',cls:'r-dp',power:174000},
+        {rank:'C',cls:'r-c',power:184500},{rank:'C+',cls:'r-cp',power:195000},
+        {rank:'B',cls:'r-b',power:255000},{rank:'B+',cls:'r-bp',power:307500},
+        {rank:'A',cls:'r-a',power:382500},{rank:'A+',cls:'r-ap',power:480000},
+        {rank:'S',cls:'r-s',power:592500},{rank:'S+',cls:'r-sp',power:675000},
+        {rank:'S++',cls:'r-spp',power:775000},{rank:'S+++',cls:'r-sppp',power:875000}
+      ]},
+      { id: 'spidercave',  name: 'Spider Cave', rows: [
+        {rank:'D',cls:'r-d',power:327000},{rank:'D+',cls:'r-dp',power:357000},
+        {rank:'C',cls:'r-c',power:375000},{rank:'C+',cls:'r-cp',power:397500},
+        {rank:'B',cls:'r-b',power:450000},{rank:'B+',cls:'r-bp',power:510000},
+        {rank:'A',cls:'r-a',power:577500},{rank:'A+',cls:'r-ap',power:660000},
+        {rank:'S',cls:'r-s',power:735000},{rank:'S+',cls:'r-sp',power:795000},
+        {rank:'S++',cls:'r-spp',power:847500},{rank:'S+++',cls:'r-sppp',power:900000}
+      ]},
+    ];
+
+    /* ── Toggle ── */
+    function toggleGate(block) {
+      block.classList.toggle('open');
+    }
+
+    /* ── Power search ── */
+    function runSearch() {
+      const raw = document.getElementById('power-input').value.replace(/,/g,'');
+      const power = parseInt(raw, 10);
+      const resultEl = document.getElementById('power-result');
+      const clearBtn = document.getElementById('power-clear-btn');
+
+      // Clear previous highlights
+      document.querySelectorAll('.rank-table tr').forEach(r => {
+        r.classList.remove('matched','over-power');
+      });
+
+      if (isNaN(power) || power < 0) {
+        resultEl.innerHTML = '<span class="res-none">Enter a valid power value</span>';
+        resultEl.className = 'power-result has-result';
+        return;
+      }
+
+      // For each gate, find the highest rank achievable
+      let lines = [];
+      const blocks = document.querySelectorAll('.gate-block');
+
+      gateData.forEach((gate, gi) => {
+        let bestRow = null;
+        gate.rows.forEach(row => { if (power >= row.power) bestRow = row; });
+
+        // Highlight rows in the actual table
+        const block = blocks[gi];
+        const tableRows = block.querySelectorAll('.rank-table tbody tr');
+        tableRows.forEach((tr, ri) => {
+          const rowPower = gate.rows[ri] ? gate.rows[ri].power : Infinity;
+          if (power >= rowPower) {
+            tr.classList.add('matched');
+          } else {
+            tr.classList.add('over-power');
+          }
+        });
+
+        if (bestRow) {
+          // Auto-open the block so highlights are visible
+          block.classList.add('open');
+          lines.push(`<span class="res-gate-name">${gate.name}</span> — up to <span class="rb ${bestRow.cls} res-rank">${bestRow.rank}</span> <span class="res-max">(${bestRow.power.toLocaleString()} req)</span>`);
+        }
+      });
+
+      if (lines.length === 0) {
+        resultEl.innerHTML = '<span class="res-none">Power too low for any Red Gate rank</span>';
+      } else {
+        resultEl.innerHTML = lines.join('<br>');
+      }
+      resultEl.className = 'power-result has-result';
+      clearBtn.style.display = 'block';
+    }
+
+    function clearSearch() {
+      document.getElementById('power-input').value = '';
+      document.getElementById('power-result').innerHTML = '';
+      document.getElementById('power-result').className = 'power-result';
+      document.getElementById('power-clear-btn').style.display = 'none';
+      document.querySelectorAll('.rank-table tr').forEach(r => r.classList.remove('matched','over-power'));
+      // Close all gates except first
+      document.querySelectorAll('.gate-block').forEach((b,i) => {
+        if (i === 0) b.classList.add('open'); else b.classList.remove('open');
+      });
+    }
+
+    document.getElementById('power-search-btn').addEventListener('click', runSearch);
+    document.getElementById('power-clear-btn').addEventListener('click', clearSearch);
+    document.getElementById('power-input').addEventListener('keydown', e => { if(e.key==='Enter') runSearch(); });
+
+    /* ── Entrance animations — separate from open/close state ── */
+    const blocks = document.querySelectorAll('.gate-block');
+    blocks.forEach((b, i) => {
+      // Start invisible but don't touch open class
+      b.style.opacity = '0';
+      b.style.transform = 'translateY(16px)';
+      setTimeout(() => {
+        b.style.transition = 'opacity 0.4s ease, transform 0.4s ease, border-color 0.2s, box-shadow 0.2s';
+        b.style.opacity = '1';
+        b.style.transform = 'translateY(0)';
+      }, 80 + i * 70);
+    });
+  </script>
 </body>
-  <a href="levelguide.html" id="normalgate-fab" style="position:fixed;bottom:28px;right:28px;z-index:2000;display:flex;align-items:center;gap:0.7em;padding:1em 1.5em;background:linear-gradient(90deg,#00ffd0 60%,#00d4ff 100%);color:#fff;font-size:1.18em;font-weight:700;border-radius:2em;box-shadow:0 0 24px 6px #00ffd099,0 0 0 2px #fff2 inset;transition:box-shadow 0.2s;animation:normalgate-glow 1.2s infinite alternate;letter-spacing:0.04em;text-decoration:none;">
-    <img src="../images/Backgrounds/RedGateIcon.png" alt="Normal Gate" style="height:1.5em;width:1.5em;filter:drop-shadow(0 0 8px #00ffd0) hue-rotate(120deg);"/>
-    NormalGate
-  </a>
-  <style>
-    @keyframes normalgate-glow {
-      0% { box-shadow:0 0 24px 6px #00ffd099,0 0 0 2px #fff2 inset; }
-      100% { box-shadow:0 0 48px 12px #00ffd0cc,0 0 0 2px #fff2 inset; }
-    }
-    #normalgate-fab:hover {
-      box-shadow:0 0 64px 16px #00ffd0,0 0 0 2px #fff2 inset;
-      background:linear-gradient(90deg,#00ffd0 80%,#00d4ff 100%);
-      color:#fff;
-    }
-  </style>
 </html>

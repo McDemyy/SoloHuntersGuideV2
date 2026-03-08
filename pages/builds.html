@@ -1,397 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-      .builds-grid {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start !important;
-        align-items: flex-start !important;
-        gap: 3em;
-        margin-top: 2.5em;
-        z-index: 2;
-        box-sizing: border-box;
-      }
-      .builds-grid > .build-card {
-        width: 850px !important;
-        min-width: 520px !important;
-        max-width: 54vw !important;
-        min-height: 440px;
-        border-radius: 22px;
-        background: linear-gradient(120deg, #0a0e1a 0%, #10182c 50%, #0a0e1a 100%);
-        background-size: 200% 200%;
-        animation: card-bg-move 8s ease-in-out infinite alternate;
-        box-shadow: 0 0 48px 0 #00d4ff33, 0 0 0 2.5px #00d4ff22;
-        position: relative;
-        margin: 2em 0;
-        padding: 2.8em 2.8em 2.8em 2.8em;
-        transition: box-shadow 0.3s, transform 0.3s;
-        display: flex;
-        flex-direction: column;
-        align-items: center !important;
-        justify-content: center !important;
-        overflow: visible;
-        box-sizing: border-box;
-      }
-      @keyframes card-bg-move {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 100% 50%, 100% 50%; }
-      }
-        .build-header {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          gap: 0;
-          margin-bottom: 16px;
-          padding-bottom: 14px;
-          border-bottom: 1px solid rgba(0, 212, 255, 0.15);
-        }
-        .build-header .build-name, .build-header .build-playstyle {
-          text-align: center !important;
-          width: 100%;
-        }
-      .build-card.physical-glow {
-        box-shadow: 0 0 48px 0 #ff2a2a99, 0 0 0 3px #ff2a2a88, 0 0 32px 8px #ff2a2a55;
-        border: 2.5px solid #ff2a2a;
-        animation: card-float 10s ease-in-out infinite alternate;
-      }
-      .build-card.magic-glow {
-        box-shadow: 0 0 48px 0 #a259ffcc, 0 0 0 3px #7b2fff99, 0 0 32px 8px #a259ff55;
-        border: 2.5px solid #a259ff;
-        animation: card-float 10s ease-in-out infinite alternate;
-      }
-      @keyframes card-float {
-        0% { transform: translateY(0) scale(1); }
-        8% { transform: translateY(-10px) scale(1.01); }
-        16% { transform: translateY(0) scale(1); }
-        100% { transform: translateY(0) scale(1); }
-      }
-      /* Solo Leveling animated background overlays */
-      .system-bg-stars, .system-bg-grid, .system-bg-orbs {
-        position: fixed;
-        left: 0; top: 0; width: 100vw; height: 100vh;
-        pointer-events: none;
-        z-index: 1;
-      }
-      .system-bg-stars { background: url('../images/bg-stars.png'); opacity: 0.45; animation: stars-move 18s linear infinite alternate; }
-      .system-bg-grid { background: url('../images/bg-grid.png'); opacity: 0.22; animation: grid-move 12s linear infinite alternate; }
-      .system-bg-orbs { background: url('../images/bg-orbs.png'); opacity: 0.22; animation: orbs-move 10s linear infinite alternate; }
-      @keyframes stars-move { 0% { background-position: 0 0; } 100% { background-position: 80px 40px; } }
-      @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: -80px -40px; } }
-      @keyframes orbs-move { 0% { background-position: 0 0; } 100% { background-position: 40px 80px; } }
-    </style>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Solo Leveling Best Builds – Optimized hunter build guides for Tank, DPS, Shadow, and Boss Killer playstyles." />
-  <title>Best Builds | Solo Leveling System DB</title>
-  <link rel="stylesheet" href="../style.css" />
-</head>
+  <meta name="description" content="Solo Hunters Best Builds – Optimized hunter configurations for Physical and Magic playstyles." />
+  <title>Best Builds | Solo Hunters System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
-  .system-bg-glitches {
-    position: fixed;
-    left: 0; top: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    z-index: 3;
-  }
-  .bg-glitch {
-    position: absolute;
-    border-radius: 2.5px;
-    opacity: 0.18;
-    filter: blur(0.5px);
-    background: linear-gradient(90deg, #00d4ff 0%, #7b2fff 100%);
-    animation: glitch-move 0.32s linear forwards;
-  }
-  @keyframes glitch-move {
-    0% { opacity: 0.18; transform: scaleX(1) skewX(0deg); }
-    40% { opacity: 0.32; transform: scaleX(1.08) skewX(8deg); }
-    80% { opacity: 0.22; transform: scaleX(0.96) skewX(-6deg); }
-    100% { opacity: 0; transform: scaleX(1.12) skewX(0deg); }
-  }
+    :root { --red:#ff2a4a; --gold:#ffd700; --cyan:#00d4ff; --purple:#7b2fff; --green:#00ff9f; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #04060f; font-family: 'Share Tech Mono', monospace; }
+
+    /* ── Background ── */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);
+      background-size: 56px 56px; animation: grid-drift 30s linear infinite alternate;
+    }
+    @keyframes grid-drift { from{background-position:0 0} to{background-position:56px 56px} }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%,rgba(123,47,255,0.12) 0%,transparent 60%), radial-gradient(ellipse at 50% 100%,rgba(0,212,255,0.08) 0%,transparent 60%);
+    }
+    .scanlines { position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.03; background:repeating-linear-gradient(0deg,#000 0px,#000 1px,transparent 1px,transparent 4px); }
+
+    /* ── Navbar ── */
+    .navbar { position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(4,6,15,0.9);border-bottom:1px solid rgba(0,212,255,0.15);backdrop-filter:blur(12px); }
+    .nav-logo { font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;text-decoration:none;text-shadow:0 0 16px rgba(0,212,255,0.6); }
+    .nav-links { display:flex;gap:8px;align-items:center; }
+    .nav-btn { font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.3);border-radius:4px;background:rgba(0,212,255,0.05);transition:all 0.2s; }
+    .nav-btn:hover { background:rgba(0,212,255,0.15);border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,0.3); }
+
+    /* ── Page layout ── */
+    .page-wrapper { position:relative;z-index:1;padding:90px 0 80px;min-height:100vh; }
+    .container { max-width:1100px;margin:0 auto;padding:0 28px; }
+    .page-header { text-align:center;padding:0 0 48px; }
+    .system-tag { display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,212,255,0.3);padding:4px 16px;border-radius:2px;margin-bottom:16px;animation:tag-pulse 2s ease-in-out infinite; }
+    @keyframes tag-pulse { 0%,100%{opacity:1} 50%{opacity:0.55} }
+    .page-title { font-family:'Orbitron',monospace;font-size:clamp(28px,6vw,56px);font-weight:900;letter-spacing:6px;text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);margin-bottom:10px; }
+    .page-subtitle { font-size:11px;letter-spacing:3px;color:rgba(140,180,220,0.6);text-transform:uppercase; }
+    .header-line { width:240px;height:1px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent); }
+
+    /* ── Builds grid ── */
+    .builds-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:28px; }
+
+    /* ── Build card ── */
+    .build-card {
+      position: relative;
+      background: linear-gradient(135deg,rgba(8,12,28,0.97) 0%,rgba(12,8,24,0.97) 100%);
+      border-radius: 8px; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      animation: card-float 8s ease-in-out infinite alternate;
+    }
+    @keyframes card-float { from{transform:translateY(0)} to{transform:translateY(-6px)} }
+    .build-card:hover { transform:translateY(-8px) !important; }
+    .build-card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;z-index:1; }
+
+    /* Physical theme */
+    .build-card.physical {
+      border: 1px solid rgba(255,42,74,0.45);
+      box-shadow: 0 0 28px rgba(255,42,74,0.18), inset 0 0 40px rgba(255,42,74,0.04);
+      animation: physical-breathe 3.5s ease-in-out infinite alternate, card-float 8s ease-in-out infinite alternate;
+    }
+    .build-card.physical::before { background: linear-gradient(90deg,transparent,rgba(255,42,74,0.5),transparent); }
+    @keyframes physical-breathe {
+      from { box-shadow: 0 0 28px rgba(255,42,74,0.18),inset 0 0 40px rgba(255,42,74,0.04); }
+      to   { box-shadow: 0 0 50px rgba(255,42,74,0.35),inset 0 0 60px rgba(255,42,74,0.08); }
+    }
+    .build-card.physical .corner { border-color: rgba(255,42,74,0.6) !important; }
+
+    /* Magic theme */
+    .build-card.magic {
+      border: 1px solid rgba(162,89,255,0.45);
+      box-shadow: 0 0 28px rgba(162,89,255,0.18), inset 0 0 40px rgba(162,89,255,0.04);
+      animation: magic-breathe 3.5s ease-in-out infinite alternate, card-float 8s ease-in-out 0.5s infinite alternate;
+    }
+    .build-card.magic::before { background: linear-gradient(90deg,transparent,rgba(162,89,255,0.5),transparent); }
+    @keyframes magic-breathe {
+      from { box-shadow: 0 0 28px rgba(162,89,255,0.18),inset 0 0 40px rgba(162,89,255,0.04); }
+      to   { box-shadow: 0 0 50px rgba(162,89,255,0.35),inset 0 0 60px rgba(162,89,255,0.08); }
+    }
+    .build-card.magic .corner { border-color: rgba(162,89,255,0.6) !important; }
+
+    /* Corner decorators */
+    .corner { position:absolute;width:10px;height:10px;pointer-events:none;z-index:2; }
+    .corner.tl { top:-1px;left:-1px;border-top:2px solid;border-left:2px solid; }
+    .corner.tr { top:-1px;right:-1px;border-top:2px solid;border-right:2px solid; }
+    .corner.bl { bottom:-1px;left:-1px;border-bottom:2px solid;border-left:2px solid; }
+    .corner.br { bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid; }
+
+    /* ── Card header ── */
+    .build-header { padding: 24px 24px 18px; border-bottom: 1px solid rgba(0,212,255,0.08); }
+    .build-title { font-family:'Orbitron',monospace;font-size:16px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;margin-bottom:6px; }
+    .build-card.physical .build-title { text-shadow: 0 0 12px rgba(255,42,74,0.4); }
+    .build-card.magic .build-title { text-shadow: 0 0 12px rgba(162,89,255,0.4); }
+    .build-playstyle { font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.5); }
+
+    /* ── Preview images ── */
+    .build-preview {
+      display: flex; align-items: center; justify-content: center; gap: 20px;
+      padding: 20px 24px; border-bottom: 1px solid rgba(0,212,255,0.06);
+      background: rgba(0,0,0,0.15);
+    }
+    .preview-item { display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;cursor:pointer;transition:transform 0.2s; }
+    .preview-item:hover { transform: translateY(-4px) scale(1.08); }
+    .preview-item img { width:64px;height:64px;object-fit:contain; }
+    .build-card.physical .preview-item img { filter: drop-shadow(0 0 10px rgba(255,42,74,0.6)); }
+    .build-card.magic .preview-item img { filter: drop-shadow(0 0 10px rgba(162,89,255,0.6)); }
+    .preview-label { font-size:8px;letter-spacing:1px;text-transform:uppercase;color:rgba(140,180,220,0.5);text-align:center; }
+
+    /* ── Card body ── */
+    .build-body { padding: 20px 24px 24px; display:flex;flex-direction:column;gap:16px; }
+
+    /* ── Section rows ── */
+    .build-row {}
+    .build-section-label {
+      font-size:8px;letter-spacing:2.5px;text-transform:uppercase;
+      color:rgba(140,180,220,0.4);margin-bottom:8px;
+    }
+    .build-tags { display:flex;flex-wrap:wrap;gap:6px; }
+    .build-tag {
+      font-family:'Share Tech Mono',monospace;
+      font-size:10px;letter-spacing:1px;text-transform:uppercase;
+      padding:5px 12px;border-radius:3px;
+      border:1px solid rgba(0,212,255,0.2);
+      color:rgba(140,180,220,0.7);
+      background:rgba(0,212,255,0.04);
+      text-decoration:none; cursor:default; transition:all 0.2s;
+    }
+    .build-tag.clickable { cursor:pointer; }
+    .build-tag.clickable:hover { border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.1); }
+    .build-card.physical .build-tag.weapon { border-color:rgba(255,42,74,0.3);color:rgba(255,120,140,0.8);background:rgba(255,42,74,0.06); }
+    .build-card.magic .build-tag.weapon { border-color:rgba(162,89,255,0.3);color:rgba(180,130,255,0.8);background:rgba(162,89,255,0.06); }
+    .build-tag.class-tag { border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.08); }
+
+    /* ── Stats grid ── */
+    .build-stats { display:grid;grid-template-columns:1fr 1fr;gap:8px 16px; }
+    .stat-item { display:flex;flex-direction:column;gap:3px; }
+    .stat-name { font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(140,180,220,0.4);line-height:1; }
+    .stat-val  { font-size:12px;font-weight:bold;color:var(--cyan);line-height:1; }
+    .build-card.physical .stat-val.highlight { color:#ff4e6b;text-shadow:0 0 8px rgba(255,78,107,0.4); }
+    .build-card.magic    .stat-val.highlight { color:#a259ff;text-shadow:0 0 8px rgba(162,89,255,0.4); }
+
+    /* ── Modal ── */
+    .system-modal { display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(4,6,15,0.85);backdrop-filter:blur(8px); }
+    .system-modal.open { display:flex; }
+    .modal-box { position:relative;background:linear-gradient(135deg,rgba(8,12,28,0.98),rgba(12,8,24,0.98));border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:32px;max-width:620px;width:90%;box-shadow:0 0 60px rgba(0,212,255,0.15); }
+    .modal-close { position:absolute;top:12px;right:16px;font-size:22px;color:rgba(0,212,255,0.6);cursor:pointer;background:none;border:none;line-height:1; }
+    .modal-close:hover { color:var(--cyan); }
+    .modal-title { font-family:'Orbitron',monospace;font-size:15px;font-weight:700;color:#fff;margin-bottom:18px; }
+    .modal-table { width:100%;border-collapse:collapse;font-size:11px; }
+    .modal-table th { color:rgba(0,212,255,0.6);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid rgba(0,212,255,0.15);text-align:left; }
+    .modal-table td { padding:10px;border-bottom:1px solid rgba(0,212,255,0.06);color:rgba(200,220,255,0.8); }
+    .modal-table tr:last-child td { border-bottom:none; }
+    .rank-ss{color:#ff4e6b;font-weight:bold;} .rank-s{color:#ff7a3d;font-weight:bold;} .rank-a{color:#6e7fff;font-weight:bold;} .rank-b{color:#ffd700;font-weight:bold;} .rank-c{color:#7fd8ff;font-weight:bold;}
+    .modal-rarity { font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:2px;border:1px solid;display:inline-block;margin-bottom:18px; }
+    .rarity-mythic { color:#ff2a4a;border-color:rgba(255,42,74,0.5);background:rgba(255,42,74,0.12); }
+    .rarity-epic   { color:#aa44ff;border-color:rgba(170,68,255,0.5);background:rgba(170,68,255,0.12); }
+
+    @media(max-width:960px) { .builds-grid { grid-template-columns:1fr; } }
+    @media(max-width:480px) { .container{padding:0 14px;} .build-preview{gap:12px;} .preview-item img{width:50px;height:50px;} .build-stats{grid-template-columns:1fr 1fr;} }
   </style>
+</head>
 <body>
-  <div class="system-bg-stars"></div>
-  <div class="system-bg-grid"></div>
-  <div class="system-bg-particles"></div>
-  <div class="system-bg-rays"></div>
-  <div class="system-bg-lines"></div>
-  <div class="system-bg-orbs"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="scanlines"></div>
 
-        100% { background-position: 100% 50%, 100% 50%; }
-      }
-
-  <!-- Modal for Magic Info -->
-  <div id="magic-modal" class="system-modal" style="display:none;">
-    <div class="system-modal-content" id="magic-modal-content"></div>
-    <span class="system-modal-close" id="close-magic-modal">&times;</span>
-  </div>
-
-  <!-- Navigation -->
   <nav class="navbar">
     <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
-    <div class="nav-links" style="display:flex;gap:0.3em;align-items:center;">
+    <div class="nav-links">
       <a href="../index.html" class="nav-btn">⬅ Home</a>
-      
-      <a href="tierlists.html" class="nav-btn">Tierlist</a>
+      <a href="tierlists.html" class="nav-btn">Tier List</a>
     </div>
   </nav>
 
   <div class="page-wrapper">
     <div class="container">
 
-      <!-- Page Header -->
       <header class="page-header">
         <div class="system-tag">[ DATABASE — BUILDS MODULE ]</div>
         <h1 class="page-title">Best Builds</h1>
         <p class="page-subtitle">Optimized Hunter Configurations · Armor · Weapons · Strategy</p>
-        <div class="center-builds-wrapper">
-          <!-- Physical Build -->
-          <article class="build-card physical-glow">
-            <span class="panel-corner tl"></span>
-            <span class="panel-corner tr"></span>
-            <span class="panel-corner bl"></span>
-            <span class="panel-corner br"></span>
-            <div class="build-header" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;width:100%;">
-              <h2 class="build-name page-title" style="margin:0;text-align:justify;width:100%;">Physical Build</h2>
-              <p class="build-playstyle" style="text-align:justify;width:100%;">Playstyle: Heavy-hitting tank</p>
-            </div>
-            <div class="build-img-row center-build-row">
-              <div style="display:flex;flex-direction:row;gap:18px;flex-wrap:nowrap;align-items:center;justify-content:center;">
-                <a href="weapons/shadowscythe.html"><img src="../images/weapons/ShadowScythe.png" alt="Shadow Scythe" class="build-img" style="height:60px;"></a>
-                <a href="#" class="armor-popup-build" data-armor="Commander Set"><img src="../images/armor/CursedCommander.png" alt="CursedCommander" class="build-img" style="height:60px;cursor:pointer;"></a>
-                <a href="artifacts.html"><img src="../images/Artifacts/ShadowFang.png" alt="Shadow Fang" class="build-img" style="height:60px;"></a>
-              </div>
-            </div>
-            <p class="build-section-label">Recommended Weapon</p>
-            <div class="build-items center-build-items">
-              <a href="weapons/shadowscythe.html" class="build-tag weapon clickable-link">Shadow Scythe</a>
-              <a href="weapons/dualdagger.html" class="build-tag weapon clickable-link">Dual Daggers</a>
-              <a href="weapons/thunderaxe.html" class="build-tag weapon clickable-link">Thunder Axe</a>
-            </div>
-            <p class="build-section-label">Recommended Armor</p>
-            <div class="build-items center-build-items">
-              <a href="#" class="build-tag clickable-link armor-popup-build" data-armor="Commander Set">CursedCommander</a>
-            </div>
-            <p class="build-section-label">Recommended Artifact</p>
-            <div class="build-items center-build-items">
-              <a href="artifacts.html" class="build-tag clickable-link">Shadow Fang</a>
-              <a href="artifacts.html" class="build-tag clickable-link">Wanwood</a>
-            </div>
-            <p class="build-section-label">Stats</p>
-            <div class="build-stats center-build-stats">
-              <span class="build-stat">Magic: <b>1</b></span>
-              <span class="build-stat">Strength: <b>1000</b></span>
-              <span class="build-stat">Defence: <b>700-800</b></span>
-              <span class="build-stat">Energy: <b>50-100</b></span>
-              <span class="build-stat">Agility: <b>1-100</b></span>
-            </div>
-            <p class="build-section-label">Best Class</p>
-            <div class="build-items center-build-items">
-              <span class="build-tag">Tank</span>
-            </div>
-          </article>
-          <!-- Magic Build -->
-          <article class="build-card magic-glow">
-            <span class="panel-corner tl"></span>
-            <span class="panel-corner tr"></span>
-            <span class="panel-corner bl"></span>
-            <span class="panel-corner br"></span>
-            <div class="build-header" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:center;width:100%;">
-              <h2 class="build-name page-title" style="margin:0;text-align:justify;width:100%;">Magic Build</h2>
-              <p class="build-playstyle" style="text-align:justify;width:100%;">Playstyle: High magic burst</p>
-            </div>
-            <div class="build-img-row center-build-row">
-              <div style="display:flex;flex-direction:row;gap:18px;flex-wrap:nowrap;align-items:center;justify-content:center;">
-                <a href="#" class="magic-popup" data-magic="Werewolf" data-obtain="Acquired from Summoning"><img src="../images/magic/Werewolf.png" alt="Werewolf" class="build-img" style="height:60px;cursor:pointer;"></a>
-                <a href="#" class="armor-popup-build" data-armor="Astral Set"><img src="../images/armor/Astral.png" alt="Astral Armor" class="build-img" style="height:60px;cursor:pointer;"></a>
-                <a href="artifacts.html"><img src="../images/Artifacts/DarkHeart.png" alt="Dark Heart Ring" class="build-img" style="height:60px;"></a>
-              </div>
-            </div>
-            <p class="build-section-label">Recommended Weapon</p>
-            <div class="build-items center-build-items">
-              <a href="#" class="build-tag weapon clickable-link magic-popup" data-magic="Werewolf" data-obtain="Acquired from Summoning">Werewolf</a>
-              <a href="#" class="build-tag weapon clickable-link magic-popup" data-magic="Divine Blade" data-obtain="Acquired from Summoning">Divine Blade</a>
-            </div>
-            <p class="build-section-label">Recommended Armor</p>
-            <div class="build-items center-build-items">
-              <a href="#" class="build-tag clickable-link armor-popup-build" data-armor="Astral Set">Astral</a>
-            </div>
-            <p class="build-section-label">Recommended Artifact</p>
-            <div class="build-items center-build-items">
-              <a href="artifacts.html" class="build-tag clickable-link">Dark Heart Ring</a>
-            </div>
-            <p class="build-section-label">Stats</p>
-            <div class="build-stats center-build-stats">
-              <span class="build-stat">Magic: <b>1000</b></span>
-              <span class="build-stat">Strength: <b>1-100</b></span>
-              <span class="build-stat">Defence: <b>400-600</b></span>
-              <span class="build-stat">Energy: <b>100-200</b></span>
-              <span class="build-stat">Agility: <b>1-100</b></span>
-            </div>
-            <p class="build-section-label">Best Class</p>
-            <div class="build-items center-build-items">
-              <span class="build-tag">Mage</span>
-            </div>
-          </article>
-        </div>
+        <div class="header-line"></div>
+      </header>
+
+      <div class="builds-grid">
+
+        <!-- ── Physical Build ── -->
+        <article class="build-card physical">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+
+          <div class="build-header">
+            <div class="build-title">Physical Build</div>
+            <div class="build-playstyle">Playstyle: Heavy-hitting tank</div>
           </div>
-<script>
-    // Glitch animation generator for background
-    function spawnGlitch() {
-      const glitch = document.createElement('div');
-      glitch.className = 'bg-glitch';
-      const w = Math.random() * 120 + 60;
-      const h = Math.random() * 8 + 2;
-      glitch.style.width = w + 'px';
-      glitch.style.height = h + 'px';
-      glitch.style.left = (Math.random() * 100) + 'vw';
-      glitch.style.top = (Math.random() * 100) + 'vh';
-      glitch.style.opacity = 0.12 + Math.random() * 0.18;
-      document.querySelector('.system-bg-glitches').appendChild(glitch);
-      setTimeout(() => {
-        glitch.remove();
-      }, 320);
-    }
-    setInterval(spawnGlitch, 120);
-  // Magic Power List Data (same as magic.html)
-  const magicPowerList = {
-    "Vines": {Range: "Mid", AOE: "B", IFrame: "No", Damage: "C", Notes: "Mediocre AoE and Single-Target Damage"},
-    "Lightning": {Range: "Mid", AOE: "B", IFrame: "No", Damage: "C", Notes: "Lightning Nova is the only good skill"},
-    "Darkness": {Range: "Long", AOE: "S", IFrame: "No", Damage: "A", Notes: "Amazing AoE but lacking damage"},
-    "Nature": {Range: "Mid", AOE: "B", IFrame: "Yes (1)", Damage: "A", Notes: ""},
-    "Crimson": {Range: "Mid", AOE: "A", IFrame: "Yes (1)", Damage: "A", Notes: ""},
-    "Goliath": {Range: "Short", AOE: "B", IFrame: "Yes (2)", Damage: "S", Notes: "Buff Weapon (skill also)"},
-    "Light": {Range: "Long", AOE: "B", IFrame: "No", Damage: "B", Notes: "Nice and fast. Lacks single-target damage."},
-    "Divine Blade": {Range: "Mid", AOE: "A", IFrame: "Yes (All)", Damage: "SS", Notes: "Have M1"},
-    "Werewolf": {Range: "Mid", AOE: "SS", IFrame: "Yes (3)", Damage: "S", Notes: "Have M1 (Only Transformation)"}
-  };
-  // Modal logic for magic items in builds
-  document.querySelectorAll('.magic-popup').forEach(card => {
-    card.addEventListener('click', function(e) {
-      e.preventDefault();
-      const name = card.getAttribute('data-magic');
-      const obtain = card.getAttribute('data-obtain') || '';
-      const info = magicPowerList[name];
-      if (!info) return;
-      let html = `<h2 style='color:#00d4ff;margin-bottom:0.7em;'>${name} — Power Info</h2>`;
-      html += `<table class='system-table' style='margin:0 auto 1em auto;'>`;
-      html += `<tr><th>Range</th><th>AOE</th><th>I-Frame</th><th>Damage</th><th>Notes</th></tr>`;
-      html += `<tr><td>${info.Range}</td><td>${info.AOE}</td><td>${info.IFrame}</td><td>${info.Damage}</td><td>${info.Notes || ''}</td></tr>`;
-      html += `</table>`;
-      if (obtain) {
-        html += `<div class='obtain-section'><div class='obtain-title'>How to Obtain</div><div class='obtain-methods'><div class='obtain-way'>${obtain}</div></div></div>`;
-      }
-      document.getElementById('magic-modal-content').innerHTML = html;
-      document.getElementById('magic-modal').style.display = 'flex';
-    });
-  });
-  document.getElementById('close-magic-modal').onclick = function() {
-    document.getElementById('magic-modal').style.display = 'none';
-  };
-  document.getElementById('magic-modal').onclick = function(e) {
-    if (e.target === this) this.style.display = 'none';
-  };
-</script>
-    <!-- Armor Modal for Builds -->
-    <div id="armor-modal" class="system-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;align-items:center;justify-content:center;overflow:auto;background:rgba(0,0,0,0.18);">
+
+          <div class="build-preview">
+            <a href="weapons/shadowscythe.html" class="preview-item">
+              <img src="../images/weapons/ShadowScythe.png" alt="Shadow Scythe" />
+              <span class="preview-label">Shadow Scythe</span>
+            </a>
+            <button class="preview-item armor-popup" data-armor="Commander Set" style="background:none;border:none;padding:0;">
+              <img src="../images/armor/CursedCommander.png" alt="Commander Set" />
+              <span class="preview-label">Commander Set</span>
+            </button>
+            <a href="artifacts.html" class="preview-item">
+              <img src="../images/Artifacts/ShadowFang.png" alt="Shadow Fang" />
+              <span class="preview-label">ShadowFang</span>
+            </a>
+          </div>
+
+          <div class="build-body">
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Weapons</div>
+              <div class="build-tags">
+                <a href="weapons/shadowscythe.html" class="build-tag weapon clickable">Shadow Scythe</a>
+                <a href="weapons/dualdagger.html"   class="build-tag weapon clickable">Dual Daggers</a>
+                <a href="weapons/thunderaxe.html"   class="build-tag weapon clickable">Thunder Axe</a>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Armor</div>
+              <div class="build-tags">
+                <button class="build-tag clickable armor-popup" data-armor="Commander Set" style="background:rgba(255,42,74,0.06);border-color:rgba(255,42,74,0.3);color:rgba(255,120,140,0.8);">Commander Set</button>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Artifacts</div>
+              <div class="build-tags">
+                <a href="artifacts.html" class="build-tag clickable">Shadow Fang</a>
+                <a href="artifacts.html" class="build-tag clickable">Wanwood</a>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Target Stats</div>
+              <div class="build-stats">
+                <div class="stat-item"><span class="stat-name">Strength</span><span class="stat-val highlight">1000</span></div>
+                <div class="stat-item"><span class="stat-name">Defence</span><span class="stat-val">700–800</span></div>
+                <div class="stat-item"><span class="stat-name">Energy</span><span class="stat-val">50–100</span></div>
+                <div class="stat-item"><span class="stat-name">Agility</span><span class="stat-val">1–100</span></div>
+                <div class="stat-item"><span class="stat-name">Magic</span><span class="stat-val">1</span></div>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Best Class</div>
+              <div class="build-tags">
+                <span class="build-tag class-tag">Tank</span>
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+        <!-- ── Magic Build ── -->
+        <article class="build-card magic">
+          <div class="corner tl"></div><div class="corner tr"></div>
+          <div class="corner bl"></div><div class="corner br"></div>
+
+          <div class="build-header">
+            <div class="build-title">Magic Build</div>
+            <div class="build-playstyle">Playstyle: High magic burst</div>
+          </div>
+
+          <div class="build-preview">
+            <button class="preview-item magic-popup" data-magic="Werewolf" style="background:none;border:none;padding:0;">
+              <img src="../images/magic/Werewolf.png" alt="Werewolf" />
+              <span class="preview-label">Werewolf</span>
+            </button>
+            <button class="preview-item armor-popup" data-armor="Astral Set" style="background:none;border:none;padding:0;">
+              <img src="../images/armor/Astral.png" alt="Astral Set" />
+              <span class="preview-label">Astral Set</span>
+            </button>
+            <a href="artifacts.html" class="preview-item">
+              <img src="../images/Artifacts/DarkHeart.png" alt="Dark Heart" />
+              <span class="preview-label">Dark Heart</span>
+            </a>
+          </div>
+
+          <div class="build-body">
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Magic</div>
+              <div class="build-tags">
+                <button class="build-tag weapon clickable magic-popup" data-magic="Werewolf">Werewolf</button>
+                <button class="build-tag weapon clickable magic-popup" data-magic="Divine Blade">Divine Blade</button>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Armor</div>
+              <div class="build-tags">
+                <button class="build-tag clickable armor-popup" data-armor="Astral Set" style="background:rgba(162,89,255,0.06);border-color:rgba(162,89,255,0.3);color:rgba(180,130,255,0.8);">Astral Set</button>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Recommended Artifacts</div>
+              <div class="build-tags">
+                <a href="artifacts.html" class="build-tag clickable">Dark Heart</a>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Target Stats</div>
+              <div class="build-stats">
+                <div class="stat-item"><span class="stat-name">Magic</span><span class="stat-val highlight">1000</span></div>
+                <div class="stat-item"><span class="stat-name">Energy</span><span class="stat-val">100–200</span></div>
+                <div class="stat-item"><span class="stat-name">Defence</span><span class="stat-val">400–600</span></div>
+                <div class="stat-item"><span class="stat-name">Agility</span><span class="stat-val">1–100</span></div>
+                <div class="stat-item"><span class="stat-name">Strength</span><span class="stat-val">1–100</span></div>
+              </div>
+            </div>
+
+            <div class="build-row">
+              <div class="build-section-label">Best Class</div>
+              <div class="build-tags">
+                <span class="build-tag class-tag">Mage</span>
+              </div>
+            </div>
+
+          </div>
+        </article>
+
+      </div><!-- /.builds-grid -->
+    </div><!-- /.container -->
+  </div><!-- /.page-wrapper -->
+
+  <!-- ── Armor Modal ── -->
+  <div id="armor-modal" class="system-modal">
+    <div class="modal-box">
+      <button class="modal-close" id="close-armor-modal">&times;</button>
       <div id="armor-modal-content"></div>
-      <span class="system-modal-close" id="close-armor-modal">&times;</span>
     </div>
-    <script>
-    // Armor info data (copied from armor.html)
+  </div>
+
+  <!-- ── Magic Modal ── -->
+  <div id="magic-modal" class="system-modal">
+    <div class="modal-box">
+      <button class="modal-close" id="close-magic-modal">&times;</button>
+      <div id="magic-modal-content"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Data ── */
     const armorInfo = {
-      "Iron Set": {
-        Location: "ALL Gate",
-        BaseHealth: "18% Health",
-        MaxHealth: "56.8% Health",
-        Bonus2: "20% Melee Damage",
-        Bonus3: "20% Melee Damage",
-        Rarity: "Epic"
-      },
-      "Sunforge Set": {
-        Location: "Spider Cave",
-        BaseHealth: "57% Health",
-        MaxHealth: "243% Health",
-        Bonus2: "15% Extra Health",
-        Bonus3: "20% Melee Damage",
-        Rarity: "Mythic"
-      },
-      "Bloodsteel Set": {
-        Location: "Jungle",
-        BaseHealth: "32% Health",
-        MaxHealth: "146.8% Health",
-        Bonus2: "8% Extra Health",
-        Bonus3: "20% Melee Damage",
-        Rarity: "Mythic"
-      },
-      "Oathkeeper Set": {
-        Location: "Desert",
-        BaseHealth: "78% Health",
-        MaxHealth: "347.1% Health",
-        Bonus2: "18% Extra Health",
-        Bonus3: "Burn Passive",
-        Rarity: "Mythic"
-      },
-      "Serpent Set": {
-        Location: "Subway",
-        BaseHealth: "48% Health",
-        MaxHealth: "220.2% Health",
-        Bonus2: "12% Extra Health",
-        Bonus3: "25% Melee Damage",
-        Rarity: "Mythic"
-      },
-      "Venomspike Set": {
-        Location: "Caves",
-        BaseHealth: "46% Health",
-        MaxHealth: "218.2% Health",
-        Bonus2: "10% Extra Health",
-        Bonus3: "25% Melee Damage",
-        Rarity: "Mythic"
-      },
-      "Astral Set": {
-        Location: "Snow Forest",
-        BaseHealth: "44% Health",
-        MaxHealth: "187.5% Health",
-        Bonus2: "14% Extra Health",
-        Bonus3: "20% Magic Damage",
-        Rarity: "Mythic"
-      },
-      "Commander Set": {
-        Location: "Cursed Commander",
-        BaseHealth: "63% Health",
-        MaxHealth: "362% Health",
-        Bonus2: "30% Melee Damage",
-        Bonus3: "Burn Passive",
-        Rarity: "Mythic"
-      }
+      "Iron Set":       { Location:"ALL Gate",              BaseHP:"18% HP",    MaxHP:"56.8% HP",   Bonus2:"20% Melee Dmg", Bonus3:"20% Melee Dmg", Rarity:"epic"   },
+      "Sunforge Set":   { Location:"Spider Cave",           BaseHP:"57% HP",    MaxHP:"243% HP",    Bonus2:"15% Extra HP",  Bonus3:"20% Melee Dmg", Rarity:"mythic" },
+      "Bloodsteel Set": { Location:"Jungle",                BaseHP:"32% HP",    MaxHP:"146.8% HP",  Bonus2:"8% Extra HP",   Bonus3:"20% Melee Dmg", Rarity:"mythic" },
+      "Oathkeeper Set": { Location:"Desert",                BaseHP:"78% HP",    MaxHP:"347.1% HP",  Bonus2:"18% Extra HP",  Bonus3:"Burn Passive",  Rarity:"mythic" },
+      "Serpent Set":    { Location:"Subway",                BaseHP:"48% HP",    MaxHP:"220.2% HP",  Bonus2:"12% Extra HP",  Bonus3:"25% Melee Dmg", Rarity:"mythic" },
+      "Venomspike Set": { Location:"Caves",                 BaseHP:"46% HP",    MaxHP:"218.2% HP",  Bonus2:"10% Extra HP",  Bonus3:"25% Melee Dmg", Rarity:"mythic" },
+      "Astral Set":     { Location:"Snow Forest",           BaseHP:"44% HP",    MaxHP:"187.5% HP",  Bonus2:"14% Extra HP",  Bonus3:"20% Magic Dmg", Rarity:"mythic" },
+      "Commander Set":  { Location:"Cursed Commander Boss", BaseHP:"63% HP",    MaxHP:"362% HP",    Bonus2:"30% Melee Dmg", Bonus3:"Burn Passive",  Rarity:"mythic" },
     };
-    // Armor modal popup logic for builds page
-    document.querySelectorAll('.armor-popup-build').forEach(card => {
-      card.addEventListener('click', function(e) {
+
+    const magicData = {
+      "Vines":        { Range:"Mid",   AOE:"B",  IFrame:"No",      Damage:"C",  Notes:"Mediocre AoE and single-target damage" },
+      "Lightning":    { Range:"Mid",   AOE:"B",  IFrame:"No",      Damage:"C",  Notes:"Lightning Nova is the only good skill" },
+      "Darkness":     { Range:"Long",  AOE:"S",  IFrame:"No",      Damage:"A",  Notes:"Amazing AoE but lacking single damage" },
+      "Nature":       { Range:"Mid",   AOE:"B",  IFrame:"Yes (1)", Damage:"A",  Notes:"" },
+      "Crimson":      { Range:"Mid",   AOE:"A",  IFrame:"Yes (1)", Damage:"A",  Notes:"" },
+      "Goliath":      { Range:"Short", AOE:"B",  IFrame:"Yes (2)", Damage:"S",  Notes:"Buff weapon (skill also)" },
+      "Light":        { Range:"Long",  AOE:"B",  IFrame:"No",      Damage:"B",  Notes:"Nice and fast. Lacks single-target damage." },
+      "Divine Blade": { Range:"Mid",   AOE:"A",  IFrame:"Yes (All)",Damage:"SS",Notes:"Has M1" },
+      "Werewolf":     { Range:"Mid",   AOE:"SS", IFrame:"Yes (3)", Damage:"S",  Notes:"Has M1 (Only Transformation)" },
+    };
+
+    const rankClass = r => ({ SS:'rank-ss', S:'rank-s', A:'rank-a', B:'rank-b', C:'rank-c' }[r] || '');
+
+    /* ── Armor popups ── */
+    document.querySelectorAll('.armor-popup').forEach(el => {
+      el.addEventListener('click', e => {
         e.preventDefault();
-        const name = card.getAttribute('data-armor');
-        const info = armorInfo[name];
+        const info = armorInfo[el.dataset.armor];
         if (!info) return;
-        let rarityClass = info.Rarity === 'Mythic' ? 'rarity-mythic' : 'rarity-epic';
-        let html = `<div style='background:rgba(10,18,40,0.60);border-radius:18px;padding:2.2em 2.2em 1.5em 2.2em;box-shadow:0 0 32px #00d4ff55,0 0 0 2.5px #00d4ff inset;width:1000px;max-width:1000px;display:flex;flex-direction:column;align-items:center;justify-content:center;word-break:break-word;'>`;
-        html += `<h2 style='color:#00d4ff;margin-bottom:0.5em;font-size:2em;text-shadow:0 0 8px #00d4ff88;'>${name}</h2>`;
-        html += `<span class='card-rarity ${rarityClass}' style='font-size:1.15em;margin-bottom:1.2em;display:inline-block;letter-spacing:0.08em;background:rgba(0,0,0,0.18);padding:0.3em 1.2em 0.3em 1.2em;border-radius:8px;border:1.5px solid #00d4ff;box-shadow:0 0 8px #00d4ff33;'>${info.Rarity}</span>`;
-        html += `<table class='system-table' style='margin:0 auto 1.2em auto;font-size:1.08em;width:100%;max-width:960px;word-break:break-word;table-layout:fixed;'><colgroup><col span='5' style='width:20%;'></colgroup>`;
-        html += `<tr><th>Location</th><th>Total Base Health</th><th>Total Max/Shiny Health</th><th>2-Piece Bonus</th><th>3-Piece Bonus</th></tr>`;
-        html += `<tr><td>${info.Location}</td><td>${info.BaseHealth}</td><td>${info.MaxHealth}</td><td>${info.Bonus2}</td><td>${info.Bonus3}</td></tr>`;
-        html += `</table>`;
-        html += `</div>`;
-        document.getElementById('armor-modal-content').innerHTML = html;
-        document.getElementById('armor-modal').style.display = 'flex';
+        const label = info.Rarity === 'mythic' ? 'Mythic' : 'Epic';
+        document.getElementById('armor-modal-content').innerHTML = `
+          <div class="modal-title">${el.dataset.armor}</div>
+          <span class="modal-rarity rarity-${info.Rarity}">${label}</span>
+          <table class="modal-table">
+            <thead><tr><th>Location</th><th>Base HP</th><th>Max HP</th><th>2-Piece</th><th>3-Piece</th></tr></thead>
+            <tbody><tr>
+              <td>${info.Location}</td><td>${info.BaseHP}</td><td>${info.MaxHP}</td>
+              <td>${info.Bonus2}</td><td>${info.Bonus3}</td>
+            </tr></tbody>
+          </table>`;
+        document.getElementById('armor-modal').classList.add('open');
       });
     });
-    document.getElementById('close-armor-modal').onclick = function() {
-      document.getElementById('armor-modal').style.display = 'none';
-    };
-    document.getElementById('armor-modal').onclick = function(e) {
-      if (e.target === this) this.style.display = 'none';
-    };
+
+    /* ── Magic popups ── */
+    document.querySelectorAll('.magic-popup').forEach(el => {
+      el.addEventListener('click', e => {
+        e.preventDefault();
+        const info = magicData[el.dataset.magic];
+        if (!info) return;
+        document.getElementById('magic-modal-content').innerHTML = `
+          <div class="modal-title">${el.dataset.magic} — Ability Info</div>
+          <table class="modal-table">
+            <thead><tr><th>Range</th><th>AOE</th><th>I-Frame</th><th>Damage</th><th>Notes</th></tr></thead>
+            <tbody><tr>
+              <td>${info.Range}</td>
+              <td class="${rankClass(info.AOE)}">${info.AOE}</td>
+              <td style="color:${info.IFrame==='No'?'rgba(140,180,220,0.5)':'#00ff9f'}">${info.IFrame}</td>
+              <td class="${rankClass(info.Damage)}">${info.Damage}</td>
+              <td>${info.Notes || '—'}</td>
+            </tr></tbody>
+          </table>`;
+        document.getElementById('magic-modal').classList.add('open');
+      });
+    });
+
+    /* ── Close modals ── */
+    ['armor','magic'].forEach(id => {
+      document.getElementById(`close-${id}-modal`).onclick = () => document.getElementById(`${id}-modal`).classList.remove('open');
+      document.getElementById(`${id}-modal`).addEventListener('click', e => { if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+    });
+
+    /* ── Card entrance animation ── */
+    document.querySelectorAll('.build-card').forEach((c,i) => {
+      c.style.opacity='0'; c.style.transform='translateY(24px)';
+      setTimeout(()=>{ c.style.transition='opacity 0.5s ease,transform 0.5s ease'; c.style.opacity='1'; c.style.transform='translateY(0)'; }, 100+i*120);
+    });
   </script>
-  <script src="./armor-bg-animate.js"></script>
+</body>
 </html>

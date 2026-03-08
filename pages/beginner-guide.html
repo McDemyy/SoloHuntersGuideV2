@@ -1,86 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Solo Hunters Beginner Guide – Everything new players need to know, starter armor, weapons, and enchantments." />
-  <title>Beginner Guide | SH System DB</title>
-  <link rel="stylesheet" href="../style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beginner Guide | Solo Hunters System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--bg:#00000f;--border:rgba(0,212,255,0.15);--cyan:#00d4ff;--purple:#7b2fff;--red:#ff2a4a;--gold:#ffd700;--ice:#4db8ff;--text:rgba(180,210,240,0.85);--text-dim:rgba(120,160,200,0.5);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
+    .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
+    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(123,47,255,0.14) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
+    .bg-grid{background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:48px 48px;animation:gd 40s linear infinite alternate;}
+    @keyframes gd{from{background-position:0 0}to{background-position:48px 48px}}
+    .bg-scanlines{background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);opacity:.5;}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(0,0,8,0.9);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);}
+    .nav-logo{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);text-decoration:none;text-shadow:0 0 20px rgba(0,212,255,0.7);}
+    .nav-links{display:flex;gap:8px;}
+    .nav-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.25);border-radius:3px;background:rgba(0,212,255,0.04);transition:all .2s;}
+    .nav-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--cyan);box-shadow:0 0 14px rgba(0,212,255,0.3);}
+    .page{position:relative;z-index:1;padding:80px 24px 80px;max-width:860px;margin:0 auto;}
+    .page-header{text-align:center;padding:32px 0 40px;}
+    .sys-tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,212,255,0.3);padding:4px 18px;border-radius:2px;margin-bottom:18px;animation:tp 2s ease-in-out infinite;}
+    @keyframes tp{0%,100%{opacity:1}50%{opacity:.5}}
+    .page-title{font-family:'Orbitron',monospace;font-size:clamp(26px,5vw,46px);font-weight:900;letter-spacing:5px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(0,212,255,0.35);margin-bottom:8px;}
+    .page-sub{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);}
+    .header-line{width:260px;height:1px;margin:18px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);}
+    .sections{display:flex;flex-direction:column;gap:16px;}
+    .panel{background:linear-gradient(135deg,rgba(6,10,22,.97),rgba(10,6,20,.97));border:1px solid var(--border);border-radius:6px;padding:24px 26px;position:relative;overflow:hidden;opacity:0;transform:translateY(20px);animation:fadeUp .6s ease forwards;}
+    .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.3),transparent);}
+    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}.d6{animation-delay:.6s}
+    @keyframes fadeUp{to{opacity:1;transform:none;}}
+    .corner{position:absolute;width:8px;height:8px;}
+    .corner.tl{top:0;left:0;border-top:1px solid rgba(0,212,255,.5);border-left:1px solid rgba(0,212,255,.5);}
+    .corner.tr{top:0;right:0;border-top:1px solid rgba(0,212,255,.5);border-right:1px solid rgba(0,212,255,.5);}
+    .corner.bl{bottom:0;left:0;border-bottom:1px solid rgba(0,212,255,.5);border-left:1px solid rgba(0,212,255,.5);}
+    .corner.br{bottom:0;right:0;border-bottom:1px solid rgba(0,212,255,.5);border-right:1px solid rgba(0,212,255,.5);}
+    .section-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;opacity:.7;}
+    .section-label.cyan{color:var(--cyan)}.section-label.purple{color:var(--purple)}.section-label.gold{color:var(--gold)}.section-label.red{color:var(--red)}
+    .section-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;letter-spacing:2px;color:#fff;margin-bottom:12px;}
+    .prose{font-size:14px;line-height:1.8;color:rgba(180,210,240,.8);}
+    .tip-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+    .tip-row{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;background:rgba(0,212,255,.03);border:1px solid rgba(0,212,255,.08);border-radius:4px;font-size:13px;line-height:1.6;}
+    .tip-num{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);opacity:.6;min-width:20px;padding-top:2px;}
+    .gear-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;}
+    @media(max-width:540px){.gear-grid{grid-template-columns:1fr;}}
+    .gear-card{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 12px;background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.14);border-radius:6px;text-align:center;}
+    .gear-img{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(0,212,255,.4));}
+    .gear-name{font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;color:#fff;}
+    .gear-tag{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:2px 8px;border-radius:2px;}
+    .gear-tag.legend{color:var(--gold);border:1px solid rgba(255,215,0,.3);background:rgba(255,215,0,.07);}
+    .gear-tag.epic{color:#bf5fff;border:1px solid rgba(138,43,226,.3);background:rgba(138,43,226,.07);}
+    .gear-tag.rare{color:var(--cyan);border:1px solid rgba(0,212,255,.3);background:rgba(0,212,255,.07);}
+    .stat-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+    .stat-chip{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:4px 12px;border-radius:3px;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.15);color:rgba(180,210,240,.7);}
+    .enchant-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
+    @media(max-width:480px){.enchant-grid{grid-template-columns:1fr;}}
+    .enchant-card{padding:14px 16px;background:rgba(123,47,255,.05);border:1px solid rgba(123,47,255,.2);border-radius:4px;}
+    .enchant-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--purple);margin-bottom:6px;}
+    .enchant-desc{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;color:var(--text-dim);line-height:1.6;}
+    .link-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+    .link-btn{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 16px;border-radius:3px;text-decoration:none;transition:all .2s;}
+    .link-btn.cyan{color:var(--cyan);border:1px solid rgba(0,212,255,.3);background:rgba(0,212,255,.05);}
+    .link-btn.cyan:hover{background:rgba(0,212,255,.12);box-shadow:0 0 14px rgba(0,212,255,.25);}
+    .link-btn.purple{color:var(--purple);border:1px solid rgba(123,47,255,.35);background:rgba(123,47,255,.05);}
+    .link-btn.purple:hover{background:rgba(123,47,255,.12);box-shadow:0 0 14px rgba(123,47,255,.25);}
+  </style>
 </head>
 <body>
+  <div class="bg-layer bg-radial"></div>
+  <div class="bg-layer bg-grid"></div>
+  <div class="bg-layer bg-scanlines"></div>
   <nav class="navbar">
     <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
-    <ul class="nav-links">
-      <li><a href="../index.html" class="nav-back">⬅ Home</a></li>
-      <li><a href="armor.html">Armor</a></li>
-      <li><a href="weapons.html">Weapons</a></li>
-      <li><a href="builds.html">Builds</a></li>
-      <li><a href="levelguide.html">Gate Info</a></li>
-    </ul>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">← Home</a>
+    </div>
   </nav>
-  <div class="page-wrapper">
-    <div class="container">
-      <header class="page-header">
-        <div class="system-tag">[ SYSTEM DATABASE — BEGINNER MODULE ]</div>
-        <h1 class="page-title">Beginner Guide</h1>
-        <p class="page-subtitle">Everything you need to know to start your journey!</p>
-      </header>
-      <section class="beginner-section" style="max-width:700px;margin:0 auto 2em auto;padding:2em;background:rgba(10,18,40,0.92);border-radius:1.2em;box-shadow:0 0 32px #00d4ff33;">
-        <h2 style="color:#00d4ff;margin-bottom:1em;">How the Game Works</h2>
-        <ul style="font-size:1.12em;margin-bottom:2em;">
-          <li>Solo Hunters is a dungeon-crawling RPG where you progress through gates, defeat monsters, and collect loot.</li>
-          <li>Each gate has unique enemies, bosses, and rewards. Power, EXP, and Gold increase as you advance.</li>
-          <li>Build your character by equipping armor, weapons, and rings, and enhance them with enchantments.</li>
-          <li>Red Gates are rare, supercharged dungeons with extra rewards.</li>
-        </ul>
-        <h2 style="color:#7b2fff;margin-bottom:1em;">Beginner Set Recommendation</h2>
-        <div style="display:flex;gap:1.5em;flex-wrap:wrap;margin-bottom:1em;justify-content:center;">
-          <div style="background:#101a2a;padding:1.2em 2em;border-radius:1em;box-shadow:0 0 12px #00d4ff33;display:flex;flex-direction:column;align-items:center;max-width:180px;">
-            <img src="../images/weapons/DemonKingDaggers.png" alt="DemonKingDaggers" style="width:80px;height:80px;object-fit:contain;margin-bottom:0.7em;box-shadow:0 0 8px #ffd700;" />
-            <strong>DemonKingDaggers</strong><br>
-            <span style="color:#ffd700;font-size:0.98em;font-weight:600;">Legendary Weapon</span>
-          </div>
-          <div style="background:#101a2a;padding:1.2em 2em;border-radius:1em;box-shadow:0 0 12px #7b2fff33;display:flex;flex-direction:column;align-items:center;max-width:180px;">
-            <img src="../images/armor/Ironset.png" alt="IronSet" style="width:80px;height:80px;object-fit:contain;margin-bottom:0.7em;box-shadow:0 0 8px #7b2fff;" />
-            <strong>IronSet</strong><br>
-            <span style="color:#7b2fff;font-size:0.98em;font-weight:600;">Armor</span>
-          </div>
-          <div style="background:#101a2a;padding:1.2em 2em;border-radius:1em;box-shadow:0 0 12px #00d4ff33;display:flex;flex-direction:column;align-items:center;max-width:180px;">
-            <img src="../images/Artifacts/EarthRingV2.png" alt="EarthRingV2" style="width:80px;height:80px;object-fit:contain;margin-bottom:0.7em;box-shadow:0 0 8px #00d4ff;" />
-            <strong>EarthRingV2</strong><br>
-            <span style="color:#00d4ff;font-size:0.98em;font-weight:600;">Rare Ring</span>
-          </div>
-        </div>
-        <div style="margin-bottom:1.2em;font-size:1.12em;">
-          <strong>Stats:</strong> 10 Strength, 8 Defense, 1 Energy, 1 Agility<br>
-          <strong>Class:</strong> Any
-        </div>
-        <h2 style="color:#ffd700;margin-bottom:1em;">Enchantment Guide</h2>
-        <ul style="font-size:1.12em;margin-bottom:2em;">
-          <li><strong>Fortune</strong>: Focus on this if you need Iron Set (better drop rates).</li>
-          <li><strong>Deadly</strong> & <strong>Sharpshooter</strong>: Focus on these if you don't need Iron Set (more damage and crit).</li>
-        </ul>
+  <div class="page">
+    <header class="page-header">
+      <div class="sys-tag">[ SYSTEM DATABASE — BEGINNER MODULE ]</div>
+      <h1 class="page-title">Beginner Guide</h1>
+      <p class="page-sub">Everything you need to start your hunter journey</p>
+      <div class="header-line"></div>
+    </header>
+    <div class="sections">
 
-        <h2 style="color:#00d4ff;margin-bottom:1em;">Portals & Gates Explained</h2>
-        <div style="font-size:1.12em;margin-bottom:2em;">
-          Portals are entrances to dungeons, each with unique monsters, bosses, and loot. As you progress, gates become harder and offer better rewards. <br>
-          <strong>Red Gates</strong> are rare, supercharged versions with extra EXP and loot.<br>
-          <strong>Gate Info</strong> shows recommended power, EXP, and gold for each gate.<br>
+      <!-- How It Works -->
+      <div class="panel d1">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="section-label cyan">// How the Game Works</div>
+        <p class="prose">Solo Hunters is a dungeon-crawling RPG where you progress through gates, defeat monsters, and collect loot. Each gate has unique enemies, bosses, and rewards — power, EXP, and gold all increase as you advance. Build your character by equipping armor, weapons, and rings, and enhance them with enchantments. Red Gates are rare supercharged dungeons with extra rewards.</p>
+      </div>
+
+      <!-- Starter Gear -->
+      <div class="panel d2">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="section-label purple">// Recommended Starter Set</div>
+        <div class="gear-grid">
+          <div class="gear-card">
+            <img class="gear-img" src="../images/weapons/DemonKingDaggers.png" alt="Demon King Daggers" onerror="this.style.opacity='.2'"/>
+            <span class="gear-name">Demon King Daggers</span>
+            <span class="gear-tag legend">Legendary</span>
+          </div>
+          <div class="gear-card">
+            <img class="gear-img" src="../images/armor/Ironset.png" alt="Iron Set" onerror="this.style.opacity='.2'"/>
+            <span class="gear-name">Iron Set</span>
+            <span class="gear-tag epic">Epic</span>
+          </div>
+          <div class="gear-card">
+            <img class="gear-img" src="../images/Artifacts/EarthRingV2.png" alt="Earth Ring V2" onerror="this.style.opacity='.2'"/>
+            <span class="gear-name">Earth Ring V2</span>
+            <span class="gear-tag rare">Rare</span>
+          </div>
         </div>
-        <div style="display:flex;gap:1.2em;justify-content:center;margin-bottom:2em;flex-wrap:wrap;">
-          <a href="portals.html" style="background:linear-gradient(90deg,#00d4ff 60%,#7b2fff 100%);color:#fff;font-size:1.08em;font-weight:700;padding:0.8em 1.8em;border-radius:1.2em;box-shadow:0 0 12px #00d4ff55;text-decoration:none;">Portal Calc</a>
-          <a href="levelguide.html" style="background:linear-gradient(90deg,#7b2fff 60%,#00d4ff 100%);color:#fff;font-size:1.08em;font-weight:700;padding:0.8em 1.8em;border-radius:1.2em;box-shadow:0 0 12px #7b2fff55;text-decoration:none;">Gate Info</a>
-          <a href="../index.html" style="background:linear-gradient(90deg,#00d4ff 60%,#7b2fff 100%);color:#fff;font-size:1.08em;font-weight:700;padding:0.8em 1.8em;border-radius:1.2em;box-shadow:0 0 12px #00d4ff55;text-decoration:none;">Index</a>
-          <a href="classes.html" style="background:linear-gradient(90deg,#7b2fff 60%,#00d4ff 100%);color:#fff;font-size:1.08em;font-weight:700;padding:0.8em 1.8em;border-radius:1.2em;box-shadow:0 0 12px #7b2fff55;text-decoration:none;">Classes Info</a>
+        <div class="stat-chips" style="margin-top:16px;">
+          <span class="stat-chip">Strength: 10</span>
+          <span class="stat-chip">Defense: 8</span>
+          <span class="stat-chip">Energy: 1</span>
+          <span class="stat-chip">Agility: 1</span>
+          <span class="stat-chip">Class: Any</span>
         </div>
-        <h2 style="color:#ff4e6b;margin-bottom:1em;">Tips for Beginners</h2>
-        <ul style="font-size:1.12em;">
-          <li>Upgrade your gear as soon as possible for smoother progression.</li>
-          <li>Try different classes and builds to find your playstyle.</li>
-          <li>Don't ignore rings—they provide valuable bonuses!</li>
-          <li>Check Gate Info for recommended power and rewards.</li>
-        </ul>
-      </section>
+      </div>
+
+      <!-- Enchantments -->
+      <div class="panel d3">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="section-label gold">// Enchantment Guide</div>
+        <div class="enchant-grid">
+          <div class="enchant-card">
+            <div class="enchant-name">Fortune</div>
+            <div class="enchant-desc">Focus on this if you need the Iron Set — improves drop rates from gates significantly.</div>
+          </div>
+          <div class="enchant-card">
+            <div class="enchant-name">Deadly + Sharpshooter</div>
+            <div class="enchant-desc">Focus on these once you have Iron Set — boosts damage output and critical hit chance.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gates -->
+      <div class="panel d4">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="section-label cyan">// Portals & Gates Explained</div>
+        <p class="prose" style="margin-bottom:14px;">Portals are entrances to dungeons, each with unique monsters, bosses, and loot. As you progress, gates become harder and offer better rewards. <strong style="color:#fff;">Red Gates</strong> are rare supercharged versions with extra EXP and loot — they spawn with a 5% chance when a normal gate closes. Gate Info shows recommended power, EXP, and gold for each dungeon.</p>
+        <div class="link-row">
+          <a href="levelguide.html" class="link-btn cyan">Gate Info →</a>
+          <a href="redgates.html" class="link-btn purple">Red Gates →</a>
+          <a href="classes.html" class="link-btn cyan">Classes Info →</a>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="panel d5">
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="section-label red">// Tips for Beginners</div>
+        <div class="tip-list">
+          <div class="tip-row"><span class="tip-num">01</span><span>Upgrade your gear as soon as possible — better equipment makes progression significantly smoother.</span></div>
+          <div class="tip-row"><span class="tip-num">02</span><span>Try different classes and builds to find your playstyle. Each class has a unique strength profile.</span></div>
+          <div class="tip-row"><span class="tip-num">03</span><span>Don't ignore rings — they provide powerful passive bonuses that stack with armor and weapon stats.</span></div>
+          <div class="tip-row"><span class="tip-num">04</span><span>Check Gate Info before entering a dungeon to make sure your power meets the recommended threshold.</span></div>
+          <div class="tip-row"><span class="tip-num">05</span><span>To get more class rerolls: complete the Zood quest, use Codes, or purchase with Robux.</span></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </body>

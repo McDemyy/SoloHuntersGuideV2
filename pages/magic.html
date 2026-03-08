@@ -1,214 +1,404 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta name="description" content="Solo Hunters - Magic Tier List" />
-	<title>Magic Tier List | Solo Hunters</title>
-	<link rel="stylesheet" href="../style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solo Hunters Magic Database – All magic abilities sorted by rarity." />
+  <title>Magic | Solo Hunters System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root{--red:#ff2a4a;--gold:#ffd700;--cyan:#00d4ff;--purple:#7b2fff;--green:#00ff9f;}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#04060f;font-family:'Share Tech Mono',monospace;}
+    .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);background-size:56px 56px;animation:grid-drift 30s linear infinite alternate;}
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:56px 56px}}
+    .bg-vignette{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(123,47,255,0.12) 0%,transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(0,212,255,0.08) 0%,transparent 60%);}
+    .scanlines{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.03;background:repeating-linear-gradient(0deg,#000 0px,#000 1px,transparent 1px,transparent 4px);}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(4,6,15,0.9);border-bottom:1px solid rgba(0,212,255,0.15);backdrop-filter:blur(12px);}
+    .nav-logo{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;text-decoration:none;text-shadow:0 0 16px rgba(0,212,255,0.6);}
+    .nav-links{display:flex;gap:8px;align-items:center;}
+    .nav-btn{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.3);border-radius:4px;background:rgba(0,212,255,0.05);transition:all 0.2s;}
+    .nav-btn:hover,.nav-btn.active{background:rgba(0,212,255,0.15);border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,0.3);}
+    .page-wrapper{position:relative;z-index:1;padding:90px 0 80px;min-height:100vh;}
+    .container{max-width:1280px;margin:0 auto;padding:0 28px;}
+    .page-header{text-align:center;padding:0 0 48px;}
+    .system-tag{display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,212,255,0.3);padding:4px 16px;border-radius:2px;margin-bottom:16px;animation:tag-pulse 2s ease-in-out infinite;}
+    @keyframes tag-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+    .page-title{font-family:'Orbitron',monospace;font-size:clamp(28px,6vw,56px);font-weight:900;letter-spacing:6px;text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);margin-bottom:10px;}
+    .page-subtitle{font-size:11px;letter-spacing:3px;color:rgba(140,180,220,0.6);text-transform:uppercase;}
+    .header-line{width:240px;height:1px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);}
+    .filter-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:20px;}
+    .filter-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.5);}
+    .filter-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;background:transparent;border:1px solid rgba(0,212,255,0.2);border-radius:2px;color:rgba(140,180,220,0.6);cursor:pointer;transition:all 0.2s;line-height:1;}
+    .filter-btn:hover,.filter-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,212,255,0.08);}
+    .results-bar{display:flex;align-items:center;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(0,212,255,0.08);}
+    .results-count{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,212,255,0.5);}
+    #count-num{color:var(--cyan);font-weight:bold;}
+    .cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:24px;}
+    .item-card{position:relative;display:flex;flex-direction:column;background:linear-gradient(135deg,rgba(8,12,28,0.95) 0%,rgba(12,8,24,0.95) 100%);border:1px solid rgba(0,212,255,0.2);border-radius:8px;overflow:hidden;transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;cursor:pointer;}
+    .item-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.4),transparent);z-index:1;}
+    .item-card:hover{transform:translateY(-5px);border-color:rgba(0,212,255,0.5);box-shadow:0 12px 40px rgba(0,212,255,0.12);}
+    .item-card.mythic-glow{border-color:rgba(255,42,74,0.4);box-shadow:0 0 20px rgba(255,42,74,0.15),inset 0 0 30px rgba(255,42,74,0.03);animation:mythic-breathe 3.5s ease-in-out infinite alternate;}
+    .item-card.mythic-glow::before{background:linear-gradient(90deg,transparent,rgba(255,42,74,0.5),transparent);}
+    .item-card.mythic-glow:hover{box-shadow:0 12px 50px rgba(255,42,74,0.3);}
+    @keyframes mythic-breathe{from{box-shadow:0 0 20px rgba(255,42,74,0.15),inset 0 0 30px rgba(255,42,74,0.03)}to{box-shadow:0 0 35px rgba(255,42,74,0.3),inset 0 0 40px rgba(255,42,74,0.06)}}
+    .item-card.legendary-glow{border-color:rgba(255,215,0,0.4);box-shadow:0 0 20px rgba(255,215,0,0.12),inset 0 0 30px rgba(255,215,0,0.03);animation:legendary-breathe 3.5s ease-in-out infinite alternate;}
+    .item-card.legendary-glow::before{background:linear-gradient(90deg,transparent,rgba(255,215,0,0.5),transparent);}
+    .item-card.legendary-glow .corner{border-color:rgba(255,215,0,0.5) !important;}
+    @keyframes legendary-breathe{from{box-shadow:0 0 20px rgba(255,215,0,0.12),inset 0 0 30px rgba(255,215,0,0.03)}to{box-shadow:0 0 35px rgba(255,215,0,0.25),inset 0 0 40px rgba(255,215,0,0.06)}}
+    .item-card.epic-glow{border-color:rgba(170,68,255,0.4);box-shadow:0 0 20px rgba(170,68,255,0.12),inset 0 0 30px rgba(170,68,255,0.03);animation:epic-breathe 3.5s ease-in-out infinite alternate;}
+    .item-card.epic-glow::before{background:linear-gradient(90deg,transparent,rgba(170,68,255,0.5),transparent);}
+    .item-card.epic-glow .corner{border-color:rgba(170,68,255,0.5) !important;}
+    @keyframes epic-breathe{from{box-shadow:0 0 20px rgba(170,68,255,0.12),inset 0 0 30px rgba(170,68,255,0.03)}to{box-shadow:0 0 35px rgba(170,68,255,0.25),inset 0 0 40px rgba(170,68,255,0.06)}}
+    .item-card.rare-glow{border-color:rgba(0,212,255,0.35);}
+    .item-card.uncommon-glow{border-color:rgba(140,180,220,0.3);}
+    .card-image-wrap{position:relative;height:160px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(255,42,74,0.05) 0%,rgba(4,6,15,0) 100%);overflow:visible;}
+    .item-card.legendary-glow .card-image-wrap{background:linear-gradient(180deg,rgba(255,215,0,0.05) 0%,rgba(4,6,15,0) 100%);}
+    .item-card.epic-glow .card-image-wrap{background:linear-gradient(180deg,rgba(170,68,255,0.05) 0%,rgba(4,6,15,0) 100%);}
+    .item-card.rare-glow .card-image-wrap,.item-card.uncommon-glow .card-image-wrap{background:linear-gradient(180deg,rgba(0,212,255,0.04) 0%,rgba(4,6,15,0) 100%);}
+    .card-image{width:100px;height:100px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(255,42,74,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.6));transition:transform 0.3s;position:relative;z-index:1;margin-top:20px;animation:float-idle 5s ease-in-out infinite alternate;}
+    .item-card.legendary-glow .card-image{filter:drop-shadow(0 0 12px rgba(255,215,0,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.6));}
+    .item-card.epic-glow .card-image{filter:drop-shadow(0 0 12px rgba(170,68,255,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.6));}
+    .item-card.rare-glow .card-image,.item-card.uncommon-glow .card-image{filter:drop-shadow(0 0 10px rgba(0,212,255,0.4)) drop-shadow(0 4px 8px rgba(0,0,0,0.6));}
+    @keyframes float-idle{from{transform:translateY(0px)}to{transform:translateY(-7px)}}
+    .item-card:hover .card-image{transform:translateY(-4px) scale(1.08);animation:none;}
+    .rarity-badge{position:absolute;top:10px;right:10px;z-index:10;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid;white-space:nowrap;}
+    .rarity-mythic   {color:#ff2a4a;border-color:rgba(255,42,74,0.5);background:rgba(255,42,74,0.15);}
+    .rarity-legendary{color:#ffd700;border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.15);}
+    .rarity-epic     {color:#aa44ff;border-color:rgba(170,68,255,0.5);background:rgba(170,68,255,0.15);}
+    .rarity-rare     {color:#00d4ff;border-color:rgba(0,212,255,0.5);background:rgba(0,212,255,0.10);}
+    .rarity-uncommon {color:rgba(140,180,220,0.9);border-color:rgba(140,180,220,0.4);background:rgba(140,180,220,0.08);}
+    .type-tag{position:absolute;top:10px;left:10px;z-index:10;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;color:rgba(0,212,255,0.8);border:1px solid rgba(0,212,255,0.25);background:rgba(0,212,255,0.08);white-space:nowrap;}
+    .card-body{padding:14px 16px 16px;border-top:1px solid rgba(0,212,255,0.08);display:flex;flex-direction:column;flex:1;gap:8px;}
+    .card-name{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;color:#fff;line-height:1.3;}
+    .card-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;}
+    .stat-row{display:flex;flex-direction:column;gap:3px;}
+    .stat-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(140,180,220,0.45);line-height:1;}
+    .stat-value{font-size:11px;font-weight:bold;color:var(--cyan);line-height:1;white-space:nowrap;}
+    .stat-value.rank-ss{color:#ff4e6b;text-shadow:0 0 8px rgba(255,78,107,0.5);}
+    .stat-value.rank-s{color:#ff7a3d;}
+    .stat-value.rank-a{color:#6e7fff;}
+    .stat-value.rank-b{color:var(--gold);}
+    .stat-value.rank-c{color:#7fd8ff;}
+    .card-notes{font-size:9px;color:rgba(140,180,220,0.5);line-height:1.5;margin-top:2px;}
+    .item-card-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.3);border-radius:4px;background:rgba(0,212,255,0.04);transition:all 0.2s;cursor:pointer;margin-top:auto;}
+    .item-card-btn::before{content:'⬡';font-size:12px;}
+    .item-card-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--cyan);box-shadow:0 0 16px rgba(0,212,255,0.2);color:#fff;}
+    .corner{position:absolute;width:10px;height:10px;pointer-events:none;z-index:2;}
+    .corner.tl{top:-1px;left:-1px;border-top:2px solid;border-left:2px solid;border-color:rgba(255,42,74,0.6);}
+    .corner.tr{top:-1px;right:-1px;border-top:2px solid;border-right:2px solid;border-color:rgba(255,42,74,0.6);}
+    .corner.bl{bottom:-1px;left:-1px;border-bottom:2px solid;border-left:2px solid;border-color:rgba(255,42,74,0.6);}
+    .corner.br{bottom:-1px;right:-1px;border-bottom:2px solid;border-right:2px solid;border-color:rgba(255,42,74,0.6);}
+    .item-card:not(.mythic-glow) .corner{border-color:rgba(0,212,255,0.3) !important;}
+    .item-card.legendary-glow .corner{border-color:rgba(255,215,0,0.5) !important;}
+    .item-card.epic-glow .corner{border-color:rgba(170,68,255,0.5) !important;}
+    .item-card.hidden{display:none;}
+    /* Modal */
+    .system-modal{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(4,6,15,0.85);backdrop-filter:blur(8px);}
+    .system-modal.open{display:flex;}
+    .modal-box{position:relative;background:linear-gradient(135deg,rgba(8,12,28,0.98),rgba(12,8,24,0.98));border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:32px;max-width:700px;width:90%;box-shadow:0 0 60px rgba(0,212,255,0.15);}
+    .modal-close{position:absolute;top:12px;right:16px;font-size:22px;color:rgba(0,212,255,0.6);cursor:pointer;background:none;border:none;line-height:1;}
+    .modal-close:hover{color:var(--cyan);}
+    .modal-title{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:#fff;margin-bottom:16px;}
+    .modal-table{width:100%;border-collapse:collapse;font-size:11px;}
+    .modal-table th{color:rgba(0,212,255,0.6);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 10px;border-bottom:1px solid rgba(0,212,255,0.15);text-align:left;}
+    .modal-table td{padding:10px;border-bottom:1px solid rgba(0,212,255,0.06);color:rgba(200,220,255,0.8);}
+    .modal-table tr:last-child td{border-bottom:none;}
+    .rank-ss-text{color:#ff4e6b;font-weight:bold;}
+    .rank-s-text{color:#ff7a3d;font-weight:bold;}
+    .rank-a-text{color:#6e7fff;font-weight:bold;}
+    .rank-b-text{color:var(--gold);font-weight:bold;}
+    .rank-c-text{color:#7fd8ff;font-weight:bold;}
+    @media(max-width:768px){.cards-grid{grid-template-columns:repeat(2,1fr);gap:14px;}}
+    @media(max-width:480px){.cards-grid{gap:10px;}.container{padding:0 14px;}.card-image-wrap{height:130px;}.card-image{width:78px;height:78px;}.page-title{letter-spacing:3px;}}
+  </style>
 </head>
 <body>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="scanlines"></div>
 
-	<div class="system-bg-stars"></div>
-	<div class="system-bg-grid"></div>
-	<script>
-	  // Generate random stars for the system background
-	  const starCount = 36;
-	  const starsContainer = document.querySelector('.system-bg-stars');
-	  if (starsContainer) {
-	    for (let i = 0; i < starCount; i++) {
-	      const star = document.createElement('div');
-	      star.className = 'system-star';
-	      star.style.left = Math.random() * 100 + 'vw';
-	      star.style.top = Math.random() * 100 + 'vh';
-	      star.style.animationDelay = (Math.random() * 3) + 's';
-	      star.style.opacity = 0.5 + Math.random() * 0.5;
-	      starsContainer.appendChild(star);
-	    }
-	  }
-	</script>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">⬅ Home</a>
+      <a href="tierlists.html" class="nav-btn">Tier List</a>
+    </div>
+  </nav>
 
-	<div class="system-bg-particles"></div>
-	<div class="system-bg-rays"></div>
-	<div class="system-bg-grid"></div>
-	<nav class="navbar">
-		<a href="../index.html" class="nav-logo">⚔ SH System DB</a>
-		<div class="nav-links" style="display:flex;gap:0.3em;align-items:center;">
-			<a href="../index.html" class="nav-btn">⬅ Home</a>
-      
-			<a href="tierlists.html" class="nav-btn">Tierlist</a>
-		</div>
-	</nav>
-	<div class="page-wrapper">
-		<div class="container">
-			<header class="page-header">
-				<div class="system-tag">[ DATABASE — MAGIC MODULE ]</div>
-				<h1 class="page-title">Magic Abilities</h1>
-				<p class="page-subtitle">All magic spells and abilities, sorted by rarity</p>
-			</header>
-									<div class="cards-grid magic-cards-grid">
-										<!-- Modal for Magic Info -->
-										<div id="magic-modal" class="system-modal" style="display:none;">
-											<div class="system-modal-content" id="magic-modal-content"></div>
-											<span class="system-modal-close" id="close-magic-modal">&times;</span>
-										</div>
-				<article class="item-card magic-popup" data-magic="Werewolf" data-type="magic" data-rarity="mythic">
-					<div class="card-image-wrap magic-glow-mythic">
-						<img class="card-image" src="../images/magic/Werewolf.png" alt="Werewolf" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Werewolf</h2>
-						<span class="card-rarity rarity-mythic">Mythic</span>
-						<div class="card-desc">Tier: S<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Divine Blade" data-type="magic" data-rarity="mythic">
-					<div class="card-image-wrap magic-glow-mythic">
-						<img class="card-image" src="../images/magic/DivineBlade.png" alt="Divine Blade" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Divine Blade</h2>
-						<span class="card-rarity rarity-mythic">Mythic</span>
-						<div class="card-desc">Tier: S<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Goliath" data-type="magic" data-rarity="mythic">
-					   <div class="card-image-wrap magic-glow-legendary">
-						<img class="card-image" src="../images/magic/Goliath.png" alt="Goliath" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Goliath</h2>
-						   <span class="card-rarity rarity-legendary">Legendary</span>
-						<div class="card-desc">Tier: S<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Light" data-type="magic" data-rarity="mythic">
-					   <div class="card-image-wrap magic-glow-legendary">
-						<img class="card-image" src="../images/magic/Light.png" alt="Light" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Light</h2>
-						   <span class="card-rarity rarity-legendary">Legendary</span>
-						<div class="card-desc">Tier: S<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Crimson" data-type="magic" data-rarity="epic">
-					<div class="card-image-wrap magic-glow-epic">
-						<img class="card-image" src="../images/magic/Crimson.png" alt="Crimson" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Crimson</h2>
-						<span class="card-rarity rarity-epic">Epic</span>
-						<div class="card-desc">Tier: A<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Darkness" data-type="magic" data-rarity="epic">
-					<div class="card-image-wrap magic-glow-epic">
-						<img class="card-image" src="../images/magic/Dark.png" alt="Dark" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Dark</h2>
-						<span class="card-rarity rarity-epic">Epic</span>
-						<div class="card-desc">Tier: A<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Nature" data-type="magic" data-rarity="rare">
-					<div class="card-image-wrap magic-glow-rare">
-						<img class="card-image" src="../images/magic/Nature.png" alt="Nature" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Nature</h2>
-						<span class="card-rarity rarity-rare">Rare</span>
-						<div class="card-desc">Tier: B<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Lightning" data-type="magic" data-rarity="uncommon">
-					<div class="card-image-wrap magic-glow-uncommon">
-						<img class="card-image" src="../images/magic/Lightning.png" alt="Lightning" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Lightning</h2>
-						<span class="card-rarity rarity-uncommon">Uncommon</span>
-						<div class="card-desc">Tier: C<br>Acquired from Summoning</div>
-					</div>
-				</article>
-				<article class="item-card magic-popup" data-magic="Vines" data-type="magic" data-rarity="uncommon">
-					<div class="card-image-wrap magic-glow-uncommon">
-						<img class="card-image" src="../images/magic/Vines.png" alt="Vines" />
-					</div>
-					<div class="card-body">
-						<h2 class="card-name">Vines</h2>
-						<span class="card-rarity rarity-uncommon">Uncommon</span>
-						<div class="card-desc">Tier: C<br>Acquired from Summoning</div>
-					</div>
-				</article>
-			</div>
-		</div>
-	</div>
-		<script src="../script.js"></script>
-		<script>
-			// Magic Power List Data
-			const magicPowerList = {
-				"Vines": {Range: "Mid", AOE: "B", IFrame: "No", Damage: "C", Notes: "Mediocre AoE and Single-Target Damage"},
-				"Lightning": {Range: "Mid", AOE: "B", IFrame: "No", Damage: "C", Notes: "Lightning Nova is the only good skill"},
-				"Darkness": {Range: "Long", AOE: "S", IFrame: "No", Damage: "A", Notes: "Amazing AoE but lacking damage"},
-				"Nature": {Range: "Mid", AOE: "B", IFrame: "Yes (1)", Damage: "A", Notes: ""},
-				"Crimson": {Range: "Mid", AOE: "A", IFrame: "Yes (1)", Damage: "A", Notes: ""},
-				"Goliath": {Range: "Short", AOE: "B", IFrame: "Yes (2)", Damage: "S", Notes: "Buff Weapon (skill also)"},
-				"Light": {Range: "Long", AOE: "B", IFrame: "No", Damage: "B", Notes: "Nice and fast. Lacks single-target damage."},
-				"Divine Blade": {Range: "Mid", AOE: "A", IFrame: "Yes (All)", Damage: "SS", Notes: "Have M1"},
-				"Werewolf": {Range: "Mid", AOE: "SS", IFrame: "Yes (3)", Damage: "S", Notes: "Have M1 (Only Transformation)"}
-			};
-			// Modal logic
-			document.querySelectorAll('.magic-popup').forEach(card => {
-				card.addEventListener('click', function() {
-					const name = card.getAttribute('data-magic');
-					const info = magicPowerList[name];
-					if (!info) return;
-					let html = `<h2 style='color:#00d4ff;margin-bottom:0.7em;'>${name} — Power Info</h2>`;
-					html += `<table class='system-table' style='margin:0 auto 1em auto;'>`;
-					html += `<tr><th>Range</th><th>AOE</th><th>I-Frame</th><th>Damage</th><th>Notes</th></tr>`;
-					html += `<tr><td>${info.Range}</td><td>${info.AOE}</td><td>${info.IFrame}</td><td>${info.Damage}</td><td>${info.Notes || ''}</td></tr>`;
-					html += `</table>`;
-					document.getElementById('magic-modal-content').innerHTML = html;
-					document.getElementById('magic-modal').style.display = 'flex';
-				});
-			});
-			document.getElementById('close-magic-modal').onclick = function() {
-				document.getElementById('magic-modal').style.display = 'none';
-			};
-			document.getElementById('magic-modal').onclick = function(e) {
-				if (e.target === this) this.style.display = 'none';
-			};
-		</script>
-	<script>
-		// Animated background particles (already present)
-		const bg = document.querySelector('.system-bg-particles');
-		if (bg && !bg.hasChildNodes()) {
-			for (let i = 0; i < 24; i++) {
-				const p = document.createElement('div');
-				p.className = 'particle';
-				p.style.left = Math.random() * 100 + '%';
-				p.style.top = Math.random() * 100 + '%';
-				p.style.animationDuration = (6 + Math.random() * 8) + 's';
-				p.style.opacity = 0.15 + Math.random() * 0.25;
-				bg.appendChild(p);
-			}
-		}
-		// Animated light rays
-		const rays = document.querySelector('.system-bg-rays');
-		if (rays && !rays.hasChildNodes()) {
-			for (let i = 0; i < 7; i++) {
-				const r = document.createElement('div');
-				r.className = 'system-ray';
-				r.style.top = Math.random() * 100 + 'vh';
-				r.style.animationDelay = (Math.random() * 7) + 's';
-				rays.appendChild(r);
-			}
-		}
-	</script>
+  <div class="page-wrapper">
+    <div class="container">
+      <header class="page-header">
+        <div class="system-tag">[ DATABASE — MAGIC MODULE ]</div>
+        <h1 class="page-title">Magic</h1>
+        <p class="page-subtitle">All abilities sorted by rarity · Click for full stats</p>
+        <div class="header-line"></div>
+      </header>
+
+      <div class="filter-bar">
+        <span class="filter-label">Rarity:</span>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="mythic">Mythic</button>
+        <button class="filter-btn" data-filter="legendary">Legendary</button>
+        <button class="filter-btn" data-filter="epic">Epic</button>
+        <button class="filter-btn" data-filter="rare">Rare</button>
+        <button class="filter-btn" data-filter="uncommon">Uncommon</button>
+      </div>
+
+      <div class="results-bar">
+        <span class="results-count">ABILITIES FOUND: <span id="count-num">9</span></span>
+      </div>
+
+      <div class="cards-grid" id="magic-grid">
+
+        <article class="item-card mythic-glow magic-card" data-filter="mythic" data-magic="Werewolf">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-mythic">Mythic</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Werewolf.png" alt="Werewolf" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Werewolf</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-ss">S</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-s">S</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-ss">SS</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:var(--green)">3</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card mythic-glow magic-card" data-filter="mythic" data-magic="Divine Blade">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-mythic">Mythic</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/DivineBlade.png" alt="Divine Blade" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Divine Blade</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-ss">S</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-ss">SS</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:var(--green)">All</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card legendary-glow magic-card" data-filter="legendary" data-magic="Goliath">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-legendary">Legendary</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Goliath.png" alt="Goliath" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Goliath</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-ss">S</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-s">S</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:var(--green)">2</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card legendary-glow magic-card" data-filter="legendary" data-magic="Light">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-legendary">Legendary</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Light.png" alt="Light" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Light</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-ss">S</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:rgba(140,180,220,0.5)">No</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card epic-glow magic-card" data-filter="epic" data-magic="Crimson">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-epic">Epic</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Crimson.png" alt="Crimson" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Crimson</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:var(--green)">1</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card epic-glow magic-card" data-filter="epic" data-magic="Darkness">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-epic">Epic</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Dark.png" alt="Dark" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Dark</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-ss">S</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:rgba(140,180,220,0.5)">No</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card rare-glow magic-card" data-filter="rare" data-magic="Nature">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-rare">Rare</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Nature.png" alt="Nature" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Nature</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-a">A</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:var(--green)">1</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card uncommon-glow magic-card" data-filter="uncommon" data-magic="Lightning">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-uncommon">Uncommon</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Lightning.png" alt="Lightning" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Lightning</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-c">C</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-c">C</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:rgba(140,180,220,0.5)">No</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+        <article class="item-card uncommon-glow magic-card" data-filter="uncommon" data-magic="Vines">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-uncommon">Uncommon</span>
+            <span class="type-tag">Magic</span>
+            <img class="card-image" src="../images/magic/Vines.png" alt="Vines" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Vines</h2>
+            <div class="card-stats">
+              <div class="stat-row"><span class="stat-label">Tier</span><span class="stat-value rank-c">C</span></div>
+              <div class="stat-row"><span class="stat-label">Damage</span><span class="stat-value rank-c">C</span></div>
+              <div class="stat-row"><span class="stat-label">AOE</span><span class="stat-value rank-b">B</span></div>
+              <div class="stat-row"><span class="stat-label">I-Frame</span><span class="stat-value" style="color:rgba(140,180,220,0.5)">No</span></div>
+            </div>
+            <button class="item-card-btn magic-info-btn">Ability Info</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="magic-modal" class="system-modal">
+    <div class="modal-box">
+      <button class="modal-close" id="close-magic-modal">&times;</button>
+      <div id="magic-modal-content"></div>
+    </div>
+  </div>
+
+  <script>
+    const magicData = {
+      "Vines":        { Range:"Mid",  AOE:"B", IFrame:"No",    Damage:"C",  Notes:"Mediocre AoE and single-target damage" },
+      "Lightning":    { Range:"Mid",  AOE:"B", IFrame:"No",    Damage:"C",  Notes:"Lightning Nova is the only good skill" },
+      "Darkness":     { Range:"Long", AOE:"S", IFrame:"No",    Damage:"A",  Notes:"Amazing AoE but lacking single damage" },
+      "Nature":       { Range:"Mid",  AOE:"B", IFrame:"Yes (1)",Damage:"A", Notes:"" },
+      "Crimson":      { Range:"Mid",  AOE:"A", IFrame:"Yes (1)",Damage:"A", Notes:"" },
+      "Goliath":      { Range:"Short",AOE:"B", IFrame:"Yes (2)",Damage:"S", Notes:"Buff weapon (skill also)" },
+      "Light":        { Range:"Long", AOE:"B", IFrame:"No",    Damage:"B",  Notes:"Nice and fast. Lacks single-target damage." },
+      "Divine Blade": { Range:"Mid",  AOE:"A", IFrame:"Yes (All)",Damage:"SS",Notes:"Has M1" },
+      "Werewolf":     { Range:"Mid",  AOE:"SS",IFrame:"Yes (3)",Damage:"S", Notes:"Has M1 (Only Transformation)" },
+    };
+
+    const rankColor = r => {
+      if(r==='SS') return 'rank-ss-text';
+      if(r==='S')  return 'rank-s-text';
+      if(r==='A')  return 'rank-a-text';
+      if(r==='B')  return 'rank-b-text';
+      return 'rank-c-text';
+    };
+
+    document.querySelectorAll('.magic-info-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const card = btn.closest('.magic-card');
+        const name = card.dataset.magic;
+        const info = magicData[name];
+        if (!info) return;
+        document.getElementById('magic-modal-content').innerHTML = `
+          <div class="modal-title">${name} — Ability Info</div>
+          <table class="modal-table">
+            <thead><tr><th>Range</th><th>AOE</th><th>I-Frame</th><th>Damage</th><th>Notes</th></tr></thead>
+            <tbody><tr>
+              <td>${info.Range}</td>
+              <td class="${rankColor(info.AOE)}">${info.AOE}</td>
+              <td style="color:${info.IFrame==='No'?'rgba(140,180,220,0.5)':'#00ff9f'}">${info.IFrame}</td>
+              <td class="${rankColor(info.Damage)}">${info.Damage}</td>
+              <td>${info.Notes||'—'}</td>
+            </tr></tbody>
+          </table>
+        `;
+        document.getElementById('magic-modal').classList.add('open');
+      });
+    });
+
+    document.getElementById('close-magic-modal').onclick = () => document.getElementById('magic-modal').classList.remove('open');
+    document.getElementById('magic-modal').addEventListener('click', e => { if(e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+    const btns   = document.querySelectorAll('.filter-btn');
+    const cards  = document.querySelectorAll('.item-card');
+    const countEl = document.getElementById('count-num');
+    function updateCount(){ countEl.textContent = [...cards].filter(c=>!c.classList.contains('hidden')).length; }
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        cards.forEach(c => c.classList.toggle('hidden', f!=='all' && c.dataset.filter!==f));
+        updateCount();
+      });
+    });
+    cards.forEach((c,i) => {
+      c.style.opacity='0'; c.style.transform='translateY(20px)';
+      setTimeout(()=>{ c.style.transition='opacity 0.4s ease,transform 0.4s ease'; c.style.opacity='1'; c.style.transform='translateY(0)'; }, 80+i*60);
+    });
+  </script>
 </body>
 </html>
-
-

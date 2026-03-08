@@ -5,82 +5,429 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Solo Hunters Classes Info – Stats, rarity, and drop chance for every class." />
   <title>Classes Info | SH System DB</title>
-  <link rel="stylesheet" href="../style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cyan:   #00d4ff;
+      --purple: #7b2fff;
+      --red:    #ff2a4a;
+      --gold:   #ffd700;
+      --green:  #00ff9f;
+      --dark:   #04060f;
+
+      --rarity-rare:      #7b2fff;
+      --rarity-epic:      #aa44ff;
+      --rarity-legendary: #ff7a3d;
+      --rarity-mythic:    #ffd700;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--dark); font-family: 'Share Tech Mono', monospace; color: #c8deff; overflow-x: hidden; min-height: 100vh; }
+
+    /* ── BG ── */
+    .bg-grid { position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);background-size:48px 48px;animation:grid-drift 40s linear infinite alternate; }
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
+    .bg-vignette { position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(123,47,255,0.1) 0%,transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(0,212,255,0.07) 0%,transparent 60%); }
+    .scanlines { position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.025;background:repeating-linear-gradient(0deg,#000 0,#000 1px,transparent 1px,transparent 3px); }
+
+    /* ── NAVBAR ── */
+    .navbar { position:fixed;top:0;left:0;right:0;z-index:1000;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:rgba(4,6,15,0.92);border-bottom:1px solid rgba(0,212,255,0.12);backdrop-filter:blur(16px); }
+    .nav-logo { font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:3px;color:var(--cyan);text-decoration:none;text-transform:uppercase;text-shadow:0 0 16px rgba(0,212,255,0.6); }
+    .nav-links { display:flex;gap:6px;flex-wrap:wrap; }
+    .nav-btn { font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 11px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.25);border-radius:3px;background:rgba(0,212,255,0.04);transition:all 0.2s;white-space:nowrap; }
+    .nav-btn:hover { background:rgba(0,212,255,0.12);border-color:var(--cyan);box-shadow:0 0 10px rgba(0,212,255,0.25); }
+
+    /* ── LAYOUT ── */
+    .page { position:relative;z-index:1;padding:80px 0 100px;min-height:100vh; }
+    .container { max-width:900px;margin:0 auto;padding:0 20px; }
+
+    /* ── HEADER ── */
+    .page-header { text-align:center;padding:0 0 52px; }
+    .system-tag { display:inline-flex;align-items:center;gap:8px;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,212,255,0.28);padding:4px 16px;border-radius:2px;margin-bottom:18px;background:rgba(0,212,255,0.04);animation:tag-blink 3s ease-in-out infinite; }
+    .tag-dot { width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:tag-blink 1s ease-in-out infinite; }
+    @keyframes tag-blink{0%,100%{opacity:1}50%{opacity:0.5}}
+    .page-title { font-family:'Orbitron',monospace;font-size:clamp(26px,7vw,50px);font-weight:900;letter-spacing:5px;text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.15);margin-bottom:10px; }
+    .page-subtitle { font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(140,180,220,0.5); }
+    .header-line { width:200px;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent); }
+
+    /* ── CLASS CARDS GRID ── */
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 40px;
+    }
+
+    .class-card {
+      position: relative;
+      background: linear-gradient(135deg, rgba(8,12,28,0.97), rgba(10,6,22,0.97));
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      opacity: 0; transform: translateY(18px);
+      transition: opacity 0.4s ease, transform 0.4s ease, box-shadow 0.25s, border-color 0.25s;
+    }
+    .class-card.visible { opacity: 1; transform: translateY(0); }
+    .class-card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px; }
+
+    /* Rarity theming */
+    .class-card.rare     { border-color: rgba(123,47,255,0.3); }
+    .class-card.rare::before { background: linear-gradient(90deg,transparent,rgba(123,47,255,0.5),transparent); }
+    .class-card.rare:hover { border-color: rgba(123,47,255,0.6); box-shadow: 0 8px 32px rgba(123,47,255,0.15); }
+    .class-card.rare .gc { border-color: rgba(123,47,255,0.5) !important; }
+
+    .class-card.epic     { border-color: rgba(170,68,255,0.3); }
+    .class-card.epic::before { background: linear-gradient(90deg,transparent,rgba(170,68,255,0.5),transparent); }
+    .class-card.epic:hover { border-color: rgba(170,68,255,0.6); box-shadow: 0 8px 32px rgba(170,68,255,0.15); }
+    .class-card.epic .gc { border-color: rgba(170,68,255,0.5) !important; }
+
+    .class-card.legendary { border-color: rgba(255,122,61,0.3); animation: legendary-breathe 3.5s ease-in-out infinite alternate; }
+    .class-card.legendary::before { background: linear-gradient(90deg,transparent,rgba(255,122,61,0.5),transparent); }
+    .class-card.legendary:hover { border-color: rgba(255,122,61,0.65); box-shadow: 0 8px 32px rgba(255,122,61,0.2); }
+    .class-card.legendary .gc { border-color: rgba(255,122,61,0.5) !important; }
+    @keyframes legendary-breathe {
+      from { box-shadow: 0 0 12px rgba(255,122,61,0.08); }
+      to   { box-shadow: 0 0 28px rgba(255,122,61,0.22); }
+    }
+
+    .class-card.mythic { border-color: rgba(255,215,0,0.35); animation: mythic-breathe 3s ease-in-out infinite alternate; }
+    .class-card.mythic::before { background: linear-gradient(90deg,transparent,rgba(255,215,0,0.5),transparent); }
+    .class-card.mythic:hover { border-color: rgba(255,215,0,0.7); box-shadow: 0 8px 36px rgba(255,215,0,0.2); }
+    .class-card.mythic .gc { border-color: rgba(255,215,0,0.55) !important; }
+    @keyframes mythic-breathe {
+      from { box-shadow: 0 0 14px rgba(255,215,0,0.1); }
+      to   { box-shadow: 0 0 34px rgba(255,215,0,0.28); }
+    }
+
+    /* Corners */
+    .gc { position:absolute;width:8px;height:8px;pointer-events:none;z-index:2; }
+    .gc.tl{top:-1px;left:-1px;border-top:1.5px solid;border-left:1.5px solid;}
+    .gc.tr{top:-1px;right:-1px;border-top:1.5px solid;border-right:1.5px solid;}
+    .gc.bl{bottom:-1px;left:-1px;border-bottom:1.5px solid;border-left:1.5px solid;}
+    .gc.br{bottom:-1px;right:-1px;border-bottom:1.5px solid;border-right:1.5px solid;}
+
+    /* Card image area */
+    .class-img-wrap {
+      display: flex; align-items: center; justify-content: center;
+      height: 130px;
+      background: rgba(0,0,0,0.25);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .class-img {
+      width: 80px; height: 80px; object-fit: contain;
+      animation: float-idle 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 14px rgba(0,212,255,0.25));
+    }
+    .class-card.rare     .class-img { filter: drop-shadow(0 0 14px rgba(123,47,255,0.4)); }
+    .class-card.epic     .class-img { filter: drop-shadow(0 0 14px rgba(170,68,255,0.4)); }
+    .class-card.legendary .class-img { filter: drop-shadow(0 0 14px rgba(255,122,61,0.45)); }
+    .class-card.mythic   .class-img { filter: drop-shadow(0 0 18px rgba(255,215,0,0.5)); }
+    @keyframes float-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .class-card:hover .class-img { animation-play-state: paused; transform: scale(1.1); transition: transform 0.2s; }
+
+    /* Rarity badge */
+    .rarity-badge {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 2px; border: 1px solid;
+      font-weight: bold;
+    }
+    .rarity-badge.rare      { color: var(--rarity-rare);      border-color: rgba(123,47,255,0.4);  background: rgba(123,47,255,0.1); }
+    .rarity-badge.epic      { color: var(--rarity-epic);      border-color: rgba(170,68,255,0.4);  background: rgba(170,68,255,0.1); }
+    .rarity-badge.legendary { color: var(--rarity-legendary); border-color: rgba(255,122,61,0.4);  background: rgba(255,122,61,0.1); }
+    .rarity-badge.mythic    { color: var(--rarity-mythic);    border-color: rgba(255,215,0,0.4);   background: rgba(255,215,0,0.1); }
+
+    /* Card body */
+    .class-card-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+
+    .class-name { font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;line-height:1; }
+
+    /* Drop chance bar */
+    .drop-row { display: flex; flex-direction: column; gap: 5px; }
+    .drop-label { font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.4); }
+    .drop-bar-wrap { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+    .drop-bar { height: 100%; border-radius: 2px; transition: width 1s cubic-bezier(0.4,0,0.2,1); width: 0; }
+    .class-card.rare     .drop-bar { background: linear-gradient(90deg,var(--rarity-rare),#a070ff); }
+    .class-card.epic     .drop-bar { background: linear-gradient(90deg,var(--rarity-epic),#cc88ff); }
+    .class-card.legendary .drop-bar { background: linear-gradient(90deg,var(--rarity-legendary),#ffaa66); }
+    .class-card.mythic   .drop-bar { background: linear-gradient(90deg,var(--rarity-mythic),#ffee88); }
+    .drop-pct { font-family:'Orbitron',monospace;font-size:12px;font-weight:700;margin-top:2px; }
+    .class-card.rare     .drop-pct { color: var(--rarity-rare); }
+    .class-card.epic     .drop-pct { color: var(--rarity-epic); }
+    .class-card.legendary .drop-pct { color: var(--rarity-legendary); }
+    .class-card.mythic   .drop-pct { color: var(--rarity-mythic); }
+
+    /* Stats */
+    .stats-label { font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.4);margin-bottom:4px; }
+    .stats-list { display: flex; flex-direction: column; gap: 4px; }
+    .stat-line {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.5px;
+      color: rgba(180,210,255,0.75);
+    }
+    .stat-icon { font-size: 11px; width: 14px; flex-shrink: 0; }
+
+    /* ── INFO FOOTER ── */
+    .info-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .info-card {
+      padding: 16px 18px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,212,255,0.12);
+      background: rgba(0,212,255,0.03);
+      position: relative; overflow: hidden;
+    }
+    .info-card::before { content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent); }
+    .info-card.warning { border-color: rgba(255,42,74,0.2); background: rgba(255,42,74,0.04); }
+    .info-card.warning::before { background:linear-gradient(90deg,transparent,rgba(255,42,74,0.4),transparent); }
+    .info-title { font-family:'Orbitron',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px; }
+    .info-card .info-title { color: var(--cyan); }
+    .info-card.warning .info-title { color: var(--red); }
+    .info-body { font-size:10px;line-height:1.8;color:rgba(180,210,255,0.65); }
+    .info-body .hl-gold  { color: var(--gold); font-weight: bold; }
+    .info-body .hl-cyan  { color: var(--cyan); }
+    .info-body .hl-purple{ color: var(--rarity-epic); }
+    .info-body .hl-red   { color: var(--red); }
+
+    @media(max-width:600px) {
+      .classes-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .info-panel { grid-template-columns: 1fr; }
+      .class-img-wrap { height: 110px; }
+      .class-img { width: 64px; height: 64px; }
+    }
+    @media(max-width:380px) {
+      .classes-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="scanlines"></div>
+
   <nav class="navbar">
     <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
-    <ul class="nav-links">
-      <li><a href="../index.html" class="nav-back">⬅ Home</a></li>
-      <li><a href="armor.html">Armor</a></li>
-      <li><a href="weapons.html">Weapons</a></li>
-      <li><a href="builds.html">Builds</a></li>
-      <li><a href="levelguide.html">Gate Info</a></li>
-      <li><a href="beginner-guide.html">Beginner Guide</a></li>
-    </ul>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">⬅ Home</a>
+      <a href="builds.html" class="nav-btn">Builds</a>
+      <a href="levelguide.html" class="nav-btn">Gate Info</a>
+      <a href="beginner-guide.html" class="nav-btn">Beginner Guide</a>
+    </div>
   </nav>
-  <div class="page-wrapper">
+
+  <div class="page">
     <div class="container">
+
       <header class="page-header">
-        <div class="system-tag">[ SYSTEM DATABASE — CLASSES MODULE ]</div>
-        <h1 class="page-title">Classes Info</h1>
-        <p class="page-subtitle">Stats, rarity, and drop chance for every class.</p>
+        <div class="system-tag"><span class="tag-dot"></span>Database — Classes Module<span class="tag-dot"></span></div>
+        <h1 class="page-title">Classes</h1>
+        <p class="page-subtitle">Stats · Rarity · Drop Chance — Roll your destiny</p>
+        <div class="header-line"></div>
       </header>
-      <section class="classes-section" style="max-width:700px;margin:0 auto 2em auto;padding:2em;background:rgba(10,18,40,0.92);border-radius:1.2em;box-shadow:0 0 32px #00d4ff33;">
-        <table class="system-table" style="width:100%;margin-bottom:2em;">
-          <thead>
-            <tr>
-              <th>Class</th>
-              <th>Rarity</th>
-              <th>Stats</th>
-              <th>Drop Chance</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><img src="../images/Classes/Knight.png" alt="Knight" style="width:54px;height:54px;object-fit:contain;" title="Knight" /></td>
-              <td style="color:#7b2fff;font-weight:bold;">Rare</td>
-              <td>+10% M1 Damage<br>+10% HP<br>+10% Magic</td>
-              <td>60%</td>
-            </tr>
-            <tr>
-              <td><img src="../images/Classes/Summoner.png" alt="Summoner" style="width:54px;height:54px;object-fit:contain;" title="Summoner" /></td>
-              <td style="color:#a259ff;font-weight:bold;">Epic</td>
-              <td>+20% HP<br>+20% Magic Damage</td>
-              <td>25%</td>
-            </tr>
-            <tr>
-              <td><img src="../images/Classes/Elf.png" alt="Elf" style="width:54px;height:54px;object-fit:contain;" title="Elf" /></td>
-              <td style="color:#a259ff;font-weight:bold;">Epic</td>
-              <td>+25% Magic Damage<br>+25% Drop Chance</td>
-              <td>25%</td>
-            </tr>
-            <tr>
-              <td><img src="../images/Classes/Tank.png" alt="Tank" style="width:54px;height:54px;object-fit:contain;" title="Tank" /></td>
-              <td style="color:#ff4e6b;font-weight:bold;">Legendary</td>
-              <td>+40% HP<br>+20% M1 Damage</td>
-              <td>10%</td>
-            </tr>
-            <tr>
-              <td><img src="../images/Classes/Mage.png" alt="Mage" style="width:54px;height:54px;object-fit:contain;" title="Mage" /></td>
-              <td style="color:#ff4e6b;font-weight:bold;">Legendary</td>
-              <td>+40% Magic Damage</td>
-              <td>10%</td>
-            </tr>
-            <tr>
-              <td><img src="../images/Classes/Assasin.png" alt="Assassin" style="width:54px;height:54px;object-fit:contain;" title="Assassin" /></td>
-              <td style="color:#ffd700;font-weight:bold;">Mythic</td>
-              <td>+20% M1 Damage<br>+20% Magic Damage<br>+20% HP</td>
-              <td>5%</td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="font-size:1.08em;color:#00d4ff;">M1 = Main attack (physical damage).<br>Magic = Magic attack or ability damage.<br>Drop chance is the probability of getting this class from a class box or roll.</div>
-        <div style="margin-top:2em;font-size:1.12em;color:#ff4e6b;font-weight:bold;text-align:center;">
-          To get more class rerolls: complete the <span style="color:#ffd700;">Zood quest</span>, use <span style="color:#00d4ff;">Codes</span>, or purchase with <span style="color:#a259ff;">Robux</span> only.
+
+      <!-- Classes Grid -->
+      <div class="classes-grid">
+
+        <!-- Knight — Rare -->
+        <div class="class-card rare">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge rare">Rare</span>
+            <img class="class-img" src="../images/Classes/Knight.png" alt="Knight" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Knight</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="60"></div></div>
+              <span class="drop-pct">60%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">⚔</span>+10% M1 Damage</div>
+                <div class="stat-line"><span class="stat-icon">❤</span>+10% HP</div>
+                <div class="stat-line"><span class="stat-icon">✨</span>+10% Magic</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
+
+        <!-- Summoner — Epic -->
+        <div class="class-card epic">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge epic">Epic</span>
+            <img class="class-img" src="../images/Classes/Summoner.png" alt="Summoner" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Summoner</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="25"></div></div>
+              <span class="drop-pct">25%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">❤</span>+20% HP</div>
+                <div class="stat-line"><span class="stat-icon">✨</span>+20% Magic Damage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Elf — Epic -->
+        <div class="class-card epic">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge epic">Epic</span>
+            <img class="class-img" src="../images/Classes/Elf.png" alt="Elf" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Elf</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="25"></div></div>
+              <span class="drop-pct">25%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">✨</span>+25% Magic Damage</div>
+                <div class="stat-line"><span class="stat-icon">🎲</span>+25% Drop Chance</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tank — Legendary -->
+        <div class="class-card legendary">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge legendary">Legendary</span>
+            <img class="class-img" src="../images/Classes/Tank.png" alt="Tank" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Tank</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="10"></div></div>
+              <span class="drop-pct">10%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">❤</span>+40% HP</div>
+                <div class="stat-line"><span class="stat-icon">⚔</span>+20% M1 Damage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mage — Legendary -->
+        <div class="class-card legendary">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge legendary">Legendary</span>
+            <img class="class-img" src="../images/Classes/Mage.png" alt="Mage" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Mage</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="10"></div></div>
+              <span class="drop-pct">10%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">✨</span>+40% Magic Damage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assassin — Mythic -->
+        <div class="class-card mythic">
+          <span class="gc tl"></span><span class="gc tr"></span><span class="gc bl"></span><span class="gc br"></span>
+          <div class="class-img-wrap">
+            <span class="rarity-badge mythic">Mythic</span>
+            <img class="class-img" src="../images/Classes/Assasin.png" alt="Assassin" />
+          </div>
+          <div class="class-card-body">
+            <div class="class-name">Assassin</div>
+            <div class="drop-row">
+              <span class="drop-label">Drop Chance</span>
+              <div class="drop-bar-wrap"><div class="drop-bar" data-pct="5"></div></div>
+              <span class="drop-pct">5%</span>
+            </div>
+            <div>
+              <div class="stats-label">Bonuses</div>
+              <div class="stats-list">
+                <div class="stat-line"><span class="stat-icon">⚔</span>+20% M1 Damage</div>
+                <div class="stat-line"><span class="stat-icon">✨</span>+20% Magic Damage</div>
+                <div class="stat-line"><span class="stat-icon">❤</span>+20% HP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.classes-grid -->
+
+      <!-- Info panels -->
+      <div class="info-panel">
+        <div class="info-card">
+          <div class="info-title">◈ Stat Glossary</div>
+          <div class="info-body">
+            <span class="hl-cyan">M1</span> = Main attack (physical damage)<br>
+            <span class="hl-cyan">Magic</span> = Magic attack or ability damage<br>
+            <span class="hl-cyan">Drop Chance</span> = Probability from a class box or roll
+          </div>
+        </div>
+        <div class="info-card warning">
+          <div class="info-title">⚠ Getting Rerolls</div>
+          <div class="info-body">
+            Complete the <span class="hl-gold">Zood Quest</span><br>
+            Redeem active <span class="hl-cyan">Codes</span><br>
+            Purchase with <span class="hl-purple">Robux</span> only
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <script>
+    /* Scroll-in entrance */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.class-card').forEach((c, i) => {
+      c.style.transitionDelay = (i * 75) + 'ms';
+      io.observe(c);
+    });
+
+    /* Animate drop-chance bars after card becomes visible */
+    const barObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const bar = e.target.querySelector('.drop-bar');
+          if (bar) {
+            const pct = bar.dataset.pct;
+            setTimeout(() => { bar.style.width = pct + '%'; }, 200);
+          }
+          barObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.class-card').forEach(c => barObserver.observe(c));
+  </script>
 </body>
 </html>
