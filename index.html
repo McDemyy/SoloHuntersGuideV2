@@ -1,417 +1,580 @@
-</style>
-<style>
-.system-bg-glitches {
-  position: fixed;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 3;
-}
-.bg-glitch {
-  position: absolute;
-  border-radius: 2.5px;
-  opacity: 0.18;
-  filter: blur(0.5px);
-  background: linear-gradient(90deg, #00d4ff 0%, #7b2fff 100%);
-  animation: glitch-move 0.32s linear forwards;
-}
-@keyframes glitch-move {
-  0% { opacity: 0.18; transform: scaleX(1) skewX(0deg); }
-  40% { opacity: 0.32; transform: scaleX(1.08) skewX(8deg); }
-  80% { opacity: 0.22; transform: scaleX(0.96) skewX(-6deg); }
-  100% { opacity: 0; transform: scaleX(1.12) skewX(0deg); }
-}
-</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Solo Leveling System Database – A complete game guide hub for hunters." />
-  <title>Solo Hunters</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solo Hunters System Database - A complete game guide hub for hunters." />
+  <title>Solo Hunters - System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --void:#00000f;--abyss:#020510;--deep:#040818;--navy:#071030;--blue:#0a1845;
+      --sys:#1a6fff;--ice:#4db8ff;--cyan:#00c8ff;--glow:#2979ff;--shadow:#6a00ff;
+      --purple:#8b20ff;--violet:#b94dff;--red:#ff1e3c;--gold:#e8c860;
+      --silver:#a8c4e0;--white:#ddeeff;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--void);font-family:'Rajdhani',sans-serif;color:var(--silver);min-height:100vh;overflow-x:hidden;}
+    .bg-void{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 120% 70% at 50% 0%,rgba(41,121,255,0.12) 0%,transparent 55%),radial-gradient(ellipse 80% 60% at 15% 50%,rgba(106,0,255,0.10) 0%,transparent 50%),radial-gradient(ellipse 60% 40% at 85% 70%,rgba(26,111,255,0.07) 0%,transparent 45%),var(--void);}
+    .bg-grid{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(41,121,255,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,0.06) 1px,transparent 1px);background-size:60px 60px;animation:grid-drift 60s linear infinite alternate;}
+    .bg-grid-accent{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(rgba(41,121,255,0.12) 1px,transparent 1px),linear-gradient(90deg,rgba(41,121,255,0.12) 1px,transparent 1px);background-size:300px 300px;animation:grid-drift 60s linear infinite alternate;}
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:60px 60px}}
+    .bg-scan{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0px,transparent 2px,rgba(0,0,30,0.08) 2px,rgba(0,0,30,0.08) 3px);opacity:.7;}
+    .bg-rift{position:fixed;left:50%;top:0;bottom:0;transform:translateX(-50%);width:1px;z-index:1;pointer-events:none;background:linear-gradient(180deg,transparent 0%,rgba(41,121,255,0.0) 10%,rgba(41,121,255,0.15) 30%,rgba(139,32,255,0.2) 50%,rgba(41,121,255,0.15) 70%,rgba(41,121,255,0.0) 90%,transparent 100%);animation:rift-pulse 4s ease-in-out infinite;}
+    @keyframes rift-pulse{0%,100%{opacity:.4}50%{opacity:1}}
+    .bg-particles{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+    .sp{position:absolute;border-radius:50%;animation:sp-rise linear infinite;}
+    @keyframes sp-rise{0%{transform:translateY(0) translateX(0) scale(1);opacity:0}8%{opacity:var(--op)}92%{opacity:calc(var(--op)*0.5)}100%{transform:translateY(-100vh) translateX(var(--dx)) scale(0.3);opacity:0}}
+    .bg-vignette{position:fixed;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,15,0.75) 100%);}
+    .bg-sweep-layer{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+    .sweep{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(41,121,255,0.5) 50%,transparent 100%);animation:sweep-through linear forwards;opacity:0;}
+    @keyframes sweep-through{0%{top:0%;opacity:0}5%{opacity:.6}95%{opacity:.3}100%{top:100%;opacity:0}}
+
+    /* NAVBAR */
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(0,0,15,0.85);border-bottom:1px solid rgba(41,121,255,0.15);backdrop-filter:blur(20px);}
+    .navbar::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(41,121,255,0.3),rgba(139,32,255,0.3),transparent);}
+    .nav-logo{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:4px;color:var(--ice);text-decoration:none;text-transform:uppercase;text-shadow:0 0 20px rgba(77,184,255,0.6);display:flex;align-items:center;gap:10px;}
+    .nav-logo-icon{width:24px;height:24px;border:1px solid rgba(41,121,255,0.5);border-radius:3px;display:flex;align-items:center;justify-content:center;background:rgba(41,121,255,0.08);font-size:13px;}
+    .nav-logo-pulse{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse-dot 1.4s ease-in-out infinite;}
+    @keyframes pulse-dot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.8);opacity:.4}}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .nav-badge{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(77,184,255,0.5);border:1px solid rgba(77,184,255,0.15);padding:3px 10px;border-radius:2px;}
+    .nav-redgate{display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);text-decoration:none;border:1px solid rgba(255,30,60,0.3);border-radius:3px;padding:4px 14px;background:rgba(255,30,60,0.04);transition:all .2s;}
+    .nav-redgate:hover{background:rgba(255,30,60,0.1);border-color:var(--red);box-shadow:0 0 16px rgba(255,30,60,0.25);}
+    .nav-redgate img{width:13px;height:13px;object-fit:contain;}
+
+    /* HERO */
+    .hero{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:90px 20px 60px;text-align:center;}
+    .gate-portal{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);pointer-events:none;z-index:-1;}
+    .gate-ring{position:absolute;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);border-style:solid;}
+    .gate-ring:nth-child(1){width:240px;height:240px;border-width:1px;border-color:rgba(41,121,255,0.2);border-style:dashed;animation:gate-rotate 20s linear infinite;}
+    .gate-ring:nth-child(2){width:380px;height:380px;border-width:1px;border-color:rgba(139,32,255,0.12);animation:gate-rotate 30s linear infinite reverse;}
+    .gate-ring:nth-child(3){width:520px;height:520px;border-width:1px;border-color:rgba(41,121,255,0.08);border-style:dashed;animation:gate-rotate 45s linear infinite;}
+    .gate-ring:nth-child(4){width:680px;height:680px;border-width:1px;border-color:rgba(139,32,255,0.05);animation:gate-rotate 60s linear infinite reverse;}
+    @keyframes gate-rotate{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+    .gate-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(41,121,255,0.12) 0%,rgba(139,32,255,0.06) 50%,transparent 70%);animation:core-breathe 4s ease-in-out infinite;}
+    @keyframes core-breathe{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6}50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}}
+
+    .sys-notify{display:inline-flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--ice);border:1px solid rgba(77,184,255,0.25);padding:6px 20px;border-radius:2px;background:rgba(41,121,255,0.05);margin-bottom:28px;position:relative;animation:notify-in .8s ease-out both;}
+    .sys-notify::before,.sys-notify::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:40px;height:1px;}
+    .sys-notify::before{right:100%;margin-right:8px;background:linear-gradient(90deg,transparent,rgba(77,184,255,0.4));}
+    .sys-notify::after{left:100%;margin-left:8px;background:linear-gradient(90deg,rgba(77,184,255,0.4),transparent);}
+    @keyframes notify-in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .notify-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse-dot 1.2s ease-in-out infinite;}
+    .hero-title{font-family:'Cinzel',serif;font-size:clamp(34px,9vw,80px);font-weight:900;letter-spacing:clamp(6px,3vw,16px);text-transform:uppercase;color:var(--white);text-shadow:0 0 30px rgba(41,121,255,0.5),0 0 60px rgba(41,121,255,0.2),0 0 100px rgba(139,32,255,0.1);line-height:1.05;margin-bottom:8px;animation:title-in 1s ease-out .2s both;}
+    @keyframes title-in{from{opacity:0;transform:translateY(24px) scale(.97);letter-spacing:20px}to{opacity:1;transform:translateY(0) scale(1)}}
+    .hero-title-line2{display:block;font-family:'Share Tech Mono',monospace;font-size:clamp(10px,2.5vw,16px);font-weight:400;letter-spacing:clamp(8px,4vw,22px);color:rgba(77,184,255,0.7);text-shadow:none;margin-top:10px;animation:title-in 1s ease-out .45s both;}
+    .hero-div{display:flex;align-items:center;gap:0;width:clamp(200px,55vw,440px);margin:24px auto 20px;animation:title-in .8s ease-out .6s both;}
+    .hero-div-line{flex:1;height:1px;}
+    .hero-div-line:first-child{background:linear-gradient(90deg,transparent,rgba(41,121,255,0.5));}
+    .hero-div-line:last-child{background:linear-gradient(90deg,rgba(41,121,255,0.5),transparent);}
+    .hero-div-diamond{width:6px;height:6px;border-radius:1px;background:var(--glow);box-shadow:0 0 8px var(--glow);transform:rotate(45deg);margin:0 12px;animation:diamond-pulse 2s ease-in-out infinite;}
+    @keyframes diamond-pulse{0%,100%{box-shadow:0 0 6px var(--glow)}50%{box-shadow:0 0 16px var(--glow),0 0 28px rgba(41,121,255,0.4)}}
+    .hero-sub{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(140,180,220,0.35);margin-bottom:36px;animation:title-in .8s ease-out .7s both;}
+    .hero-cta{display:inline-flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--white);text-decoration:none;padding:11px 28px;border:1px solid rgba(77,184,255,0.35);border-radius:3px;background:linear-gradient(90deg,rgba(41,121,255,0.1),rgba(139,32,255,0.1));margin-bottom:12px;transition:all .25s;box-shadow:0 0 24px rgba(41,121,255,0.08),inset 0 0 20px rgba(41,121,255,0.04);animation:title-in .8s ease-out .8s both;position:relative;overflow:hidden;}
+    .hero-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(77,184,255,0.8),transparent);animation:cta-shine 3s ease-in-out infinite;}
+    @keyframes cta-shine{0%,100%{left:-100%}50%{left:100%}}
+    .hero-cta:hover{background:linear-gradient(90deg,rgba(41,121,255,0.2),rgba(139,32,255,0.2));border-color:var(--ice);box-shadow:0 0 32px rgba(41,121,255,0.2),0 0 0 1px rgba(77,184,255,0.1);transform:translateY(-2px);color:#fff;}
+    .cta-bracket{color:rgba(77,184,255,0.5);font-size:14px;}
+
+    /* ── ORACLE ENTRY BUTTON ── */
+    .oracle-entry-btn{display:inline-flex;align-items:center;gap:12px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--white);text-decoration:none;padding:11px 28px;border:1px solid rgba(185,77,255,0.4);border-radius:3px;background:linear-gradient(90deg,rgba(139,32,255,0.1),rgba(41,121,255,0.08));margin-bottom:20px;transition:all .25s;box-shadow:0 0 24px rgba(139,32,255,0.1),inset 0 0 20px rgba(139,32,255,0.04);animation:title-in .8s ease-out .85s both;position:relative;overflow:hidden;}
+    .oracle-entry-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(185,77,255,0.9),rgba(77,184,255,0.5),transparent);animation:cta-shine 2.5s ease-in-out infinite;}
+    .oracle-entry-btn::after{content:'';position:absolute;bottom:0;left:-100%;width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(185,77,255,0.4),transparent);animation:cta-shine 2.5s ease-in-out 1.25s infinite;}
+    .oracle-entry-btn:hover{background:linear-gradient(90deg,rgba(139,32,255,0.2),rgba(41,121,255,0.15));border-color:rgba(185,77,255,0.8);box-shadow:0 0 32px rgba(139,32,255,0.25),0 0 0 1px rgba(185,77,255,0.15);transform:translateY(-2px);color:#fff;}
+    .oeb-pulse{width:6px;height:6px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet),0 0 20px rgba(185,77,255,0.4);animation:oeb-blink 1.4s ease-in-out infinite;flex-shrink:0;}
+    @keyframes oeb-blink{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.6);opacity:1}}
+    .oeb-text{display:flex;align-items:center;gap:8px;}
+    .oeb-bracket{color:rgba(185,77,255,0.55);font-size:14px;}
+
+    /* POWER SCANNER */
+    .scanner-panel{width:100%;max-width:720px;margin-bottom:22px;animation:title-in .8s ease-out .88s both;}
+    .scanner-frame{background:rgba(2,5,16,0.9);border:1px solid rgba(41,121,255,0.18);border-radius:4px;padding:16px 20px 14px;position:relative;overflow:hidden;}
+    .scanner-frame::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(41,121,255,0.4),rgba(139,32,255,0.2),transparent);}
+    .sf-c{position:absolute;width:10px;height:10px;}
+    .sf-c.tl{top:0;left:0;border-top:1.5px solid rgba(41,121,255,0.55);border-left:1.5px solid rgba(41,121,255,0.55);}
+    .sf-c.tr{top:0;right:0;border-top:1.5px solid rgba(41,121,255,0.55);border-right:1.5px solid rgba(41,121,255,0.55);}
+    .sf-c.bl{bottom:0;left:0;border-bottom:1.5px solid rgba(41,121,255,0.55);border-left:1.5px solid rgba(41,121,255,0.55);}
+    .sf-c.br{bottom:0;right:0;border-bottom:1.5px solid rgba(41,121,255,0.55);border-right:1.5px solid rgba(41,121,255,0.55);}
+    .scanner-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+    .scanner-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(77,184,255,0.5);display:flex;align-items:center;gap:8px;}
+    .scanner-label-dot{width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:pulse-dot 1s ease-in-out infinite;}
+    .scanner-hint{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(140,180,220,0.2);}
+    .scanner-row{display:flex;gap:8px;}
+    .scanner-input{flex:1;font-family:'Share Tech Mono',monospace;font-size:14px;letter-spacing:1px;padding:9px 14px;background:rgba(0,0,20,0.6);border:1px solid rgba(41,121,255,0.2);border-radius:3px;color:var(--ice);outline:none;transition:border-color .2s,box-shadow .2s;}
+    .scanner-input::placeholder{color:rgba(41,121,255,0.25);}
+    .scanner-input:focus{border-color:rgba(41,121,255,0.5);box-shadow:0 0 18px rgba(41,121,255,0.1);}
+    .scanner-input::-webkit-inner-spin-button,.scanner-input::-webkit-outer-spin-button{display:none;}
+    .scanner-btn{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:9px 20px;background:linear-gradient(135deg,rgba(41,121,255,0.15),rgba(139,32,255,0.12));border:1px solid rgba(41,121,255,0.35);border-radius:3px;color:var(--ice);cursor:pointer;white-space:nowrap;transition:all .2s;}
+    .scanner-btn:hover{background:linear-gradient(135deg,rgba(41,121,255,0.28),rgba(139,32,255,0.22));box-shadow:0 0 18px rgba(41,121,255,0.2);border-color:var(--ice);}
+    .scanner-btn.clear{background:rgba(255,255,255,0.02);border-color:rgba(255,255,255,0.07);color:rgba(140,180,220,0.3);padding:9px 12px;}
+    .scanner-result{font-family:'Share Tech Mono',monospace;min-height:0;font-size:10px;letter-spacing:.5px;line-height:2;margin-top:10px;}
+    .sr-gate{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--cyan);text-shadow:0 0 12px rgba(0,200,255,0.5);}
+    .sr-next{color:rgba(232,200,96,0.7);font-size:9px;}
+    .sr-red{color:rgba(255,80,100,0.8);font-size:9px;}
+    .sr-link{color:var(--ice);text-decoration:none;border-bottom:1px solid rgba(77,184,255,0.25);transition:color .15s;}
+    .sr-link:hover{color:#fff;}
+
+    /* MENU GRID */
+    .menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:720px;animation:title-in .8s ease-out .95s both;}
+    .menu-btn{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:16px 18px 14px;background:rgba(2,5,18,0.92);border:1px solid rgba(41,121,255,0.12);border-radius:4px;text-decoration:none;cursor:pointer;transition:transform .22s,border-color .22s,box-shadow .22s,background .22s;overflow:hidden;font-family:'Rajdhani',sans-serif;}
+    .menu-btn::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(41,121,255,0.3),transparent);}
+    .menu-btn::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 0%,rgba(41,121,255,0.05) 0%,transparent 60%);pointer-events:none;}
+    .menu-btn:hover{transform:translateY(-4px);border-color:rgba(41,121,255,0.4);background:rgba(4,8,28,0.95);box-shadow:0 10px 40px rgba(41,121,255,0.12),0 0 0 1px rgba(41,121,255,0.06);}
+    .mc{position:absolute;width:7px;height:7px;pointer-events:none;}
+    .mc.tl{top:-1px;left:-1px;border-top:1px solid rgba(41,121,255,0.5);border-left:1px solid rgba(41,121,255,0.5);}
+    .mc.tr{top:-1px;right:-1px;border-top:1px solid rgba(41,121,255,0.5);border-right:1px solid rgba(41,121,255,0.5);}
+    .mc.bl{bottom:-1px;left:-1px;border-bottom:1px solid rgba(41,121,255,0.5);border-left:1px solid rgba(41,121,255,0.5);}
+    .mc.br{bottom:-1px;right:-1px;border-bottom:1px solid rgba(41,121,255,0.5);border-right:1px solid rgba(41,121,255,0.5);}
+    .btn-rank{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:3px;text-transform:uppercase;color:rgba(77,184,255,0.4);margin-bottom:6px;}
+    .btn-label{font-family:'Cinzel',serif;font-size:clamp(10px,2.8vw,13px);font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--white);line-height:1;}
+    .btn-desc{font-family:'Share Tech Mono',monospace;font-size:clamp(7px,1.6vw,8.5px);letter-spacing:1px;text-transform:uppercase;color:rgba(140,180,220,0.35);line-height:1.4;margin-top:2px;}
+    .menu-btn.v-red{border-color:rgba(255,30,60,0.15);}
+    .menu-btn.v-red::before{background:linear-gradient(90deg,transparent,rgba(255,30,60,0.3),transparent);}
+    .menu-btn.v-red:hover{border-color:rgba(255,30,60,0.45);box-shadow:0 10px 40px rgba(255,30,60,0.1);}
+    .menu-btn.v-red .mc{border-color:rgba(255,30,60,0.45)!important;}
+    .menu-btn.v-red .btn-label{color:rgba(255,160,170,1);}
+    .menu-btn.v-red .btn-rank{color:rgba(255,80,100,0.45);}
+    .menu-btn.v-purple{border-color:rgba(139,32,255,0.18);}
+    .menu-btn.v-purple::before{background:linear-gradient(90deg,transparent,rgba(139,32,255,0.35),transparent);}
+    .menu-btn.v-purple:hover{border-color:rgba(139,32,255,0.5);box-shadow:0 10px 40px rgba(139,32,255,0.12);}
+    .menu-btn.v-purple .mc{border-color:rgba(139,32,255,0.5)!important;}
+    .menu-btn.v-purple .btn-label{color:rgba(190,150,255,1);}
+    .menu-btn.v-purple .btn-rank{color:rgba(185,77,255,0.45);}
+    .menu-btn.v-gold{border-color:rgba(232,200,96,0.18);}
+    .menu-btn.v-gold::before{background:linear-gradient(90deg,transparent,rgba(232,200,96,0.35),transparent);}
+    .menu-btn.v-gold:hover{border-color:rgba(232,200,96,0.5);box-shadow:0 10px 40px rgba(232,200,96,0.1);}
+    .menu-btn.v-gold .mc{border-color:rgba(232,200,96,0.5)!important;}
+    .menu-btn.v-gold .btn-label{color:rgba(255,225,140,1);}
+    .menu-btn.v-gold .btn-rank{color:rgba(232,200,96,0.4);}
+    .menu-btn.wide{grid-column:span 3;flex-direction:row;align-items:center;gap:16px;padding:13px 20px;}
+    .wide-icon{width:32px;height:32px;border:1px solid rgba(41,121,255,0.3);border-radius:3px;background:rgba(41,121,255,0.06);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+    .wide-text{flex:1;}
+    .wide-arrow{font-family:'Share Tech Mono',monospace;font-size:16px;color:rgba(77,184,255,0.3);transition:color .2s,transform .2s;}
+    .menu-btn.wide:hover .wide-arrow{color:var(--ice);transform:translateX(4px);}
+
+    /* RECENT + STATUS */
+    .recent-bar{width:100%;max-width:720px;margin-top:18px;animation:title-in .8s ease-out 1.05s both;}
+    .recent-heading{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:rgba(140,180,220,0.2);margin-bottom:8px;}
+    .recent-chips{display:flex;gap:8px;flex-wrap:wrap;}
+    .recent-chip{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 13px;border-radius:2px;border:1px solid rgba(41,121,255,0.12);background:rgba(41,121,255,0.03);color:rgba(140,180,220,0.45);text-decoration:none;transition:all .18s;}
+    .recent-chip:hover{border-color:rgba(41,121,255,0.35);color:var(--ice);background:rgba(41,121,255,0.07);}
+    .recent-chip-dot{width:3px;height:3px;border-radius:50%;background:var(--cyan);opacity:.4;flex-shrink:0;}
+    .recent-none{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(140,180,220,0.15);text-transform:uppercase;}
+    .status-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-top:32px;border:1px solid rgba(41,121,255,0.1);border-radius:3px;background:rgba(2,5,18,0.7);max-width:720px;width:100%;animation:title-in .8s ease-out 1.1s both;overflow:hidden;}
+    .status-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-right:1px solid rgba(41,121,255,0.08);position:relative;}
+    .status-item:last-child{border-right:none;}
+    .status-item::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(41,121,255,0.2),transparent);}
+    .status-label{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:2px;text-transform:uppercase;color:rgba(140,180,220,0.28);}
+    .status-value{font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--ice);}
+    .status-value.active{color:#00e87a;text-shadow:0 0 10px rgba(0,232,122,0.4);}
+
+    /* MODALS */
+    .sys-modal{display:none;position:fixed;inset:0;z-index:2000;align-items:center;justify-content:center;background:rgba(0,0,15,0.85);backdrop-filter:blur(12px);}
+    .sys-modal.open{display:flex;}
+    .modal-box{position:relative;background:linear-gradient(135deg,rgba(2,5,18,0.99),rgba(4,3,22,0.99));border:1px solid rgba(41,121,255,0.25);border-radius:6px;padding:32px 28px 28px;max-width:440px;width:92%;box-shadow:0 0 60px rgba(41,121,255,0.1),0 0 120px rgba(139,32,255,0.06);animation:modal-in .25s ease-out;}
+    @keyframes modal-in{from{opacity:0;transform:scale(.95) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(41,121,255,0.5),rgba(139,32,255,0.3),transparent);}
+    .modal-close{position:absolute;top:12px;right:16px;font-size:18px;color:rgba(77,184,255,0.4);background:none;border:none;cursor:pointer;line-height:1;font-family:'Share Tech Mono',monospace;}
+    .modal-close:hover{color:var(--ice);}
+    .modal-title{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:3px;color:var(--ice);text-transform:uppercase;margin-bottom:22px;text-shadow:0 0 16px rgba(77,184,255,0.4);}
+    .modal-links{display:flex;flex-direction:column;gap:8px;}
+    .modal-link{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:rgba(41,121,255,0.04);border:1px solid rgba(41,121,255,0.12);border-radius:3px;text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(180,210,255,0.7);transition:all .2s;}
+    .modal-link:hover{background:rgba(41,121,255,0.1);border-color:rgba(41,121,255,0.35);color:#fff;transform:translateX(4px);}
+    .modal-link-arrow{color:rgba(77,184,255,0.5);font-size:14px;}
+    .modal-map-wrap{display:flex;flex-direction:column;gap:14px;align-items:center;}
+    .modal-map-img-block{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;}
+    .modal-map-img-block img{width:100%;border-radius:4px;border:1px solid rgba(41,121,255,0.15);}
+    .modal-map-caption{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(77,184,255,0.5);}
+    .credits-body{text-align:center;font-family:'Share Tech Mono',monospace;font-size:12px;line-height:2.2;color:rgba(180,210,255,0.7);}
+    .credits-name{color:var(--ice);}
+    .credits-name.shadow{color:var(--violet);}
+    .fixed-btn{position:fixed;z-index:1100;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:7px 16px;background:rgba(0,0,15,0.88);border:1px solid rgba(41,121,255,0.2);border-radius:3px;color:rgba(77,184,255,0.55);cursor:pointer;transition:all .2s;backdrop-filter:blur(8px);}
+    .fixed-btn:hover{border-color:rgba(77,184,255,0.5);color:var(--ice);box-shadow:0 0 14px rgba(41,121,255,0.18);}
+    #btn-credits{bottom:18px;right:18px;}
+    #btn-mute{bottom:18px;left:18px;}
+    .site-footer{position:relative;z-index:10;text-align:center;padding:18px 20px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(140,180,220,0.15);border-top:1px solid rgba(41,121,255,0.06);}
+    @media(max-width:560px){.menu-grid{grid-template-columns:repeat(2,1fr);}.menu-btn.wide{grid-column:span 2;}.gate-ring:nth-child(3),.gate-ring:nth-child(4){display:none;}.status-bar{flex-wrap:wrap;}.status-item{min-width:33%;border-bottom:1px solid rgba(41,121,255,0.06);}.hero{padding:76px 16px 48px;}.sys-notify::before,.sys-notify::after{display:none;}}
+    @media(max-width:360px){.btn-label{font-size:10px;}.menu-btn{padding:12px;}}
+  </style>
 </head>
 <body>
-  <audio id="bg-music" src="system-open.mp3" preload="auto" loop style="display:none;"></audio>
-  <button id="mute-music-btn" style="position:fixed;bottom:18px;left:18px;z-index:1200;padding:0.4em 1.1em;font-size:0.98em;background:#0a1a2c;color:#00d4ff;border:1.5px solid #00d4ff;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;opacity:0.85;cursor:pointer;transition:opacity 0.2s;">Mute</button>
+  <div class="bg-void"></div>
+  <div class="bg-grid"></div>
+  <div class="bg-grid-accent"></div>
+  <div class="bg-scan"></div>
+  <div class="bg-rift"></div>
+  <div class="bg-particles" id="particles"></div>
+  <div class="bg-sweep-layer" id="sweep-layer"></div>
+  <div class="bg-vignette"></div>
 
-  <audio id="system-open-audio" src="system-open.mp3" preload="auto"></audio>
-
-
-
-  <div class="system-bg-grid"></div>
-  <div class="system-bg-rays"></div>
-  <div class="system-bg-shimmer"></div>
-  <div class="system-bg-particles"></div>
-  <div class="system-bg-glitch"></div>
-  <div class="system-bg-circuit">
-    <svg viewBox="0 0 1920 1600" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <g opacity="0.18">
-        <rect x="80" y="120" width="1760" height="1200" rx="48" stroke="#00d4ff" stroke-width="3.5"/>
-        <rect x="260" y="320" width="1400" height="900" rx="32" stroke="#7b2fff" stroke-width="2.5"/>
-        <path d="M80 800 H0 V1600 H1920 V800 H1840" stroke="#00d4ff" stroke-width="2.2"/>
-        <path d="M960 120 V0" stroke="#00d4ff" stroke-width="2.2"/>
-        <circle cx="960" cy="120" r="14" fill="#00d4ff"/>
-        <circle cx="260" cy="320" r="12" fill="#7b2fff"/>
-        <circle cx="1660" cy="320" r="12" fill="#7b2fff"/>
-        <circle cx="260" cy="1220" r="12" fill="#7b2fff"/>
-        <circle cx="1660" cy="1220" r="12" fill="#7b2fff"/>
-      </g>
-    </svg>
-  </div>
-  <div class="system-bg-scanlines"></div>
-  <script>
-    // Animated system particles
-    function spawnParticles() {
-      const container = document.querySelector('.system-bg-particles');
-      if (!container) return;
-      for (let i = 0; i < 22; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        p.style.left = Math.random() * 100 + 'vw';
-        p.style.top = Math.random() * 100 + 'vh';
-        p.style.animationDuration = (7 + Math.random() * 7) + 's';
-        p.style.opacity = 0.18 + Math.random() * 0.22;
-        container.appendChild(p);
-      }
-    }
-    window.addEventListener('DOMContentLoaded', spawnParticles);
-    // Glitch overlay animation
-    function animateGlitch() {
-      const glitch = document.querySelector('.system-bg-glitch');
-      if (!glitch) return;
-      setInterval(() => {
-        glitch.style.opacity = 0.08 + Math.random() * 0.12;
-        glitch.style.transform = `translateY(${Math.random()*4-2}px)`;
-      }, 120);
-    }
-    window.addEventListener('DOMContentLoaded', animateGlitch);
-    // Animated system rays
-    function spawnRays() {
-      const container = document.querySelector('.system-bg-rays');
-      if (!container) return;
-      for (let i = 0; i < 7; i++) {
-        const ray = document.createElement('div');
-        ray.className = 'system-ray';
-        ray.style.top = (10 + i * 12) + '%';
-        ray.style.animationDelay = (i * 1.7) + 's';
-        container.appendChild(ray);
-      }
-    }
-    window.addEventListener('DOMContentLoaded', spawnRays);
-        // Guides Modal Logic (minimal UI)
-        function openGuidesModal() {
-          var modal = document.getElementById('guides-modal');
-          if (modal) modal.style.display = 'flex';
-        }
-        function closeGuidesModal() {
-          var modal = document.getElementById('guides-modal');
-          if (modal) modal.style.display = 'none';
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-          // Inject guides modal HTML
-          fetch('guides-modal.html').then(r => r.text()).then(html => {
-            document.getElementById('guides-modal-container').innerHTML = html;
-            var closeBtn = document.getElementById('close-guides-modal');
-            if (closeBtn) closeBtn.onclick = closeGuidesModal;
-            var modal = document.getElementById('guides-modal');
-            if (modal) {
-              modal.addEventListener('click', function(e) {
-                if (e.target === modal) closeGuidesModal();
-              });
-            }
-          });
-          // Attach click to minimal Guides button
-          var guidesBtn = document.getElementById('main-menu-guides-btn');
-          if (guidesBtn) {
-            guidesBtn.addEventListener('click', function(e) {
-              e.preventDefault();
-              openGuidesModal();
-            });
-          }
-        });
-  </script>
-
-
-
-  <!-- Navigation -->
   <nav class="navbar">
-    <a href="index.html" class="nav-logo">SH System DB</a>
-    <!-- Removed nav-mobile-btn hamburger menu button -->
-    <ul class="nav-links" style="margin-left:auto;">
-      <li style="margin-left:auto;">
-        <a href="pages/redgates.html" id="open-redgates-page" style="display:flex;align-items:center;gap:0.5em;padding-right:0.5em;">
-          <img src="images/Backgrounds/RedGateIcon.png" alt="Red Gates" style="height:1.3em;width:1.3em;vertical-align:middle;"/>
-          <span>RedGates</span>
-        </a>
-      </li>
-    </ul>
-    <div class="nav-sidepanel" id="nav-sidepanel">
-      <ul class="nav-sidepanel-links">
-        
-      </ul>
+    <a href="index.html" class="nav-logo">
+      <span class="nav-logo-icon">&#x2694;</span>
+      SH System DB
+      <span class="nav-logo-pulse"></span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">System Online</span>
+      <a href="pages/redgates.html" class="nav-redgate">
+        <img src="images/Backgrounds/RedGateIcon.png" alt="" />
+        Red Gates
+      </a>
     </div>
-    <div class="nav-sidepanel-overlay" id="nav-sidepanel-overlay"></div>
   </nav>
 
-*** End Patch
-
-  <!-- Map Modal Popup -->
-  <div id="map-modal" class="system-modal" style="display:none;position:fixed;z-index:1000;left:0;top:0;width:100vw;height:100vh;align-items:center;justify-content:center;background:rgba(10,18,40,0.88);backdrop-filter:blur(2px);">
-    <div class="system-modal-content" style="background:rgba(10,18,40,0.98);border-radius:1.2em;box-shadow:0 0 32px #00d4ff55;padding:2em 2em 1.5em 2em;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;">
-      <div style="display:flex;gap:2em;justify-content:center;align-items:flex-start;width:100%;flex-wrap:wrap;">
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <img src="images/MAP/map.png" alt="Dungeon Map" style="max-width:320px;width:100%;border-radius:1em;box-shadow:0 0 12px #00d4ff55;"/>
-          <div style="color:#00d4ff;font-size:1.08em;margin-top:0.5em;">Dungeon Map</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <img src="images/MAP/Igrislocation.png" alt="Cursed Commander Location" style="max-width:320px;width:100%;border-radius:1em;box-shadow:0 0 12px #00d4ff55;"/>
-          <div style="color:#00d4ff;font-size:1.08em;margin-top:0.5em;">Cursed Commander Location</div>
-        </div>
-      </div>
-      <button id="close-map-modal" style="margin-top:1.5em;padding:0.6em 2em;font-size:1.1em;background:#00d4ff;color:#fff;border:none;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;cursor:pointer;">Close</button>
-    </div>
-  </div>
-
-  <!-- Hero Section -->
   <main>
     <section class="hero">
-
-      <!-- Background decorations -->
-      <div class="hero-decoration">
-        <div class="hero-ring"></div>
+      <div class="gate-portal">
+        <div class="gate-core"></div>
+        <div class="gate-ring"></div>
+        <div class="gate-ring"></div>
+        <div class="gate-ring"></div>
+        <div class="gate-ring"></div>
       </div>
 
-      <!-- Beginner Guide Button moved to bottom left next to mute -->
-        <div class="hero-ring"></div>
-        <div class="hero-ring"></div>
-        <div class="hero-ring"></div>
+      <div class="sys-notify">
+        <span class="notify-dot"></span>
+        Hunter System Active
+        <span class="notify-dot"></span>
       </div>
-
-      <p class="hero-system-text">[ SYSTEM ONLINE ]</p>
 
       <h1 class="hero-title">
-    Solo Hunters
-    <span>System Guide</span>
-    </h1>
+        Solo Hunters
+        <span class="hero-title-line2">System Guide</span>
+      </h1>
 
-    <div style="display:flex;justify-content:center;margin:1.1em 0 0.5em 0;">
-    <a href="pages/beginner-guide.html" id="beginner-guide-btn" style="padding:0.3em 0.9em;font-size:0.95em;background:linear-gradient(90deg,#00d4ff 60%,#7b2fff 100%);color:#fff;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;opacity:0.92;font-weight:600;letter-spacing:0.03em;text-decoration:none;border:1.5px solid #00d4ff;transition:box-shadow 0.2s;">🛈 Beginner Guide</a>
-    </div>
+      <div class="hero-div">
+        <div class="hero-div-line"></div>
+        <div class="hero-div-diamond"></div>
+        <div class="hero-div-line"></div>
+      </div>
 
-      <p class="hero-subtitle">Game Guide Hub — Hunter's Reference Manual</p>
+      <p class="hero-sub">Hunter Reference Manual &mdash; Game Guide Hub</p>
 
-      <div class="hero-divider"></div>
+      <a href="pages/beginner-guide.html" class="hero-cta">
+        <span class="cta-bracket">[</span>
+        Access Beginner Guide
+        <span class="cta-bracket">]</span>
+      </a>
 
-      <!-- Main Menu Buttons -->
-      <nav class="menu-grid" aria-label="Main navigation">
-        <a href="#" class="menu-btn" id="main-menu-index-btn">
-          <span class="panel-corner tl"></span>
-          <span class="panel-corner tr"></span>
-          <span class="panel-corner bl"></span>
-          <span class="panel-corner br"></span>
-          <span class="menu-btn-icon"></span>
-          <span class="menu-btn-label">Index</span>
-          <span class="menu-btn-desc">Weapons · Magic · Armor · Artifacts · Classes</span>
-        </a>
-        <a href="pages/levelguide.html" class="menu-btn" id="main-menu-gateinfo-btn">
-          <span class="panel-corner tl"></span>
-          <span class="panel-corner tr"></span>
-          <span class="panel-corner bl"></span>
-          <span class="panel-corner br"></span>
-          <span class="menu-btn-icon"></span>
-          <span class="menu-btn-label">Gate Info</span>
-          <span class="menu-btn-desc">Dungeon Levels · Drops</span>
-        </a>
-        <a href="pages/tierlists.html" class="menu-btn">
-          <span class="panel-corner tl"></span>
-          <span class="panel-corner tr"></span>
-          <span class="panel-corner bl"></span>
-          <span class="panel-corner br"></span>
-          <span class="menu-btn-icon"></span>
-          <span class="menu-btn-label">Tierlists</span>
-          <span class="menu-btn-desc">Weapons · Magic</span>
-        </a>
-        <a href="pages/builds.html" class="menu-btn">
-          <span class="panel-corner tl"></span>
-          <span class="panel-corner tr"></span>
-          <span class="panel-corner bl"></span>
-          <span class="panel-corner br"></span>
-          <span class="menu-btn-icon"></span>
-          <span class="menu-btn-label">Best Builds</span>
-          <span class="menu-btn-desc">Tank · DPS · Shadow</span>
-        </a>
-        <!-- Level Guide button removed -->
-        <!-- Map Button -->
-        <a href="#" class="menu-btn" id="main-menu-map-btn">
-          <span class="panel-corner tl"></span>
-          <span class="panel-corner tr"></span>
-          <span class="panel-corner bl"></span>
-          <span class="panel-corner br"></span>
-          <span class="menu-btn-icon"></span>
-          <span class="menu-btn-label">Map</span>
-          <span class="menu-btn-desc">Cursed Commander Location</span>
-        </a>
-      </nav>
+      <!-- HUNTER ORACLE BUTTON -->
+      <a href="pages/oracle.html" class="oracle-entry-btn" data-track="Hunter Oracle">
+        <span class="oeb-pulse"></span>
+        <div class="oeb-text">
+          <span class="oeb-bracket">[</span>
+          Open Hunter Oracle
+          <span class="oeb-bracket">]</span>
+        </div>
+      </a>
 
-      <!-- Index Modal Popup -->
-      <div id="index-modal" class="system-modal" style="display:none;position:fixed;z-index:1100;left:0;top:0;width:100vw;height:100vh;align-items:center;justify-content:center;background:rgba(10,18,40,0.88);backdrop-filter:blur(2px);">
-        <div class="system-modal-content" style="background:rgba(10,18,40,0.98);border-radius:1.2em;box-shadow:0 0 32px #00d4ff55;padding:2em 2.5em 1.5em 2.5em;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;min-width:260px;">
-          <div style="color:#00d4ff;font-size:1.35em;font-weight:700;margin-bottom:1.2em;letter-spacing:0.04em;">Select a Category</div>
-          <div style="display:flex;flex-direction:column;gap:1.2em;width:100%;max-width:340px;">
-            <a href="pages/weapons.html" class="menu-btn" style="margin:0;">Weapons</a>
-            <a href="pages/magic.html" class="menu-btn" style="margin:0;">Magic</a>
-            <a href="pages/armor.html" class="menu-btn" style="margin:0;">Armor</a>
-            <a href="pages/artifacts.html" class="menu-btn" style="margin:0;">Artifacts</a>
-            <a href="pages/classes.html" class="menu-btn" style="margin:0;">Classes</a>
+      <!-- POWER SCANNER -->
+      <div class="scanner-panel">
+        <div class="scanner-frame">
+          <div class="sf-c tl"></div><div class="sf-c tr"></div>
+          <div class="sf-c bl"></div><div class="sf-c br"></div>
+          <div class="scanner-header">
+            <div class="scanner-label">
+              <span class="scanner-label-dot"></span>
+              Power Analysis &mdash; locate your gate
+            </div>
+            <span class="scanner-hint">Press <kbd>/</kbd> to focus</span>
           </div>
-          <button id="close-index-modal" style="margin-top:2em;padding:0.6em 2em;font-size:1.1em;background:#00d4ff;color:#fff;border:none;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;cursor:pointer;">Close</button>
+          <div class="scanner-row">
+            <input class="scanner-input" id="scanner-input" type="number" min="0" placeholder="Enter Power stat..." autocomplete="off" />
+            <button class="scanner-btn" id="scanner-btn">Analyze</button>
+            <button class="scanner-btn clear" id="scanner-clear" style="display:none">&#x2715;</button>
+          </div>
+          <div class="scanner-result" id="scanner-result"></div>
         </div>
       </div>
-  <script>
-    // Index Modal Logic
-    document.addEventListener('DOMContentLoaded', function() {
-      const openIndex = document.getElementById('main-menu-index-btn');
-      const indexModal = document.getElementById('index-modal');
-      const closeIndex = document.getElementById('close-index-modal');
-      if (openIndex && indexModal) {
-        openIndex.addEventListener('click', function(e) {
-          e.preventDefault();
-          indexModal.style.display = 'flex';
-        });
-      }
-      if (closeIndex && indexModal) {
-        closeIndex.addEventListener('click', function() {
-          indexModal.style.display = 'none';
-        });
-      }
-      if (indexModal) {
-        indexModal.addEventListener('click', function(e) {
-          if (e.target === indexModal) indexModal.style.display = 'none';
-        });
-      }
-    });
-  </script>
 
-      <!-- Status Bar -->
+      <!-- MENU GRID -->
+      <nav class="menu-grid" aria-label="Main navigation">
+        <button class="menu-btn" id="btn-open-index">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Database ]</span>
+          <span class="btn-label">Index</span>
+          <span class="btn-desc">Weapons &middot; Magic &middot; Armor</span>
+        </button>
+        <a href="pages/levelguide.html" class="menu-btn v-purple" data-track="Gate Info">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Dungeon Data ]</span>
+          <span class="btn-label">Gate Info</span>
+          <span class="btn-desc">Levels &middot; EXP &middot; Drops</span>
+        </a>
+        <a href="pages/redgates.html" class="menu-btn v-red" data-track="Red Gates">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Danger Zone ]</span>
+          <span class="btn-label">Red Gates</span>
+          <span class="btn-desc">Power thresholds</span>
+        </a>
+        <a href="pages/tierlists.html" class="menu-btn v-gold" data-track="Tier Lists">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Rankings ]</span>
+          <span class="btn-label">Tier Lists</span>
+          <span class="btn-desc">Weapons &middot; Magic</span>
+        </a>
+        <a href="pages/builds.html" class="menu-btn v-red" data-track="Builds">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Loadouts ]</span>
+          <span class="btn-label">Best Builds</span>
+          <span class="btn-desc">Tank &middot; DPS &middot; Mage</span>
+        </a>
+        <a href="pages/classes.html" class="menu-btn v-purple" data-track="Classes">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <span class="btn-rank">[ Hunter Ranks ]</span>
+          <span class="btn-label">Classes</span>
+          <span class="btn-desc">Rarity &middot; Drop chance</span>
+        </a>
+        <button class="menu-btn v-purple wide" id="btn-open-map">
+          <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
+          <div class="wide-icon">&#128506;</div>
+          <div class="wide-text">
+            <div class="btn-label">Dungeon Map</div>
+            <div class="btn-desc">Full map &middot; Cursed Commander Location</div>
+          </div>
+          <span class="wide-arrow">&#x203A;</span>
+        </button>
+      </nav>
 
+      <div class="recent-bar" id="recent-bar">
+        <div class="recent-heading">Recently Visited</div>
+        <div class="recent-chips" id="recent-chips">
+          <span class="recent-none">Visit a page to track it here</span>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-item"><span class="status-label">Status</span><span class="status-value active">Active</span></div>
+        <div class="status-item"><span class="status-label">Weapons</span><span class="status-value" id="stat-weapons">—</span></div>
+        <div class="status-item"><span class="status-label">Armor Sets</span><span class="status-value" id="stat-armor">—</span></div>
+        <div class="status-item"><span class="status-label">Magic</span><span class="status-value" id="stat-magic">—</span></div>
+        <div class="status-item"><span class="status-label">Artifacts</span><span class="status-value" id="stat-artifacts">—</span></div>
+        <div class="status-item"><span class="status-label">Classes</span><span class="status-value" id="stat-classes">—</span></div>
+      </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="site-footer">
-    <p>SOLO HUNTERS — <span>HUNTER GUIDE HUB</span> — All data is game reference only.</p>
+    Solo Hunters &mdash; Hunter Guide Hub &mdash; All data is game reference only.
   </footer>
 
-  <!-- Credits Button -->
-  <button id="open-credits-modal" style="position:fixed;bottom:18px;right:18px;z-index:1200;padding:0.4em 1.1em;font-size:0.98em;background:#0a1a2c;color:#00d4ff;border:1.5px solid #00d4ff;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;opacity:0.85;cursor:pointer;transition:opacity 0.2s;">Credits</button>
+  <button class="fixed-btn" id="btn-credits">Credits</button>
+  <audio id="bg-music" src="system-open.mp3" preload="auto" loop style="display:none;"></audio>
+  <button class="fixed-btn" id="btn-mute">Music</button>
 
-  <!-- Credits Modal -->
-  <div id="credits-modal" class="system-modal" style="display:none;position:fixed;z-index:2000;left:0;top:0;width:100vw;height:100vh;align-items:center;justify-content:center;background:rgba(10,18,40,0.88);backdrop-filter:blur(2px);">
-    <div class="system-modal-content" style="background:rgba(10,18,40,0.98);border-radius:1.2em;box-shadow:0 0 32px #00d4ff55;padding:2em 2.5em 1.5em 2.5em;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center;min-width:260px;">
-      <div style="color:#00d4ff;font-size:1.35em;font-weight:700;margin-bottom:0.7em;letter-spacing:0.04em;">Credits</div>
-      <div style="color:#fff;font-size:1.08em;text-align:center;line-height:1.7;">
-        <span style="color:#00d4ff;font-weight:600;">Atef</span> &amp; <span style="color:#00d4ff;font-weight:600;">FASTBOY</span><br>
-        Thanks to the testers before us<br>
-        and <span style="color:#7b2fff;font-weight:600;">Syqo</span>
+  <!-- INDEX MODAL -->
+  <div id="modal-index" class="sys-modal">
+    <div class="modal-box">
+      <button class="modal-close" data-close="modal-index">&times;</button>
+      <div class="modal-title">Select Category</div>
+      <div class="modal-links">
+        <a href="pages/weapons.html"           class="modal-link">Weapons            <span class="modal-link-arrow">&#x203A;</span></a>
+        <a href="pages/magic.html"             class="modal-link">Magic              <span class="modal-link-arrow">&#x203A;</span></a>
+        <a href="pages/armor.html"             class="modal-link">Armor              <span class="modal-link-arrow">&#x203A;</span></a>
+        <a href="pages/artifacts.html"         class="modal-link">Artifacts          <span class="modal-link-arrow">&#x203A;</span></a>
+        <a href="pages/classes.html"           class="modal-link">Classes            <span class="modal-link-arrow">&#x203A;</span></a>
+        <a href="pages/beginner-guide.html"    class="modal-link">Beginner Guide     <span class="modal-link-arrow">&#x203A;</span></a>
       </div>
-      <button id="close-credits-modal" style="margin-top:1.5em;padding:0.5em 2em;font-size:1.05em;background:#00d4ff;color:#fff;border:none;border-radius:0.7em;box-shadow:0 0 8px #00d4ff55;cursor:pointer;">Close</button>
     </div>
   </div>
 
-  <script src="script.js"></script>
-      <script>
-        // Mobile navbar side panel logic
-        document.addEventListener('DOMContentLoaded', function() {
-          const mobileBtn = document.getElementById('nav-mobile-btn');
-          const sidepanel = document.getElementById('nav-sidepanel');
-          const closeBtn = document.getElementById('nav-sidepanel-close');
-          const overlay = document.getElementById('nav-sidepanel-overlay');
-          function showPanel() {
-            sidepanel.classList.add('open');
-            overlay.classList.add('open');
-          }
-          function hidePanel() {
-            sidepanel.classList.remove('open');
-            overlay.classList.remove('open');
-          }
-          if (mobileBtn && sidepanel) {
-            mobileBtn.addEventListener('click', showPanel);
-          }
-          if (closeBtn && sidepanel) {
-            closeBtn.addEventListener('click', hidePanel);
-          }
-          if (overlay) {
-            overlay.addEventListener('click', hidePanel);
-          }
-          // Show mobile button only on small screens
-          function updateMobileBtn() {
-            if (window.innerWidth <= 900) {
-              mobileBtn.style.display = 'block';
-            } else {
-              mobileBtn.style.display = 'none';
-              hidePanel();
-            }
-          }
-          window.addEventListener('resize', updateMobileBtn);
-          updateMobileBtn();
-        });
-      </script>
-    <script>
-      // Credits Modal Logic
-      document.addEventListener('DOMContentLoaded', function() {
-        const openCredits = document.getElementById('open-credits-modal');
-        const creditsModal = document.getElementById('credits-modal');
-        const closeCredits = document.getElementById('close-credits-modal');
-        if (openCredits && creditsModal) {
-          openCredits.addEventListener('click', function() {
-            creditsModal.style.display = 'flex';
-          });
-        }
-        if (closeCredits && creditsModal) {
-          closeCredits.addEventListener('click', function() {
-            creditsModal.style.display = 'none';
-          });
-        }
-        if (creditsModal) {
-          creditsModal.addEventListener('click', function(e) {
-            if (e.target === creditsModal) creditsModal.style.display = 'none';
-          });
-        }
-      });
-    </script>
-  <script>
-    // Map Modal Logic (navbar and main menu)
-    document.addEventListener('DOMContentLoaded', function() {
-      const openMap = document.getElementById('open-map-modal');
-      const mainMenuMapBtn = document.getElementById('main-menu-map-btn');
-      const mapModal = document.getElementById('map-modal');
-      const closeMap = document.getElementById('close-map-modal');
-      if (openMap && mapModal) {
-        openMap.addEventListener('click', function(e) {
-          e.preventDefault();
-          mapModal.style.display = 'flex';
-        });
-      }
-      if (mainMenuMapBtn && mapModal) {
-        mainMenuMapBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          mapModal.style.display = 'flex';
-        });
-      }
-      if (closeMap && mapModal) {
-        closeMap.addEventListener('click', function() {
-          mapModal.style.display = 'none';
-        });
-      }
-      if (mapModal) {
-        mapModal.addEventListener('click', function(e) {
-          if (e.target === mapModal) mapModal.style.display = 'none';
-        });
-      }
-    });
-  </script>
+  <!-- MAP MODAL -->
+  <div id="modal-map" class="sys-modal">
+    <div class="modal-box" style="max-width:600px;">
+      <button class="modal-close" data-close="modal-map">&times;</button>
+      <div class="modal-title">Dungeon Map</div>
+      <div class="modal-map-wrap">
+        <div class="modal-map-img-block">
+          <img src="images/MAP/map.png" alt="Dungeon Map" />
+          <span class="modal-map-caption">Dungeon Map</span>
+        </div>
+        <div class="modal-map-img-block">
+          <img src="images/MAP/Igrislocation.png" alt="Cursed Commander Location" />
+          <span class="modal-map-caption">Cursed Commander Location</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- CREDITS MODAL -->
+  <div id="modal-credits" class="sys-modal">
+    <div class="modal-box" style="max-width:360px;">
+      <button class="modal-close" data-close="modal-credits">&times;</button>
+      <div class="modal-title">Credits</div>
+      <div class="credits-body">
+        <span class="credits-name">Atef</span> &amp; <span class="credits-name">FASTBOY</span><br>
+        Thanks to the testers before us<br>
+        and <span class="credits-name shadow">Syqo</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+  /* ── Particles ── */
+  const pc = document.getElementById('particles');
+  for(let i=0;i<32;i++){
+    const p=document.createElement('div');
+    p.className='sp';
+    const isV=Math.random()>.55;
+    const sz=1.5+Math.random()*2;
+    p.style.cssText=`left:${Math.random()*100}vw;top:${50+Math.random()*50}vh;width:${sz}px;height:${sz}px;background:${isV?'#7b2fff':'#2979ff'};box-shadow:0 0 6px ${isV?'#7b2fff':'#2979ff'};--op:${.2+Math.random()*.45};--dx:${Math.random()*50-25}px;animation-duration:${10+Math.random()*18}s;animation-delay:-${Math.random()*20}s;`;
+    pc.appendChild(p);
+  }
+
+  /* ── Sweeps ── */
+  function spawnSweep(){
+    const s=document.createElement('div');
+    s.className='sweep';
+    s.style.animationDuration=(8+Math.random()*12)+'s';
+    document.getElementById('sweep-layer').appendChild(s);
+    setTimeout(()=>s.remove(),22000);
+  }
+  spawnSweep();
+  setInterval(spawnSweep,6000+Math.random()*8000);
+
+  /* ── Modals ── */
+  const openModal=id=>document.getElementById(id).classList.add('open');
+  const closeModal=id=>document.getElementById(id).classList.remove('open');
+  document.getElementById('btn-open-index').addEventListener('click',()=>openModal('modal-index'));
+  document.getElementById('btn-open-map').addEventListener('click',()=>openModal('modal-map'));
+  document.getElementById('btn-credits').addEventListener('click',()=>openModal('modal-credits'));
+  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
+  document.querySelectorAll('.sys-modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.sys-modal.open').forEach(m=>m.classList.remove('open'));});
+
+  /* ── Music ── */
+  const audio=document.getElementById('bg-music');
+  const muteBtn=document.getElementById('btn-mute');
+  let musicOn=localStorage.getItem('sh_music')==='1';
+  function applyMusic(){if(musicOn){audio.play().catch(()=>{musicOn=false;applyMusic();});muteBtn.textContent='Mute';}else{audio.pause();muteBtn.textContent='Music';}localStorage.setItem('sh_music',musicOn?'1':'0');}
+  applyMusic();
+  muteBtn.addEventListener('click',()=>{musicOn=!musicOn;applyMusic();});
+
+  /* ── Power Scanner ── */
+  const GATES=[
+    {name:'Subway',min:0,href:'pages/levelguide.html'},
+    {name:'Caves',min:2600,href:'pages/levelguide.html'},
+    {name:'Jungle',min:11000,href:'pages/levelguide.html'},
+    {name:'Desert',min:32000,href:'pages/levelguide.html'},
+    {name:'Snow Forest',min:80000,href:'pages/levelguide.html'},
+    {name:'Spider Cave',min:145000,href:'pages/levelguide.html'},
+  ];
+  const RED_GATES=[
+    {name:'Subway',min:2100},{name:'Caves',min:11100},{name:'Jungle',min:34500},
+    {name:'Desert',min:88500},{name:'Snow Forest',min:162000},{name:'Spider Cave',min:327000},
+  ];
+  function runScan(){
+    const val=parseInt(document.getElementById('scanner-input').value,10);
+    const res=document.getElementById('scanner-result');
+    const clr=document.getElementById('scanner-clear');
+    if(isNaN(val)||val<0){res.innerHTML='<span style="color:rgba(255,80,80,.65);font-size:9px">Invalid power value</span>';return;}
+    let best=GATES[0];
+    GATES.forEach(g=>{if(val>=g.min)best=g;});
+    const ni=GATES.indexOf(best)+1;
+    const next=ni<GATES.length?GATES[ni]:null;
+    let bestRed=null;
+    RED_GATES.forEach(r=>{if(val>=r.min)bestRed=r;});
+    let html=`<span class="sr-gate">${best.name}</span> <span style="color:rgba(140,180,220,.35);font-size:9px"> &mdash; recommended gate</span> <a class="sr-link" href="${best.href}">View</a>`;
+    if(next){const gap=(next.min-val).toLocaleString();html+=`<br><span class="sr-next">+${gap} power until ${next.name}</span>`;}
+    else html+=`<br><span style="color:rgba(0,232,122,.7);font-size:9px">All gates unlocked &mdash; maximum rank achieved</span>`;
+    if(bestRed)html+=`<br><span class="sr-red">Red Gate eligible &mdash; ${bestRed.name} &nbsp;<a class="sr-link" href="pages/redgates.html">Check thresholds</a></span>`;
+    if(val>=350000)html+=`<br><span style="color:rgba(232,200,96,.8);font-size:9px">Igris Raid Boss available (350,000+ required)</span>`;
+    res.innerHTML=html;
+    clr.style.display='block';
+  }
+  document.getElementById('scanner-btn').addEventListener('click',runScan);
+  document.getElementById('scanner-input').addEventListener('keydown',e=>{if(e.key==='Enter')runScan();});
+  document.getElementById('scanner-clear').addEventListener('click',()=>{
+    document.getElementById('scanner-input').value='';
+    document.getElementById('scanner-result').innerHTML='';
+    document.getElementById('scanner-clear').style.display='none';
+  });
+
+  /* ── Keyboard shortcuts ── */
+  document.addEventListener('keydown',e=>{
+    if(document.activeElement.tagName==='INPUT') return;
+    if(e.key==='/'){e.preventDefault();const i=document.getElementById('scanner-input');i.focus();i.scrollIntoView({behavior:'smooth',block:'center'});}
+    if(e.key==='?'){e.preventDefault();const i=document.getElementById('oracle-input');i.focus();i.scrollIntoView({behavior:'smooth',block:'center'});}
+  });
+
+  /* ── Recent Pages ── */
+  const KNOWN={'weapons.html':{label:'Weapons'},'magic.html':{label:'Magic'},'armor.html':{label:'Armor'},'artifacts.html':{label:'Artifacts'},'classes.html':{label:'Classes'},'builds.html':{label:'Builds'},'tierlists.html':{label:'Tier Lists'},'levelguide.html':{label:'Gate Info'},'redgates.html':{label:'Red Gates'},'beginner-guide.html':{label:'Beginner Guide'},'weaponstier.html':{label:'Weapon Tier'},'oracle.html':{label:'Hunter Oracle'}};
+  function getRecent(){try{return JSON.parse(localStorage.getItem('sh_recent')||'[]');}catch{return[];}}
+  function saveRecent(l){localStorage.setItem('sh_recent',JSON.stringify(l));}
+  function renderRecent(){
+    const list=getRecent();
+    const el=document.getElementById('recent-chips');
+    if(!list.length){el.innerHTML='<span class="recent-none">Visit any page to track it here</span>';return;}
+    el.innerHTML=list.map(i=>`<a href="${i.href}" class="recent-chip"><span class="recent-chip-dot"></span>${i.label}</a>`).join('');
+  }
+  document.querySelectorAll('a[data-track],.modal-link[href]').forEach(link=>{
+    link.addEventListener('click',()=>{
+      const href=link.getAttribute('href');
+      if(!href||href==='#') return;
+      const file=href.split('/').pop().split('#')[0];
+      const meta=KNOWN[file];
+      if(!meta) return;
+      let list=getRecent().filter(i=>i.href!==href);
+      list.unshift({href,label:meta.label});
+      saveRecent(list.slice(0,5));
+    });
+  });
+  renderRecent();
+
+  /* ── Menu entrance stagger ── */
+  document.querySelectorAll('.menu-btn').forEach((btn,i)=>{
+    btn.style.opacity='0';btn.style.transform='translateY(14px)';
+    setTimeout(()=>{btn.style.transition='opacity .4s ease,transform .4s ease,border-color .22s,box-shadow .22s,background .22s';btn.style.opacity='1';btn.style.transform='translateY(0)';},900+i*65);
+  });
+
+  /* ── Live status counts — fetch from each page ── */
+  (async function loadCounts(){
+    const sources = [
+      // [ elementId, url, how to extract count ]
+      // Pages that use <span id="count-num">N</span>
+      { id:'stat-weapons',   url:'pages/weapons.html',   selector:'#count-num' },
+      { id:'stat-armor',     url:'pages/armor.html',     selector:'#count-num' },
+      { id:'stat-magic',     url:'pages/magic.html',     selector:'#count-num' },
+      { id:'stat-artifacts', url:'pages/artifacts.html', selector:'#count-num' },
+      // Classes uses class-name divs — count those instead
+      { id:'stat-classes',   url:'pages/classes.html',   selector:'.class-name', countAll:true },
+    ];
+
+    const parser = new DOMParser();
+
+    for(const src of sources){
+      try{
+        const res  = await fetch(src.url);
+        if(!res.ok) throw new Error();
+        const html = await res.text();
+        const doc  = parser.parseFromString(html, 'text/html');
+        let count;
+        if(src.countAll){
+          count = doc.querySelectorAll(src.selector).length;
+        } else {
+          const el = doc.querySelector(src.selector);
+          count = el ? el.textContent.trim() : '?';
+        }
+        const target = document.getElementById(src.id);
+        if(target){
+          target.textContent = count;
+          // Brief flash animation on update
+          target.style.transition='color .3s';
+          target.style.color='var(--cyan)';
+          setTimeout(()=>{ target.style.color=''; }, 600);
+        }
+      } catch(e){
+        // If fetch fails (e.g. file:// protocol), fall back to known values
+        const fallback = {'stat-weapons':11,'stat-armor':9,'stat-magic':9,'stat-artifacts':18,'stat-classes':6};
+        const target = document.getElementById(src.id);
+        if(target) target.textContent = fallback[src.id] ?? '?';
+      }
+    }
+  })();
+  </script>
 </body>
 </html>
-
-

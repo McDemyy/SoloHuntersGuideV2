@@ -1,142 +1,167 @@
-  <div class="system-bg-scanlines"></div>
-  <div class="system-bg-shimmer"></div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Venom Dagger - Weapon Details | Solo Hunters" />
-  <title>Venom Dagger | Solo Hunters</title>
-  <link rel="stylesheet" href="../../style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Venom Fang | Solo Hunters System DB</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #020408;
+      --border: rgba(0,212,255,0.18);
+      --cyan: #00d4ff;
+      --purple: #7b2fff;
+      --red: #ff2a4a;
+      --gold: #ffd700;
+      --accent: #6e7fff; --accent-rgb: 110,127,255;
+      --text: rgba(180,210,240,0.85);
+      --text-dim: rgba(120,160,200,0.5);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
+    .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
+    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(123,47,255,0.16) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
+    .bg-grid{background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:48px 48px;animation:grid-drift 40s linear infinite alternate;}
+    @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
+    .bg-scanlines{background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);opacity:.5;}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(2,4,8,0.88);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);}
+    .nav-logo{font-family:'Orbitron',monospace;font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);text-decoration:none;text-shadow:0 0 20px rgba(0,212,255,0.7);}
+    .nav-links{display:flex;gap:8px;}
+    .nav-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.25);border-radius:3px;background:rgba(0,212,255,0.04);transition:all .2s;}
+    .nav-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--cyan);box-shadow:0 0 14px rgba(0,212,255,0.3);}
+    .page{position:relative;z-index:1;padding:80px 24px 80px;max-width:860px;margin:0 auto;}
+    .weapon-hero{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 0 32px;position:relative;}
+    .weapon-hero::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:300px;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+    .rank-badge{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);border:1px solid rgba(var(--accent-rgb),0.4);padding:4px 18px;border-radius:2px;background:rgba(var(--accent-rgb),0.07);margin-bottom:20px;animation:badge-pulse 3s ease-in-out infinite;}
+    @keyframes badge-pulse{0%,100%{opacity:1;box-shadow:0 0 8px rgba(var(--accent-rgb),.3)}50%{opacity:.7;box-shadow:0 0 20px rgba(var(--accent-rgb),.5)}}
+    .weapon-img-wrap{position:relative;width:180px;height:180px;margin-bottom:28px;}
+    .weapon-img-wrap::before{content:'';position:absolute;inset:-20px;border-radius:50%;background:radial-gradient(circle,rgba(var(--accent-rgb),0.18) 0%,transparent 70%);animation:orb-pulse 3s ease-in-out infinite alternate;}
+    @keyframes orb-pulse{from{transform:scale(.95);opacity:.6}to{transform:scale(1.05);opacity:1}}
+    .weapon-img-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(var(--accent-rgb),.55)) drop-shadow(0 0 8px rgba(255,255,255,.15));animation:weapon-float 5s ease-in-out infinite alternate;position:relative;z-index:1;}
+    @keyframes weapon-float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+    .weapon-name{font-family:'Orbitron',monospace;font-size:clamp(24px,5vw,42px);font-weight:900;letter-spacing:4px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(var(--accent-rgb),.45),0 0 80px rgba(var(--accent-rgb),.2);margin-bottom:6px;}
+    .weapon-type-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px;}
+    .tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:2px;}
+    .tag-type{color:var(--cyan);border:1px solid rgba(0,212,255,.35);background:rgba(0,212,255,.07);}
+    .tag-s{color:#ff4e6b;border:1px solid rgba(255,78,107,.4);background:rgba(255,78,107,.08);}
+    .tag-a{color:#6e7fff;border:1px solid rgba(110,127,255,.4);background:rgba(110,127,255,.08);}
+    .tag-b{color:#ffd700;border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.07);}
+    .tag-f{color:#7fd8ff;border:1px solid rgba(127,216,255,.35);background:rgba(127,216,255,.07);}
+    .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
+    @media(max-width:600px){.content-grid{grid-template-columns:1fr;}}
+    .panel{background:linear-gradient(135deg,rgba(6,10,22,.97),rgba(10,6,20,.97));border:1px solid var(--border);border-radius:6px;padding:22px;position:relative;overflow:hidden;}
+    .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.3),transparent);}
+    .panel-full{grid-column:1/-1;}
+    .corner{position:absolute;width:8px;height:8px;}
+    .corner.tl{top:0;left:0;border-top:1px solid rgba(0,212,255,.5);border-left:1px solid rgba(0,212,255,.5);}
+    .corner.tr{top:0;right:0;border-top:1px solid rgba(0,212,255,.5);border-right:1px solid rgba(0,212,255,.5);}
+    .corner.bl{bottom:0;left:0;border-bottom:1px solid rgba(0,212,255,.5);border-left:1px solid rgba(0,212,255,.5);}
+    .corner.br{bottom:0;right:0;border-bottom:1px solid rgba(0,212,255,.5);border-right:1px solid rgba(0,212,255,.5);}
+    .panel-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:14px;opacity:.7;}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,212,255,.07);}
+    .stat-row:last-child{border-bottom:none;}
+    .stat-name{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);}
+    .stat-val{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:#fff;letter-spacing:1px;}
+    .stat-val.high{color:#ff4e6b;text-shadow:0 0 10px rgba(255,78,107,.5);}
+    .stat-val.good{color:var(--cyan);text-shadow:0 0 10px rgba(0,212,255,.4);}
+    .stat-val.normal{color:var(--gold);}
+    .stat-val.low{color:var(--text-dim);}
+    .power-bar-wrap{margin-top:4px;}
+    .power-label-row{display:flex;justify-content:space-between;margin-bottom:6px;}
+    .power-label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);}
+    .power-val{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;color:var(--accent);}
+    .power-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-bottom:10px;}
+    .power-fill{height:100%;border-radius:2px;animation:fill-in 1.2s ease-out both;}
+    @keyframes fill-in{from{width:0}}
+    .desc-text{font-size:13px;line-height:1.85;color:rgba(180,210,240,.75);letter-spacing:.3px;}
+    .obtain-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+    .obtain-chip{display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:4px;font-size:11px;letter-spacing:1px;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
+    .location-wrap{margin-top:14px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,212,255,.15);position:relative;}
+    .location-wrap img{width:100%;display:block;}
+    .location-label{position:absolute;bottom:0;left:0;right:0;padding:8px 14px;background:linear-gradient(0deg,rgba(2,4,8,.9),transparent);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
+    .back-row{text-align:center;margin-top:40px;}
+    .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,.3);border-radius:4px;padding:10px 24px;background:rgba(0,212,255,.05);transition:all .2s;}
+    .back-btn:hover{background:rgba(0,212,255,.12);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,212,255,.25);}
+    .fade-up{opacity:0;transform:translateY(20px);animation:fadeUp .6s ease forwards;}
+    @keyframes fadeUp{to{opacity:1;transform:none;}}
+    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+  </style>
 </head>
+<body>
+  <div class="bg-layer bg-radial"></div>
+  <div class="bg-layer bg-grid"></div>
+  <div class="bg-layer bg-scanlines"></div>
 
-  <body class="solo-bg" style="background:linear-gradient(120deg,#0a1a3a 0%,#003366 100%) fixed;">
-    <div style="position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:0;background:linear-gradient(120deg,#0a1a3a 0%,#003366 100%);"></div>
-    <div class="system-bg-stars"></div>
-    <div class="system-bg-grid"></div>
-    <div class="system-bg-particles"></div>
-    <div class="system-bg-rays"></div>
-    <script>
-      // Generate random stars for the system background
-      const starCount = 36;
-      const starsContainer = document.querySelector('.system-bg-stars');
-      if (starsContainer) {
-        for (let i = 0; i < starCount; i++) {
-          const star = document.createElement('div');
-          star.className = 'system-star';
-          star.style.left = Math.random() * 100 + 'vw';
-          star.style.top = Math.random() * 100 + 'vh';
-          star.style.animationDelay = (Math.random() * 3) + 's';
-          star.style.opacity = 0.5 + Math.random() * 0.5;
-          starsContainer.appendChild(star);
-        }
-      }
-      // Animated background particles
-      const bg = document.querySelector('.system-bg-particles');
-      if (bg && !bg.hasChildNodes()) {
-        for (let i = 0; i < 24; i++) {
-          const p = document.createElement('div');
-          p.className = 'particle';
-          p.style.left = Math.random() * 100 + '%';
-          p.style.top = Math.random() * 100 + '%';
-          p.style.animationDuration = (6 + Math.random() * 8) + 's';
-          p.style.opacity = 0.15 + Math.random() * 0.25;
-          bg.appendChild(p);
-        }
-      }
-      // Animated light rays
-      const rays = document.querySelector('.system-bg-rays');
-      if (rays && !rays.hasChildNodes()) {
-        for (let i = 0; i < 7; i++) {
-          const r = document.createElement('div');
-          r.className = 'system-ray';
-          r.style.top = Math.random() * 100 + 'vh';
-          r.style.animationDelay = (Math.random() * 7) + 's';
-          rays.appendChild(r);
-        }
-      }
-    </script>
-    <div class="system-bg-stars"></div>
-    <div class="system-bg-grid"></div>
-    <div class="system-bg-particles"></div>
-    <div class="system-bg-rays"></div>
-    <script>
-      // Generate random stars for the system background
-      const starCount = 36;
-      const starsContainer = document.querySelector('.system-bg-stars');
-      if (starsContainer) {
-        for (let i = 0; i < starCount; i++) {
-          const star = document.createElement('div');
-          star.className = 'system-star';
-          star.style.left = Math.random() * 100 + 'vw';
-          star.style.top = Math.random() * 100 + 'vh';
-          star.style.animationDelay = (Math.random() * 3) + 's';
-          star.style.opacity = 0.5 + Math.random() * 0.5;
-          starsContainer.appendChild(star);
-        }
-      }
-      // Animated background particles
-      const bg = document.querySelector('.system-bg-particles');
-      if (bg && !bg.hasChildNodes()) {
-        for (let i = 0; i < 24; i++) {
-          const p = document.createElement('div');
-          p.className = 'particle';
-          p.style.left = Math.random() * 100 + '%';
-          p.style.top = Math.random() * 100 + '%';
-          p.style.animationDuration = (6 + Math.random() * 8) + 's';
-          p.style.opacity = 0.15 + Math.random() * 0.25;
-          bg.appendChild(p);
-        }
-      }
-      // Animated light rays
-      const rays = document.querySelector('.system-bg-rays');
-      if (rays && !rays.hasChildNodes()) {
-        for (let i = 0; i < 7; i++) {
-          const r = document.createElement('div');
-          r.className = 'system-ray';
-          r.style.top = Math.random() * 100 + 'vh';
-          r.style.animationDelay = (Math.random() * 7) + 's';
-          rays.appendChild(r);
-        }
-      }
-    </script>
-    <nav class="navbar">
-      <a href="../../index.html" class="nav-logo">⚔ Solo Hunters</a>
-      <ul class="nav-links">
-        <li><a href="../weaponstier.html" class="nav-back">&#8592; Back</a></li>
-        <li><a href="../weaponstier.html">Weapon Tier List</a></li>
-      </ul>
-    </nav>
-    <div class="system-container">
-      <div class="system-header">
-        <div class="system-tag">[ WEAPON DATA MODULE ]</div>
-        <h1 class="system-title">Venom Dagger</h1>
-        <p class="system-desc">A Tier Weapon</p>
+  <nav class="navbar">
+    <a href="../../index.html" class="nav-logo">⚔ SH System DB</a>
+    <div class="nav-links">
+      <a href="../weaponstier.html" class="nav-btn">← Tier List</a>
+      <a href="allweapons.html" class="nav-btn">All Weapons</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="weapon-hero fade-up">
+      <div class="rank-badge">[ A — RANK WEAPON ]</div>
+      <div class="weapon-img-wrap">
+        <img src="../../images/weapons/VenomFang.png" alt="Venom Fang"/>
       </div>
-      <div class="dungeon-card recommended-glow" style="max-width:320px;margin:32px auto 0 auto;background:rgba(10,20,40,0.82);box-shadow:0 0 18px #00d4ff55;border-radius:1.2em;display:flex;flex-direction:column;align-items:center;">
-        <img src="../../images/weapons/VenomFang.png" alt="Venom Dagger" style="width:120px;height:120px;filter:drop-shadow(0 0 18px #00d4ff);margin-bottom:18px;" />
-        <div style="margin-bottom:1.2em;">
-          <span class="system-tag" style="background:#00d4ff22;color:#00d4ff;padding:0.2em 1em;border-radius:1em;font-size:1em;">Dagger</span>
-          <span class="system-tag" style="background:#7b2fff22;color:#7b2fff;padding:0.2em 1em;border-radius:1em;font-size:1em;margin-left:0.7em;">A Rank</span>
-        </div>
-        <ul style="list-style:none;padding:0;font-size:1.08em;text-align:left;max-width:320px;margin:0 auto 1.2em auto;">
-          <li><b>Damage:</b> Very High</li>
-          <li><b>Attack Speed:</b> Fast</li>
-          <li><b>Range:</b> Short-Mid</li>
-          <li><b>AOE:</b> B</li>
-          <li><b>Power:</b> SS+</li>
-        </ul>
-        <div style="background:rgba(10,20,40,0.82);border-radius:0.7em;padding:1em 1.2em;margin-bottom:1.2em;box-shadow:0 0 18px #00d4ff55;">
-          <span style="color:#00d4ff;font-weight:bold;">Description:</span><br>
-          Skill C is highest damage skill in game but short-mid range. Skill R and F are high damage with mid range and some AOE.
-        </div>
-        <div class="obtain-section">
-          <div class="obtain-title">How to Obtain</div>
-          <div class="obtain-methods">
-            <span class="obtain-way"><span class="obtain-icon">🚇</span> Subway</span>
-          </div>
-        </div>
+      <h1 class="weapon-name">Venom Fang</h1>
+      <div class="weapon-type-row">
+        <span class="tag tag-type">Dagger</span>
+        <span class="tag tag-a">A Rank</span>
       </div>
     </div>
-  </body>
+
+    <div class="content-grid">
+      <div class="panel fade-up d1">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="panel-label">// Combat Stats</div>
+        <div class="stat-row"><span class="stat-name">Damage</span><span class="stat-val high">Very High</span></div>
+        <div class="stat-row"><span class="stat-name">Attack Speed</span><span class="stat-val good">Fast</span></div>
+        <div class="stat-row"><span class="stat-name">Range</span><span class="stat-val normal">Short-Mid</span></div>
+        <div class="stat-row"><span class="stat-name">AOE</span><span class="stat-val normal">B</span></div>
+        <div class="stat-row"><span class="stat-name">Power Rating</span><span class="stat-val high">SS+</span></div>
+      </div>
+
+      <div class="panel fade-up d2">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="panel-label">// Performance</div>
+        <div class="power-bar-wrap">
+          <div class="power-label-row"><span class="power-label">Damage</span><span class="power-val">88%</span></div>
+        <div class="power-track"><div class="power-fill" style="width:88%;background:linear-gradient(90deg,#ff4e6b,#ff8fa0);animation-delay:0.4s"></div></div>
+          <div class="power-label-row"><span class="power-label">Speed</span><span class="power-val">75%</span></div>
+        <div class="power-track"><div class="power-fill" style="width:75%;background:linear-gradient(90deg,#00d4ff,#7fffff);animation-delay:0.5s"></div></div>
+          <div class="power-label-row"><span class="power-label">AOE</span><span class="power-val">55%</span></div>
+        <div class="power-track"><div class="power-fill" style="width:55%;background:linear-gradient(90deg,#ffd700,#ffe680);animation-delay:0.6s"></div></div>
+          <div class="power-label-row"><span class="power-label">Overall Power</span><span class="power-val">87%</span></div>
+        <div class="power-track"><div class="power-fill" style="width:87%;background:linear-gradient(90deg,#7b2fff,#b47fff);animation-delay:0.7s"></div></div>
+        </div>
+      </div>
+
+      <div class="panel panel-full fade-up d3">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="panel-label">// Weapon Analysis</div>
+        <p class="desc-text">Skill C is the highest single-skill damage in the game, though range is limited to short-mid. Skills R and F deal high damage with mid range and some AOE coverage — making this a devastating choice for players who can stay close to targets.</p>
+      </div>
+
+      <div class="panel fade-up d4">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="panel-label">// Acquisition</div>
+        <div class="obtain-list">
+          <div class="obtain-chip">🚇 Subway</div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="back-row fade-up d5">
+      <a href="../weaponstier.html" class="back-btn">← Back to Tier List</a>
+    </div>
+  </div>
+</body>
 </html>

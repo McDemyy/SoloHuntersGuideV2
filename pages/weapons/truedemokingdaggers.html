@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carmsei Katana | Solo Hunters System DB</title>
+  <title>True Demon King Daggers | Solo Hunters System DB</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -13,14 +13,14 @@
       --purple: #7b2fff;
       --red: #ff2a4a;
       --gold: #ffd700;
-      --accent: #6e7fff; --accent-rgb: 110,127,255;
+      --accent: #ff2a4a; --accent-rgb: 255,42,74;
       --text: rgba(180,210,240,0.85);
       --text-dim: rgba(120,160,200,0.5);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     body{background:var(--bg);font-family:'Rajdhani',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
     .bg-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
-    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(123,47,255,0.16) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
+    .bg-radial{background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(255,42,74,0.16) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 80% 100%,rgba(0,212,255,0.07) 0%,transparent 60%);}
     .bg-grid{background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:48px 48px;animation:grid-drift 40s linear infinite alternate;}
     @keyframes grid-drift{from{background-position:0 0}to{background-position:48px 48px}}
     .bg-scanlines{background:repeating-linear-gradient(0deg,transparent 0px,transparent 3px,rgba(0,0,0,0.07) 3px,rgba(0,0,0,0.07) 4px);opacity:.5;}
@@ -39,14 +39,12 @@
     @keyframes orb-pulse{from{transform:scale(.95);opacity:.6}to{transform:scale(1.05);opacity:1}}
     .weapon-img-wrap img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px rgba(var(--accent-rgb),.55)) drop-shadow(0 0 8px rgba(255,255,255,.15));animation:weapon-float 5s ease-in-out infinite alternate;position:relative;z-index:1;}
     @keyframes weapon-float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-    .weapon-name{font-family:'Orbitron',monospace;font-size:clamp(24px,5vw,42px);font-weight:900;letter-spacing:4px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(var(--accent-rgb),.45),0 0 80px rgba(var(--accent-rgb),.2);margin-bottom:6px;}
+    .weapon-name{font-family:'Orbitron',monospace;font-size:clamp(20px,4vw,36px);font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#fff;text-shadow:0 0 40px rgba(var(--accent-rgb),.45),0 0 80px rgba(var(--accent-rgb),.2);margin-bottom:6px;}
     .weapon-type-row{display:flex;gap:10px;justify-content:center;align-items:center;margin-top:10px;}
     .tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:2px;}
     .tag-type{color:var(--cyan);border:1px solid rgba(0,212,255,.35);background:rgba(0,212,255,.07);}
     .tag-s{color:#ff4e6b;border:1px solid rgba(255,78,107,.4);background:rgba(255,78,107,.08);}
-    .tag-a{color:#6e7fff;border:1px solid rgba(110,127,255,.4);background:rgba(110,127,255,.08);}
-    .tag-b{color:#ffd700;border:1px solid rgba(255,215,0,.35);background:rgba(255,215,0,.07);}
-    .tag-f{color:#7fd8ff;border:1px solid rgba(127,216,255,.35);background:rgba(127,216,255,.07);}
+    .tag-mythic{color:#ff2a4a;border:1px solid rgba(255,42,74,.4);background:rgba(255,42,74,.08);}
     .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:32px;}
     @media(max-width:600px){.content-grid{grid-template-columns:1fr;}}
     .panel{background:linear-gradient(135deg,rgba(6,10,22,.97),rgba(10,6,20,.97));border:1px solid var(--border);border-radius:6px;padding:22px;position:relative;overflow:hidden;}
@@ -76,15 +74,23 @@
     .desc-text{font-size:13px;line-height:1.85;color:rgba(180,210,240,.75);letter-spacing:.3px;}
     .obtain-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
     .obtain-chip{display:flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);border-radius:4px;font-size:11px;letter-spacing:1px;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
-    .location-wrap{margin-top:14px;border-radius:6px;overflow:hidden;border:1px solid rgba(0,212,255,.15);position:relative;}
-    .location-wrap img{width:100%;display:block;}
-    .location-label{position:absolute;bottom:0;left:0;right:0;padding:8px 14px;background:linear-gradient(0deg,rgba(2,4,8,.9),transparent);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-family:'Share Tech Mono',monospace;}
+
+    /* Recipe */
+    .recipe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;}
+    @media(max-width:520px){.recipe-grid{grid-template-columns:1fr;}}
+    .recipe-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px;background:rgba(255,42,74,.04);border:1px solid rgba(255,42,74,.15);border-radius:4px;text-align:center;}
+    .recipe-img{width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,42,74,.4));}
+    .recipe-img-placeholder{width:56px;height:56px;border-radius:4px;background:rgba(255,42,74,.08);border:1px dashed rgba(255,42,74,.25);display:flex;align-items:center;justify-content:center;font-size:24px;}
+    .recipe-qty{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:var(--accent);}
+    .recipe-name{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(180,210,240,.75);}
+    .recipe-note{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;color:rgba(120,160,200,.4);margin-top:2px;}
+
     .back-row{text-align:center;margin-top:40px;}
     .back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,.3);border-radius:4px;padding:10px 24px;background:rgba(0,212,255,.05);transition:all .2s;}
     .back-btn:hover{background:rgba(0,212,255,.12);border-color:var(--cyan);box-shadow:0 0 20px rgba(0,212,255,.25);}
     .fade-up{opacity:0;transform:translateY(20px);animation:fadeUp .6s ease forwards;}
     @keyframes fadeUp{to{opacity:1;transform:none;}}
-    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+    .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}.d6{animation-delay:.6s}
   </style>
 </head>
 <body>
@@ -96,72 +102,114 @@
     <a href="../../index.html" class="nav-logo">⚔ SH System DB</a>
     <div class="nav-links">
       <a href="../weaponstier.html" class="nav-btn">← Tier List</a>
-      <a href="allweapons.html" class="nav-btn">All Weapons</a>
+      <a href="../weapons.html" class="nav-btn">All Weapons</a>
     </div>
   </nav>
 
   <div class="page">
+
     <div class="weapon-hero fade-up">
-      <div class="rank-badge">[ A — RANK WEAPON ]</div>
+      <div class="rank-badge">[ S — RANK WEAPON ]</div>
       <div class="weapon-img-wrap">
-        <img src="../../images/weapons/CarmseiKatana.png" alt="Carmsei Katana"/>
+        <img src="../../images/weapons/TrueDemonKingDaggers.png" alt="True Demon King Daggers"/>
       </div>
-      <h1 class="weapon-name">Carmsei Katana</h1>
+      <h1 class="weapon-name">True Demon King Daggers</h1>
       <div class="weapon-type-row">
-        <span class="tag tag-type">Katana</span>
-        <span class="tag tag-a">A Rank</span>
+        <span class="tag tag-type">Dagger</span>
+        <span class="tag tag-s">S Rank</span>
+        <span class="tag tag-mythic">Mythic</span>
       </div>
     </div>
 
     <div class="content-grid">
+
+      <!-- Combat Stats -->
       <div class="panel fade-up d1">
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Combat Stats</div>
-        <div class="stat-row"><span class="stat-name">Damage</span><span class="stat-val high">High</span></div>
+        <div class="stat-row"><span class="stat-name">Damage</span><span class="stat-val high">Very High</span></div>
         <div class="stat-row"><span class="stat-name">Attack Speed</span><span class="stat-val high">Very Fast</span></div>
-        <div class="stat-row"><span class="stat-name">Range</span><span class="stat-val good">Mid-Long</span></div>
-        <div class="stat-row"><span class="stat-name">AOE</span><span class="stat-val high">A</span></div>
+        <div class="stat-row"><span class="stat-name">Range</span><span class="stat-val good">Short</span></div>
+        <div class="stat-row"><span class="stat-name">AOE</span><span class="stat-val high">S</span></div>
         <div class="stat-row"><span class="stat-name">Power Rating</span><span class="stat-val high">S</span></div>
       </div>
 
+      <!-- Performance Bars -->
       <div class="panel fade-up d2">
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Performance</div>
         <div class="power-bar-wrap">
-          <div class="power-label-row"><span class="power-label">Damage</span><span class="power-val">78%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:78%;background:linear-gradient(90deg,#ff4e6b,#ff8fa0);animation-delay:0.4s"></div></div>
-          <div class="power-label-row"><span class="power-label">Speed</span><span class="power-val">88%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:88%;background:linear-gradient(90deg,#00d4ff,#7fffff);animation-delay:0.5s"></div></div>
-          <div class="power-label-row"><span class="power-label">AOE</span><span class="power-val">72%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:72%;background:linear-gradient(90deg,#ffd700,#ffe680);animation-delay:0.6s"></div></div>
-          <div class="power-label-row"><span class="power-label">Overall Power</span><span class="power-val">82%</span></div>
-        <div class="power-track"><div class="power-fill" style="width:82%;background:linear-gradient(90deg,#7b2fff,#b47fff);animation-delay:0.7s"></div></div>
+          <div class="power-label-row"><span class="power-label">Damage</span><span class="power-val">88%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:88%;background:linear-gradient(90deg,#ff4e6b,#ff8fa0);animation-delay:0.4s"></div></div>
+          <div class="power-label-row"><span class="power-label">Speed</span><span class="power-val">93%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:93%;background:linear-gradient(90deg,#00d4ff,#7fffff);animation-delay:0.5s"></div></div>
+          <div class="power-label-row"><span class="power-label">AOE</span><span class="power-val">85%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:85%;background:linear-gradient(90deg,#ffd700,#ffe680);animation-delay:0.6s"></div></div>
+          <div class="power-label-row"><span class="power-label">Overall Power</span><span class="power-val">91%</span></div>
+          <div class="power-track"><div class="power-fill" style="width:91%;background:linear-gradient(90deg,#7b2fff,#b47fff);animation-delay:0.7s"></div></div>
         </div>
       </div>
 
+      <!-- Weapon Analysis -->
       <div class="panel panel-full fade-up d3">
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Weapon Analysis</div>
-        <p class="desc-text">Skill C has long range with nice damage, but only triggers at the end of the line — excellent for boss fights. Skill R has mid range with some AOE and solid damage. All skills feature very fast cooldowns, enabling aggressive combos.</p>
+        <p class="desc-text">A super cool dagger with a dark aura, delivering quick and effective physical attacks. The True Demon King Daggers are a crafted evolution of the standard Demon King Daggers — carrying the same aggressive close-range dual-wield style but significantly amplified. Relentless combos shred through enemies at exceptional speed, making this one of the strongest dagger-class weapons available. Best suited for assassin and DPS builds that prioritize burst damage and attack speed over range.</p>
       </div>
 
+      <!-- Acquisition -->
       <div class="panel fade-up d4">
         <div class="corner tl"></div><div class="corner tr"></div>
         <div class="corner bl"></div><div class="corner br"></div>
         <div class="panel-label">// Acquisition</div>
         <div class="obtain-list">
-          <div class="obtain-chip">🏜️ Desert</div>
+          <div class="obtain-chip">⚗️ Crafted</div>
+          <div class="obtain-chip">🏰 Demon Castle</div>
         </div>
       </div>
-      
+
+      <!-- Crafting Recipe -->
+      <div class="panel panel-full fade-up d5">
+        <div class="corner tl"></div><div class="corner tr"></div>
+        <div class="corner bl"></div><div class="corner br"></div>
+        <div class="panel-label">// Crafting Recipe</div>
+        <div class="recipe-grid">
+          <div class="recipe-item">
+            <img class="recipe-img" src="../../images/MAP/DemonicCube.png" alt="Demonic Cube"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="recipe-img-placeholder" style="display:none">🟥</div>
+            <span class="recipe-qty">×25</span>
+            <span class="recipe-name">Demonic Cubes</span>
+            <span class="recipe-note">Demon Castle drops</span>
+          </div>
+          <div class="recipe-item">
+            <img class="recipe-img" src="../../images/MAP/DemonicShard.png" alt="Demonic Shard"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="recipe-img-placeholder" style="display:none">🔺</div>
+            <span class="recipe-qty">×20</span>
+            <span class="recipe-name">Demonic Shards</span>
+            <span class="recipe-note">Demon Castle drops</span>
+          </div>
+          <div class="recipe-item">
+            <img class="recipe-img" src="../../images/weapons/DemonKingDaggers.png" alt="Demon King Daggers"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="recipe-img-placeholder" style="display:none">🗡️</div>
+            <span class="recipe-qty">×1</span>
+            <span class="recipe-name">Demon King Daggers</span>
+            <span class="recipe-note">Base weapon required</span>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <div class="back-row fade-up d5">
+    <div class="back-row fade-up d6">
       <a href="../weaponstier.html" class="back-btn">← Back to Tier List</a>
     </div>
+
   </div>
 </body>
 </html>
