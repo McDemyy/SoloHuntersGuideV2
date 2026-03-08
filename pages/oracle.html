@@ -148,14 +148,31 @@
     @keyframes frame-sweep{0%,100%{transform:translateX(-100%);opacity:0}50%{transform:translateX(100%);opacity:1}}
 
     /* ── FAQ CHIPS ── */
-    .faq-section{margin-bottom:14px;}
-    .faq-row{display:flex;gap:6px;flex-wrap:wrap;}
-    .faq-chip{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
-      padding:5px 12px;border:1px solid rgba(139,32,255,0.18);border-radius:2px;
-      background:rgba(139,32,255,0.04);color:rgba(185,77,255,0.55);cursor:pointer;transition:all .18s;white-space:nowrap;user-select:none;}
-    .faq-chip:hover{border-color:rgba(185,77,255,0.5);color:var(--violet2);background:rgba(139,32,255,0.12);box-shadow:0 0 12px rgba(139,32,255,0.15);}
-    .faq-chip.map-chip{border-color:rgba(0,200,255,0.2);color:rgba(77,184,255,0.6);}
-    .faq-chip.map-chip:hover{border-color:rgba(77,184,255,0.6);color:var(--ice);background:rgba(41,121,255,0.1);}
+    .faq-section{margin-bottom:16px;}
+    .faq-row-label{
+      font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;
+      text-transform:uppercase;color:rgba(185,77,255,0.35);margin-bottom:7px;padding-left:1px;
+    }
+    .faq-nav-row{margin-bottom:0;}
+    .faq-row{display:flex;gap:5px;flex-wrap:wrap;}
+    .faq-chip{
+      font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1.5px;
+      text-transform:uppercase;padding:6px 13px;border:1px solid rgba(139,32,255,0.22);
+      border-radius:2px;background:rgba(139,32,255,0.05);color:rgba(185,77,255,0.72);
+      cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none;
+    }
+    .faq-chip:hover{
+      border-color:rgba(185,77,255,0.55);color:var(--violet2);
+      background:rgba(139,32,255,0.13);box-shadow:0 0 12px rgba(139,32,255,0.15);
+    }
+    .nav-chip{
+      border-color:rgba(41,121,255,0.2);color:rgba(77,184,255,0.68);
+      background:rgba(41,121,255,0.04);
+    }
+    .nav-chip:hover{
+      border-color:rgba(77,184,255,0.5);color:var(--ice);
+      background:rgba(41,121,255,0.1);box-shadow:0 0 10px rgba(41,121,255,0.12);
+    }
 
     /* ── INPUT ── */
     .input-row{display:flex;gap:8px;}
@@ -460,7 +477,8 @@
       .orbital{display:none;}
       .oracle-title{font-size:26px;letter-spacing:4px;}
       .faq-row{gap:4px;}
-      .faq-chip{font-size:7px;padding:4px 9px;}
+      .faq-chip{font-size:10px;padding:5px 11px;letter-spacing:1px;}
+      .faq-row-label{font-size:7.5px;letter-spacing:2.5px;}
     }
   </style>
 </head>
@@ -612,11 +630,6 @@
       <span class="nav-logo-icon">⚔</span>
       SH System DB
     </a>
-    <div class="nav-center-tag">
-      <span class="nct-dot"></span>
-      Oracle Intelligence
-      <span class="nct-dot"></span>
-    </div>
     <a href="../index.html" class="nav-back">← Home</a>
   </nav>
 
@@ -653,19 +666,27 @@
 
         <!-- FAQ Chips -->
         <div class="faq-section">
+          <div class="faq-row-label">Navigate</div>
+          <div class="faq-row faq-nav-row">
+            <span class="faq-chip nav-chip" onclick="window.location.href='./weapons/allweapons.html'">Weapons</span>
+            <span class="faq-chip nav-chip" onclick="window.location.href='./armor.html'">Armor</span>
+            <span class="faq-chip nav-chip" onclick="window.location.href='./artifacts.html'">Rings</span>
+            <span class="faq-chip nav-chip" onclick="window.location.href='./tierlists.html'">Tier Lists</span>
+            <span class="faq-chip nav-chip" onclick="window.location.href='./demoncastle.html'">Demon Castle</span>
+            <span class="faq-chip nav-chip" id="matsBtn">Materials</span>
+            <span class="faq-chip nav-chip" id="mapBtn">Map</span>
+            <span class="faq-chip nav-chip" id="codesBtn">Codes</span>
+          </div>
+          <div class="faq-row-label" style="margin-top:10px">Ask</div>
           <div class="faq-row">
-            <span class="faq-chip map-chip" id="codesBtn">📍 Where do I enter codes?</span>
-            <span class="faq-chip map-chip" id="mapBtn">🗺 Dungeon Map</span>
-            <span class="faq-chip" data-q="What is the best melee build?">Best melee build?</span>
-            <span class="faq-chip" data-q="What is the best magic build?">Best magic build?</span>
-            <span class="faq-chip" data-q="What is the best class?">Best class?</span>
-            <span class="faq-chip" data-q="What gate should I be running at 50000 power?">Gate for my power?</span>
-            <span class="faq-chip" data-q="How do I get the Commander Set?">Get Commander Set?</span>
-            <span class="faq-chip" data-q="What is the Demon Castle?">Demon Castle?</span>
-            <span class="faq-chip" data-q="What is a Red Gate?">What's a Red Gate?</span>
-            <span class="faq-chip" data-q="What is the best ring for melee build?">Best melee ring?</span>
-            <span class="faq-chip" data-q="How do I craft True Demon King Daggers?">Craft True DK Daggers?</span>
-            <span class="faq-chip" id="matsBtn">📦 Material Locations</span>
+            <span class="faq-chip" data-q="What is the best melee build?">Melee Build</span>
+            <span class="faq-chip" data-q="What is the best magic build?">Magic Build</span>
+            <span class="faq-chip" data-q="What is the best class?">Best Class</span>
+            <span class="faq-chip" data-q="What gate should I be running at 50000 power?">Gate for my Power</span>
+            <span class="faq-chip" data-q="What is the best weapon?">Best Weapon</span>
+            <span class="faq-chip" data-q="What is the best ring for melee build?">Best Melee Ring</span>
+            <span class="faq-chip" data-q="How do I craft True Demon King Daggers?">Craft True DK Daggers</span>
+            <span class="faq-chip" data-q="I am a new player, where do I start?">Beginner Tips</span>
           </div>
         </div>
 
@@ -711,12 +732,11 @@
       { name: 'Shadow Scythe',     type: 'Scythe',  range: 'Short–Long',  dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Best AoE melee weapon — recommended for melee build' },
       { name: 'Venom Fang',        type: 'Dagger',  range: 'Short–Mid',   dmg: 'SS+', aoe: 'B',  rarity: 'Mythic',    note: 'Best single-target dagger damage' },
       { name: 'Dual Dagger',       type: 'Dagger',  range: 'Short',       dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'High AoE dagger' },
-      { name: 'Knights Edge',      type: 'Sword',   range: 'Mid-Long',    dmg: 'SS+', aoe: 'B',  rarity: 'Mythic',    note: 'Drops from Cursed Commander boss — highest overall power rating' },
-      { name: 'Rocket Sword',      type: 'Sword',   range: 'Long',        dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Obtained via Special Summon only' },
+      { name: 'Knights Edge',      type: 'Sword',   range: 'Mid–Long',    dmg: 'SS',  aoe: 'B',  rarity: 'Mythic',    note: '' },
+      { name: 'Rocket Sword',      type: 'Sword',   range: 'Long',        dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: '' },
       { name: 'Thunder Axe',       type: 'Axe',     range: 'Extreme Long',dmg: 'S+',  aoe: 'A+', rarity: 'Mythic',    note: '' },
       { name: 'Carmsei Katana',    type: 'Katana',  range: 'Mid–Long',    dmg: 'S',   aoe: 'A',  rarity: 'Mythic',    note: '' },
-      { name: 'Demon King Daggers',     type: 'Dagger',  range: 'Short',  dmg: 'B',   aoe: 'B',  rarity: 'Legendary', note: 'Starter weapon — drops from all gates. Upgradeable.' },
-      { name: 'True Demon King Daggers', type: 'Dagger', range: 'Short', dmg: 'SS',  aoe: 'S',  rarity: 'Mythic',    note: 'Crafted S-tier — upgrade from Demon King Daggers at Demon Castle' },
+      { name: 'Demon King Daggers',type: 'Dagger',  range: 'Short',       dmg: 'B',   aoe: 'B',  rarity: 'Legendary', note: 'Starter weapon — drops from all gates' },
       { name: 'Link Sword',        type: 'Sword',   range: 'Short',       dmg: 'C',   aoe: 'C',  rarity: 'Common',    note: 'Starter only — replace ASAP' },
     ],
     armor: [
@@ -796,20 +816,6 @@
       { name: 'Cerberus',        req: 'Unknown',        drops: 'Evil Eye Amulet (5% drop rate)' },
       { name: 'Vulcan',          req: 'Unknown',        drops: 'Demon Beserk Ring (5% drop rate)' },
     ],
-    materials: [
-      { name: 'Serpant Scale', gate: 'Subway',      gateReq: 'Lv 0+, no power needed' },
-      { name: 'Serpant Ore',   gate: 'Subway',      gateReq: 'Lv 0+, no power needed' },
-      { name: 'Crystal',       gate: 'Caves',       gateReq: 'Lv 20+, 2,600 Power' },
-      { name: 'Wolf Tooth',    gate: 'Caves',       gateReq: 'Lv 20+, 2,600 Power' },
-      { name: 'Frog Legs',     gate: 'Jungle',      gateReq: 'Lv 80+, 11,000 Power' },
-      { name: 'Ruby',          gate: 'Jungle',      gateReq: 'Lv 80+, 11,000 Power' },
-      { name: 'Eye',           gate: 'Desert',      gateReq: 'Lv 200+, 32,000 Power' },
-      { name: 'Bones',         gate: 'Desert',      gateReq: 'Lv 200+, 32,000 Power' },
-      { name: 'Fur',           gate: 'Snow Forest', gateReq: 'Lv 300+, 80,000 Power' },
-      { name: 'Snow Silk',     gate: 'Spider Cave', gateReq: 'Lv 380+, 145,000 Power' },
-      { name: 'Magic Spores',  gate: 'Spider Cave', gateReq: 'Lv 380+, 145,000 Power' },
-      { name: 'Evil Amulet',   gate: 'Bloodmoon',   gateReq: 'Any level — only drops during Bloodmoon event from any mob' },
-    ],
   };
 
   // ── Answer Engine ────────────────────────────────────────────
@@ -836,10 +842,10 @@
 
     // ── WEAPONS ──────────────────────────────────────────────
     if (has('best weapon', 'strongest weapon', 'top weapon')) {
-      return `**Best overall:** Knights Edge (98% power, drops from Cursed Commander)\n**Best AoE:** Shadow Scythe or Rocket Sword\n**Best single target dagger:** Venom Fang (SS+ damage)\n**Best crafted weapon:** True Demon King Daggers — craft at Demon Castle\n**Best for melee build:** Shadow Scythe — huge AoE, SS damage\n**Starter:** Demon King Daggers — drops from all gates`;
+      return `**Best overall:** King's Trident (S++ damage, Extreme Long range)\n**Best AoE:** Shadow Scythe or Dual Dagger\n**Best single target dagger:** Venom Fang (SS+ damage)\n**Best for melee build:** Shadow Scythe — huge AoE, SS damage\n**Starter:** Demon King Daggers — drops from all gates`;
     }
     if (has('all weapon', 'list weapon', 'every weapon')) {
-      return `REDIRECT:allweapons`;
+      return KB.weapons.map(w => `**${w.name}** — ${w.type} · Dmg ${w.dmg} · AoE ${w.aoe} · ${w.rarity}${w.note ? ' — ' + w.note : ''}`).join('\n');
     }
     for (const w of KB.weapons) {
       if (raw.includes(w.name.toLowerCase())) {
@@ -855,7 +861,7 @@
       return `**Best armor:** Commander Set (Mythic)\n**How to get:** Defeat the Igris Raid Boss — requires 350,000 Power\n\n**Runner up:** Sunforge Set — drops from Spider Cave (145k Power)\n**Best for magic build:** Astral Set — drops from Snow Forest (80k Power)`;
     }
     if (has('all armor', 'list armor', 'every armor', 'all set', 'armor set')) {
-      return `REDIRECT:armor`;
+      return KB.armor.map(a => `**${a.name}** (${a.rarity}) — ${a.how}${a.note ? ' · ' + a.note : ''}`).join('\n');
     }
     for (const a of KB.armor) {
       if (raw.includes(a.name.toLowerCase().replace(' set',''))) {
@@ -874,7 +880,7 @@
       return `**Best melee rings:**\n**ShadowFang Ring** (Mythic S) — 18% Melee + 15% Critter Dmg · Craft from Caves + Spider Cave\n**Conquerors Ring** (Mythic S) — 20% Melee + 10% Master EXP · Craft from Caves + Desert\n**Demon Beserk Ring** (Mythic S) — 25% Melee + 5% Speed · 5% drop from Vulcan boss\n\n**Best magic rings:** Dark Heart Ring (22% Ability) or Deathwing Ring (18% Ability + 10% Boss)`;
     }
     if (has('all ring', 'all artifact', 'every ring', 'list ring', 'list artifact')) {
-      return `REDIRECT:artifacts`;
+      return KB.artifacts.map(a => `**${a.name}** (${a.rarity} · Tier ${a.tier}) — ${a.stat}\n  → ${a.how}`).join('\n\n');
     }
     for (const a of KB.artifacts) {
       if (raw.includes(a.name.toLowerCase())) {
@@ -893,7 +899,7 @@
       return `**Best classes:**\n**Tank** (Legendary) — best for melee build. +40% HP, +20% M1 Dmg.\n**Mage** (Legendary) — best for magic build. +40% Magic Dmg.\n**Assassin** (Mythic) — best hybrid. +20% M1, +20% Magic, +20% HP.\n**Elf** (Epic) — best for farming. +25% Drop Chance.\n\nRerolls: Complete Zood Quest (free) · Redeem codes via Malt · Buy with Robux.`;
     }
     if (has('all class', 'list class', 'every class', 'class list')) {
-      return `REDIRECT:classes`;
+      return KB.classes.map(c => `**${c.name}** (${c.rarity} · ${c.drop} drop rate)\n${c.stats}${c.note ? ' — ' + c.note : ''}`).join('\n\n');
     }
     for (const c of KB.classes) {
       if (raw.includes(c.name.toLowerCase())) {
@@ -918,7 +924,7 @@
       return KB.gates.map(g => `**${g.name}** — Lv ${g.lv}+ · Min ${g.power.toLocaleString()} Power · Max ${g.exp} EXP · Drops ${g.armor}`).join('\n');
     }
     if (has('all gate', 'list gate', 'every gate', 'gate list', 'dungeon list')) {
-      return `REDIRECT:levelguide`;
+      return KB.gates.map(g => `**${g.name}** — Lv ${g.lv}+ · ${g.power.toLocaleString()} Power · ${g.exp} EXP · Armor: ${g.armor}`).join('\n');
     }
     for (const g of KB.gates) {
       if (raw.includes(g.name.toLowerCase())) {
@@ -936,7 +942,7 @@
       return `**Best magic abilities:**\n**Werewolf** (Mythic S) — Best AoE, 3 I-Frames, Transformation. Great for clears.\n**Divine Blade** (Mythic S) — Highest damage (SS), All I-Frames. Best for bosses.\n\nBoth acquired through Summoning. Werewolf for mobs, Divine Blade for raids.`;
     }
     if (has('all magic', 'list magic', 'every magic', 'magic list')) {
-      return `REDIRECT:magic`;
+      return KB.magic.map(m => `**${m.name}** (${m.rarity} · Tier ${m.tier}) — Dmg ${m.dmg} · AoE ${m.aoe} · I-Frames: ${m.iframe}${m.note ? ' — ' + m.note : ''}`).join('\n');
     }
     for (const m of KB.magic) {
       if (raw.includes(m.name.toLowerCase())) {
@@ -975,47 +981,8 @@
     }
 
     // ── MATERIALS ──────────────────────────────────────────
-    // Specific material lookups
-    if (has('serpant scale', 'serpent scale')) return `**Serpant Scale** drops from mobs in the **Subway** gate (Lv 0+, no power needed).`;
-    if (has('serpant ore', 'serpent ore'))     return `**Serpant Ore** drops from mobs in the **Subway** gate (Lv 0+, no power needed).`;
-    if (has('wolf tooth', 'wolftooth'))         return `**Wolf Tooth** drops from mobs in the **Caves** gate (Lv 20+, 2,600 Power).`;
-    if (has('frog leg'))                        return `**Frog Legs** drop from mobs in the **Jungle** gate (Lv 80+, 11,000 Power).`;
-    if (has('magic spore'))                     return `**Magic Spores** drop from mobs in **Spider Cave** (Lv 380+, 145,000 Power).`;
-    if (has('snow silk', 'snowsilk'))           return `**Snow Silk** drops from mobs in **Spider Cave** (Lv 380+, 145,000 Power).`;
-    if (has('evil amulet'))                     return `**Evil Amulet** only drops during a **Bloodmoon** event — any mob in any gate can drop it while the Bloodmoon is active.`;
-    if (has('crystal') && has('drop','farm','get','where')) return `**Crystal** drops from mobs in the **Caves** gate (Lv 20+, 2,600 Power).`;
-    if (has('ruby') && has('drop','farm','get','where'))    return `**Ruby** drops from mobs in the **Jungle** gate (Lv 80+, 11,000 Power).`;
-    if (has('bone') && has('drop','farm','get','where'))    return `**Bones** drop from mobs in the **Desert** gate (Lv 200+, 32,000 Power).`;
-    if (has('fur') && has('drop','farm','get','where'))     return `**Fur** drops from mobs in the **Snow Forest** gate (Lv 300+, 80,000 Power).`;
-    if (has(' eye') && has('drop','farm','get','where'))    return `**Eye** drops from mobs in the **Desert** gate (Lv 200+, 32,000 Power).`;
-
-    // What drops from a specific gate?
-    if (has('drop','material','farm') && has('subway'))
-      return `**Subway** material drops:\n• Serpant Scale\n• Serpant Ore\n\n(Lv 0+, no power required)`;
-    if (has('drop','material','farm') && has('cave') && !has('spider'))
-      return `**Caves** material drops:\n• Crystal\n• Wolf Tooth\n\n(Lv 20+, 2,600 Power)`;
-    if (has('drop','material','farm') && has('jungle'))
-      return `**Jungle** material drops:\n• Frog Legs\n• Ruby\n\n(Lv 80+, 11,000 Power)`;
-    if (has('drop','material','farm') && has('desert'))
-      return `**Desert** material drops:\n• Eye\n• Bones\n\n(Lv 200+, 32,000 Power)`;
-    if (has('drop','material','farm') && has('snow'))
-      return `**Snow Forest** material drops:\n• Fur\n\n(Lv 300+, 80,000 Power)`;
-    if (has('drop','material','farm') && has('spider'))
-      return `**Spider Cave** material drops:\n• Snow Silk\n• Magic Spores\n\n(Lv 380+, 145,000 Power)`;
-    if (has('drop','material','farm') && has('blood','bloodmoon'))
-      return `**Bloodmoon** material drops:\n• Evil Amulet — drops from any mob during a Bloodmoon event\n\nBloodmoons are a special event. Any gate, any level.`;
-
-    // General material / crafting query
-    if (has('material', 'farming material', 'where to farm', 'what drop')) {
-      return `**All material drop locations:**\n🔵 **Subway** → Serpant Scale, Serpant Ore\n🟢 **Caves** → Crystal, Wolf Tooth\n🌿 **Jungle** → Frog Legs, Ruby\n🏜️ **Desert** → Eye, Bones\n❄️ **Snow Forest** → Fur\n🕷️ **Spider Cave** → Snow Silk, Magic Spores\n🩸 **Bloodmoon** → Evil Amulet (any mob, event only)\n\n**Ring crafting sources:**\nGuardian Ring → Spider Cave + Jungle\nShadowFang Ring → Caves + Spider Cave + Bloodmoon\nDeathwing Ring → Subway + Desert\nConquerors Ring → Caves + Desert\nHeartBound Ring → All gates + Bloodmoon\n\nBring materials to the Crafting NPC to craft rings.`;
-    }
-    if (has('craft') && !has('true demon','truedk')) {
-      return `**Ring crafting material sources:**\n**Guardian Ring** → Spider Cave + Jungle\n**ShadowFang Ring** → Caves + Spider Cave + Bloodmoon\n**Deathwing Ring** → Subway + Desert\n**Conquerors Ring** → Caves + Desert\n**HeartBound Ring** → All gates + Bloodmoon\n\nFor weapon crafting: True Demon King Daggers requires ×25 Demonic Cubes + ×20 Demonic Shards + ×1 Demon King Daggers (all from Demon Castle).`;
-    }
-
-    // ── RED GATES ──────────────────────────────────────────
-    if (has('red gate', 'redgate')) {
-      return `**Red Gates** are rare, high-difficulty versions of normal gates.\n\n🩸 They have a **5% spawn chance** when a normal gate closes.\n\n**Red Gate power thresholds:**\n• Subway Red → 2,100 Power\n• Caves Red → 11,100 Power\n• Jungle Red → 34,500 Power\n• Desert Red → 88,500 Power\n• Snow Forest Red → 162,000 Power\n• Spider Cave Red → 327,000 Power\n\nRed Gates give better loot and more challenge. Check the Red Gates page for full details.`;
+    if (has('material', 'craft', 'farming material', 'where to farm')) {
+      return `**Ring crafting material sources:**\n**Guardian Ring** → Spider Cave + Jungle\n**ShadowFang Ring** → Caves + Spider Cave + Bloodmoons\n**Deathwing Ring** → Subway + Desert\n**Conquerors Ring** → Caves + Desert\n**HeartBound Ring** → Snow Forest + Jungle + Subway + Caves + Desert + Spider Cave + Bloodmoons\n\nFarm the gates listed and bring materials to the Crafting NPC.`;
     }
 
     // ── POWER ──────────────────────────────────────────────
@@ -1031,7 +998,8 @@
     }
 
     // ── FALLBACK ──────────────────────────────────────────
-    return `UNKNOWN_QUERY`;
+    const suggestions = ['best melee build', 'best magic build', 'best class', 'all rings', 'all weapons', 'all gates', 'how to get codes', 'best armor'];
+    return `No data found for that query. Try asking about:\n${suggestions.map(s => `• ${s}`).join('\n')}\n\nOr ask about a specific item, gate, class, ring, weapon, armor set, or boss by name.`;
   }
 
   /* ── Background FX ── */
@@ -1056,6 +1024,9 @@
     setTimeout(()=>s.remove(),28000);
   }
   sweep(); setInterval(sweep,7000+Math.random()*8000);
+
+  /* ── Nav chip redirects ── */
+  document.getElementById('matsBtn').addEventListener('click',()=>window.location.href='./materiallocations.html');
 
   /* ── Codes Modal ── */
   const codesModal = document.getElementById('codesModal');
@@ -1090,14 +1061,14 @@
     }));
   }
 
-  function showAns(text, query){
+  function showAns(text){
     const a=document.getElementById('answer'),t=document.getElementById('ans-text');
     document.getElementById('oerr').classList.remove('show');
     let safe=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     // Bold **text**
     safe=safe.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
     // Colour-code categories
-    safe=safe.replace(/(True Demon King Daggers|Shadow Scythe|Thunder Axe|Dual Dagger|King's Trident|Venom Fang|Carmsei Katana|Rocket Sword|Knights Edge|Demon King Daggers|Link Sword)/g,'<span class="tag-weapon">$1</span>');
+    safe=safe.replace(/\b(Shadow Scythe|Thunder Axe|Dual Dagger|King's Trident|Venom Fang|Carmsei Katana|Rocket Sword|Knights Edge|Demon King Daggers|Link Sword)\b/g,'<span class="tag-weapon">$1</span>');
     safe=safe.replace(/\b(Commander Set|Oathkeeper Set|Sunforge Set|Astral Set|Bloodsteel Set|Venomspike Set|Serpent Set|Iron Set)\b/g,'<span class="tag-armor">$1</span>');
     safe=safe.replace(/\b(ShadowFang Ring|Conquerors Ring|Deathwing Ring|Guardian Ring|HeartBound Ring|Dark Heart Ring|Wanwood Ring|Black Iron Ring|Ring Of Fire V2|Ring Of Fire|Serpant Ring|Altar Ring|Demon Beserk Ring|Heartless Ring|Soulless Ring|EarthRing V2|Evil Eye Amulet|Demon Magic Amulet)\b/g,'<span class="tag-ring">$1</span>');
     safe=safe.replace(/\b(Werewolf|Divine Blade|Goliath|Light|Crimson|Dark|Nature|Lightning|Vines)\b/g,'<span class="tag-magic">$1</span>');
@@ -1105,91 +1076,51 @@
     safe=safe.replace(/\b(Tank|Mage|Assassin|Elf|Summoner|Knight)\b/g,'<span class="tag-stat">$1</span>');
     safe=safe.replace(/\n/g,'<br>');
     // Inject map button if answer is about codes / Malt
-    const lc=(text+" "+(query||"")).toLowerCase();
+    const lc=text.toLowerCase();
     if(lc.includes('malt')||lc.includes('code')||lc.includes('redeem')){
       safe+=`<br><br><button class="ans-map-btn" onclick="document.getElementById('mapModal').classList.add('open')">🗺 View Dungeon Map — Find Malt in Snow Forest</button>`;
     }
-
     t.innerHTML=safe;
     a.classList.remove('show');void a.offsetWidth;a.classList.add('show');
   }
 
-  // Page redirect map
-  const PAGE_REDIRECTS = {
-    'allweapons':      './weapons/allweapons.html',
-    'armor':           './armor.html',
-    'artifacts':       './artifacts.html',
-    'classes':         './classes.html',
-    'levelguide':      './levelguide.html',
-    'magic':           './magic.html',
-    'demoncastle':     './demoncastle.html',
-    'materiallocations': './materiallocations.html',
-  };
-
-  const PAGE_LABELS = {
-    'allweapons':      '⚔ View All Weapons Page',
-    'armor':           '🛡 View All Armor Page',
-    'artifacts':       '💍 View All Artifacts & Rings Page',
-    'classes':         '🧬 View All Classes Page',
-    'levelguide':      '🗺 View Gate & Level Guide',
-    'magic':           '✨ View All Magic Page',
-    'demoncastle':     '🏰 View Demon Castle Page',
-    'materiallocations': '📦 View Material Locations Page',
-  };
-
   function ask(q) {
     if (!q.trim()) return;
 
-    // ── SECRET ──
+    // ── EASTER EGG ──
     if (q.trim().toLowerCase() === 'asianstud') {
+      document.getElementById('qi').value = '';
       const existing = document.getElementById('easter-overlay');
-      if (existing) existing.remove();
+      if (existing) { existing.remove(); return; }
       const ov = document.createElement('div');
       ov.id = 'easter-overlay';
-      ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;cursor:pointer;animation:easter-in .3s ease both;';
+      ov.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;cursor:pointer;animation:easter-in .35s cubic-bezier(.16,1,.3,1) both;backdrop-filter:blur(8px);';
       ov.innerHTML = `
-        <style>@keyframes easter-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}</style>
-        <img src="../images/Secret/AsianStud.jpg"
-             style="max-width:90vw;max-height:85vh;border-radius:8px;box-shadow:0 0 60px rgba(0,212,255,0.3);"
-             alt="AsianStud"/>
+        <style>
+          @keyframes easter-in{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
+          #easter-img{max-width:88vw;max-height:88vh;border-radius:6px;
+            box-shadow:0 0 0 1px rgba(185,77,255,0.3),0 0 60px rgba(139,32,255,0.35),0 0 120px rgba(41,121,255,0.15);
+            animation:easter-in .4s cubic-bezier(.16,1,.3,1) .05s both;display:block;}
+        </style>
+        <img id="easter-img" src="../images/Secret/AsianStud.jpg" alt="AsianStud"/>
       `;
       ov.addEventListener('click', () => ov.remove());
+      document.addEventListener('keydown', function esc(e) {
+        if (e.key === 'Escape') { ov.remove(); document.removeEventListener('keydown', esc); }
+      });
       document.body.appendChild(ov);
-      document.getElementById('qi').value = '';
       return;
     }
-
-    const th = document.getElementById('thinking'), b = document.getElementById('qbtn');
     const a = document.getElementById('answer'), e = document.getElementById('oerr');
     a.classList.remove('show'); e.classList.remove('show');
     th.classList.add('on'); b.disabled = true;
 
+    // Small delay for the "thinking" animation to feel satisfying
     setTimeout(() => {
       try {
         const text = queryOracle(q);
         th.classList.remove('on');
-
-        // Handle redirect tokens
-        if (text.startsWith('REDIRECT:')) {
-          const key = text.replace('REDIRECT:', '').trim();
-          const url = PAGE_REDIRECTS[key];
-          const label = PAGE_LABELS[key] || 'View Page';
-          window.location.href = url;
-          return;
-        }
-
-        // Handle unknown query
-        if (text === 'UNKNOWN_QUERY') {
-          const unknown = `Can\'t find that one. Check your **spelling**, or head to the **Questions channel** in the Discord and ask there.\n\nYou can also **@sleepy.atef** to request that this question or feature gets added to the Oracle.`;
-          showAns(unknown, q);
-          hist.unshift({ q, a: unknown, t: new Date().getHours() + ':' + String(new Date().getMinutes()).padStart(2,'0') });
-          if (hist.length > 10) hist.pop();
-          updateHist();
-          b.disabled = false;
-          return;
-        }
-
-        showAns(text, q);
+        showAns(text);
         const now = new Date();
         hist.unshift({ q, a: text, t: now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0') });
         if (hist.length > 10) hist.pop();
@@ -1208,7 +1139,6 @@
   document.querySelectorAll('.faq-chip[data-q]').forEach(s=>s.addEventListener('click',()=>{
     document.getElementById('qi').value=s.dataset.q;ask(s.dataset.q);
   }));
-  document.getElementById('matsBtn').addEventListener('click',()=>{ window.location.href='./materiallocations.html'; });
 
   // ── Live build parser — reads builds.html and populates KB.builds ──
   function parseBuildCard(article) {
@@ -1247,43 +1177,40 @@
     };
   }
 
-  // Builds initialized synchronously — always available immediately
-  KB.builds.melee = {
-    name: 'Physical Build',
-    playstyle: 'High-damage melee fighter focused on raw power and survivability.',
-    weapons: ['Shadow Scythe', 'Rocket Sword', 'Knights Edge', 'Dual Dagger', 'Venom Fang'],
-    armor: 'Commander Set',
-    artifacts: ['ShadowFang Ring', 'Conquerors Ring', 'Demon Beserk Ring', 'Wanwood Ring'],
-    stats: { Strength: '1000', Defence: '700-800', Energy: '50-100', Magic: '1' },
-    bestClass: 'Tank',
-    isMagic: false
-  };
-  KB.builds.magic = {
-    name: 'Magic Build',
-    playstyle: 'Burst-damage caster that nukes groups with powerful magical abilities.',
-    weapons: ['Divine Blade', 'Werewolf', 'Goliath', 'Light', 'Dark'],
-    armor: 'Astral Set',
-    artifacts: ['Dark Heart Ring', 'Deathwing Ring', 'Ring Of Fire V2', 'Altar Ring'],
-    stats: { Magic: '1000', Defence: '400-600', Energy: '100-200', Strength: '1-100' },
-    bestClass: 'Mage',
-    isMagic: true
-  };
-
   function loadBuilds() {
+    // oracle.html is at pages/oracle.html, builds.html is at pages/builds.html
     fetch('./builds.html')
-      .then(r => { if(!r.ok) throw new Error(); return r.text(); })
+      .then(r => { if(!r.ok) throw new Error('not found'); return r.text(); })
       .then(html => {
         const doc = new DOMParser().parseFromString(html, 'text/html');
         const cards = doc.querySelectorAll('article.build-card');
         cards.forEach(card => {
           const build = parseBuildCard(card);
-          if (build && build.name) {
-            if (build.isMagic) KB.builds.magic = build;
-            else KB.builds.melee = build;
+          if(build.isMagic) {
+            KB.builds.magic = build;
+          } else {
+            KB.builds.melee = build;
           }
         });
+        console.log('[Oracle] Builds loaded from builds.html:', KB.builds.melee?.name, '/', KB.builds.magic?.name);
       })
-      .catch(() => {});
+      .catch(() => {
+        // Fallback if fetch fails (e.g. opened as file://)
+        KB.builds.melee = {
+          name:'Physical Build', playstyle:'Heavy-hitting tank',
+          weapons:['Shadow Scythe','Dual Daggers','Thunder Axe'],
+          armor:'Commander Set', artifacts:['Shadow Fang','Wanwood'],
+          stats:{Strength:'1000',Defence:'700-800',Energy:'50-100',Magic:'1'},
+          bestClass:'Tank', isMagic:false
+        };
+        KB.builds.magic = {
+          name:'Magic Build', playstyle:'High magic burst',
+          weapons:['Werewolf','Divine Blade'],
+          armor:'Astral Set', artifacts:['Dark Heart Ring'],
+          stats:{Magic:'1000',Defence:'400-600',Energy:'100-200',Strength:'1-100'},
+          bestClass:'Mage', isMagic:true
+        };
+      });
   }
 
   loadBuilds();
