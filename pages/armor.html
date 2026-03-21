@@ -122,6 +122,20 @@
 
       <div class="cards-grid" id="armor-grid">
 
+        <!-- NEW: Dark Nexus Helmet -->
+        <article class="item-card mythic-glow armor-popup" data-filter="mythic" data-armor="Dark Nexus Helmet">
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          <div class="card-image-wrap">
+            <span class="rarity-badge rarity-mythic">Mythic</span>
+            <span class="type-tag">Armor</span>
+            <img class="card-image" src="../images/armor/DarkNexus.png" alt="Dark Nexus Helmet" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-name">Dark Nexus Helmet</h2>
+            <button class="item-card-btn">Set Info</button>
+          </div>
+        </article>
+
         <article class="item-card mythic-glow armor-popup" data-filter="mythic" data-armor="Commander Set">
           <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
           <div class="card-image-wrap">
@@ -254,6 +268,13 @@
 
   <script>
     const armorInfo = {
+      "Dark Nexus Helmet": {
+        Location: "Unknown/Secret Drop",
+        BaseHealth: "12% HP (2-piece)",
+        MaxHealth: "30% Melee Dmg (3-piece)",
+        Bonus3: "2-piece: 12% HP<br>3-piece: 30% Melee Damage",
+        Rarity: "mythic"
+      },
       "Iron Set":        { Location:"ALL Gate",              BaseHealth:"18% Health",    MaxHealth:"56.8% Health",  Bonus3:"20% Melee Dmg",                              Rarity:"epic" },
       "Sunforge Set":    { Location:"Spider Cave",           BaseHealth:"57% Health",    MaxHealth:"243% Health",   Bonus3:"15% Extra HP · 20% Melee Dmg",               Rarity:"mythic" },
       "Bloodsteel Set":  { Location:"Jungle",                BaseHealth:"32% Health",    MaxHealth:"146.8% Health", Bonus3:"8% Extra HP · 20% Melee Dmg",                Rarity:"mythic" },

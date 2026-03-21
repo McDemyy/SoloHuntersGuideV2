@@ -1,0 +1,427 @@
+      <!-- Luck titles section removed as per user request. No references to Fortunate Adventurer, Treasure Seeker, Blessed Path, Hand of Fortune, Favored by the System, or System's Chosen remain. -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <style>
+      :root { --red:#ff2a4a;--gold:#ffd700;--cyan:#00d4ff;--purple:#7b2fff;--green:#00ff9f; }
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+      body{background:#04060f;font-family:'Share Tech Mono',monospace;}
+      .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.04) 1px,transparent 1px);background-size:56px 56px;animation:grid-drift 30s linear infinite alternate;}
+      @keyframes grid-drift{from{background-position:0 0}to{background-position:56px 56px}}
+      .bg-vignette{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(123,47,255,0.12) 0%,transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(0,212,255,0.08) 0%,transparent 60%);}
+      .scanlines{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0.03;background:repeating-linear-gradient(0deg,#000 0px,#000 1px,transparent 1px,transparent 4px);}
+      .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(4,6,15,0.9);border-bottom:1px solid rgba(0,212,255,0.15);backdrop-filter:blur(12px);}
+      .nav-logo{font-family:'Orbitron',monospace;font-size:12px;font-weight:900;color:var(--cyan);letter-spacing:3px;text-transform:uppercase;text-decoration:none;text-shadow:0 0 16px rgba(0,212,255,0.6);}
+      .nav-links{display:flex;gap:8px;align-items:center;}
+      .nav-btn{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;color:var(--cyan);text-decoration:none;border:1px solid rgba(0,212,255,0.3);border-radius:4px;background:rgba(0,212,255,0.05);transition:all 0.2s;}
+      .nav-btn:hover,.nav-btn.active{background:rgba(0,212,255,0.15);border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,0.3);}
+      .page-wrapper{position:relative;z-index:1;padding:90px 0 80px;min-height:100vh;}
+      .container{max-width:900px;margin:0 auto;padding:0 28px;}
+      .page-header{text-align:center;padding:0 0 48px;}
+      .system-tag{display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(0,212,255,0.3);padding:4px 16px;border-radius:2px;margin-bottom:16px;animation:tag-pulse 2s ease-in-out infinite;}
+      @keyframes tag-pulse{0%,100%{opacity:1}50%{opacity:0.55}}
+      .page-title{font-family:'Orbitron',monospace;font-size:clamp(28px,6vw,56px);font-weight:900;letter-spacing:6px;text-transform:uppercase;color:#fff;text-shadow:0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);margin-bottom:10px;}
+      .page-subtitle{font-size:11px;letter-spacing:3px;color:rgba(140,180,220,0.6);text-transform:uppercase;}
+      .header-line{width:240px;height:1px;margin:24px auto 0;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);}
+      .section{background:rgba(2,5,18,0.97);border-radius:14px;border:2px solid rgba(41,121,255,0.10);margin:32px auto 24px auto;padding:28px 24px 18px 24px;max-width:900px;box-shadow:0 2px 16px 0 rgba(41,121,255,0.07);}
+      .section h2{font-family:'Orbitron',monospace;font-size:1.3em;color:var(--white);margin-bottom:10px;letter-spacing:1.5px;font-weight:700;}
+      .section ul{margin:0 0 10px 0;padding-left:22px;}
+      .section li{font-family:'Rajdhani',sans-serif;font-size:1.08em;color:#b8d0ff;margin-bottom:4px;}
+      .section table{width:100%;border-collapse:collapse;margin-top:10px;margin-bottom:10px;background:rgba(10,20,40,0.97);border-radius:8px;overflow:hidden;}
+      .section th,.section td{border:1px solid rgba(41,121,255,0.10);padding:8px 10px;text-align:left;font-family:'Share Tech Mono',monospace;color:#e0eaff;}
+      .section th{background:rgba(41,121,255,0.10);font-weight:700;}
+      .section tr:nth-child(even) td{background:rgba(41,121,255,0.04);}
+      .section .subtitle{font-family:'Rajdhani',sans-serif;font-size:1.08em;color:#ffe680;margin:10px 0 4px 0;font-weight:600;}
+      @media (max-width: 900px) {.container{padding:0 14px;}}
+    </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hunter Titles - Solo Hunters Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:    #ff2a4a;
+      --gold:   #ffd700;
+      --cyan:   #00d4ff;
+      --purple: #7b2fff;
+      --green:  #00ff9f;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #04060f;
+      font-family: 'Share Tech Mono', monospace;
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      animation: grid-drift 30s linear infinite alternate;
+    }
+    @keyframes grid-drift { from { background-position: 0 0; } to { background-position: 56px 56px; } }
+    .bg-vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(123,47,255,0.12) 0%, transparent 60%),
+          radial-gradient(ellipse at 50% 100%, rgba(0,212,255,0.08) 0%, transparent 60%);
+    }
+    .page-wrapper {
+      position: relative; z-index: 1;
+      padding: 90px 0 80px;
+      min-height: 100vh;
+    }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 28px; }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 28px;
+      background: rgba(10,18,32,0.92);
+      border-radius: 18px;
+      box-shadow: 0 0 32px 0 rgba(0,212,255,0.10);
+    }
+    .page-header {
+      text-align: center;
+      padding: 0 0 48px;
+    }
+    .system-tag {
+      display: inline-block;
+      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+      color: var(--cyan); border: 1px solid rgba(0,212,255,0.3);
+      padding: 4px 16px; border-radius: 2px; margin-bottom: 16px;
+      animation: tag-pulse 2s ease-in-out infinite;
+    }
+    @keyframes tag-pulse { 0%,100%{opacity:1;} 50%{opacity:0.55;} }
+    .page-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(28px, 6vw, 56px); font-weight: 900;
+      letter-spacing: 6px; text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.2);
+      margin-bottom: 10px;
+    }
+    .special-title { color: var(--red); font-weight: 700; text-shadow: 0 0 8px var(--red), 0 0 16px var(--cyan); }
+    @media (max-width: 700px) {
+      .container { padding: 12px 2vw; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-vignette"></div>
+  <div class="scanlines"></div>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">⚔ SH System DB</a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">⬅ Home</a>
+      <a href="tierlists.html" class="nav-btn">Tier List</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="container">
+      <header class="page-header">
+        <div class="system-tag">[ DATABASE — TITLES MODULE ]</div>
+        <h1 class="page-title">Hunter Titles</h1>
+        <p class="page-subtitle">Unlockable Honors &amp; Achievements</p>
+        <div class="header-line"></div>
+      </header>
+
+      <div class="section">
+        <h2 style="color:#8b20ff;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Demon Tower
+          <span style="font-weight:400;font-size:0.7em;color:#b88cff;margin-left:8px;">(DemonCastleService floor rewards)</span>
+        </h2>
+        <ul>
+            <li><b class="title-popup" data-title="Raider">Raider</b> — Clear Floor 19</li>
+            <li><b class="title-popup" data-title="Crusader">Crusader</b> — Clear Floor 26</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2 style="color:#ffe680;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Leaderboard
+          <span style="font-weight:400;font-size:0.7em;color:#ffe680;margin-left:8px;">(LeaderboardService, auto-synced)</span>
+        </h2>
+        <ul>
+            <li><b class="title-popup" data-title="Damage Top 10">Damage Top 10</b> — Rank on the Damage Done leaderboard</li>
+            <li><b class="title-popup" data-title="Damage Top 100">Damage Top 100</b> — Rank on the Damage Done leaderboard</li>
+            <li><b class="title-popup" data-title="Damage Top 1000">Damage Top 1000</b> — Rank on the Damage Done leaderboard</li>
+            <li><b class="title-popup" data-title="Demon Castle Top 10">Demon Castle Top 10</b> — Rank on the Demon Castle (BestWavesFloor30) leaderboard</li>
+            <li><b class="title-popup" data-title="Demon Castle Top 100">Demon Castle Top 100</b> — Rank on the Demon Castle (BestWavesFloor30) leaderboard</li>
+            <li><b class="title-popup" data-title="Demon Castle Top 1000">Demon Castle Top 1000</b> — Rank on the Demon Castle (BestWavesFloor30) leaderboard</li>
+        </ul>
+      </div>
+          <style>
+            .show-boosts-btn {
+              margin-left: 12px;
+              font-size: 11px;
+              padding: 2px 10px;
+              border-radius: 4px;
+              border: 1px solid #00d4ff;
+              background: rgba(0,212,255,0.08);
+              color: #00d4ff;
+              cursor: pointer;
+              transition: background 0.18s, color 0.18s;
+            }
+            .show-boosts-btn:hover {
+              background: #00d4ff;
+              color: #fff;
+            }
+            .boosts-box {
+              margin-top: 8px;
+              margin-bottom: 4px;
+              padding: 8px 12px;
+              background: rgba(0,212,255,0.07);
+              border-radius: 6px;
+              border: 1px solid rgba(0,212,255,0.13);
+              display: flex;
+              gap: 10px;
+              flex-wrap: wrap;
+              font-size: 12px;
+            }
+            .boost-badge {
+              display: inline-block;
+              padding: 3px 10px;
+              border-radius: 12px;
+              color: #fff;
+              font-weight: 600;
+              font-size: 11px;
+              margin-right: 6px;
+              margin-bottom: 2px;
+              box-shadow: 0 1px 6px 0 rgba(0,0,0,0.10);
+              letter-spacing: 1px;
+            }
+          </style>
+          <script>
+            function toggleBoosts(btn) {
+              var box = btn.nextElementSibling;
+              if (box.style.display === 'none' || box.style.display === '') {
+                box.style.display = 'flex';
+                btn.textContent = 'Hide Boosts';
+              } else {
+                box.style.display = 'none';
+                btn.textContent = 'Show Boosts';
+              }
+            }
+          </script>
+      <div class="section">
+        <h2 style="color:#ffe680;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Leaderboard
+          <span style="font-weight:400;font-size:0.7em;color:#ffe680;margin-left:8px;">(LeaderboardService, auto-synced)</span>
+        </h2>
+            <li><b class="title-popup" data-title="Noob">Noob</b> — Default/new player</li>
+        </ul>
+      </div>
+        <!-- Modal for title boosts -->
+        <div id="title-boost-modal" class="system-modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;">
+          <div style="background:#10182a;padding:32px 28px 22px 28px;border-radius:14px;min-width:260px;max-width:90vw;box-shadow:0 0 32px 0 #00d4ff44;position:relative;">
+            <button id="close-title-boost-modal" style="position:absolute;top:10px;right:14px;background:none;border:none;color:#00d4ff;font-size:1.5em;cursor:pointer;">&times;</button>
+            <h2 id="modal-title-name" style="color:#00d4ff;font-size:1.2em;margin-bottom:10px;"></h2>
+            <div id="modal-title-boosts" style="font-size:1.08em;color:#ffe680;"></div>
+          </div>
+        </div>
+        <script>
+        // Title boosts data (expand as needed)
+        const TITLE_BOOSTS = {
+          'Raider': ['+5% Melee Damage', '+5% Health'],
+          'Crusader': ['+10% Melee Damage', '+10% Health'],
+          'Damage Top 10': ['+100% Dungeon Loot Luck'],
+          'Damage Top 100': ['+50% Dungeon Loot Luck'],
+          'Damage Top 1000': ['+5% Dungeon Loot Luck'],
+          'Demon Castle Top 10': ['+50% Melee Damage', '+50% Ability Damage'],
+          'Demon Castle Top 100': ['+30% Melee Damage', '+30% Ability Damage'],
+          'Demon Castle Top 1000': ['+5% Melee Damage', '+5% Ability Damage'],
+          'Noob': ['No boosts'],
+          // Dungeon Slayer
+          'Serpent Slayer I-V': [
+            'I: +5% Melee & Ability Damage',
+            'II: +10% Melee & Ability Damage',
+            'III: +15% Melee & Ability Damage',
+            'IV: +20% Melee & Ability Damage',
+            'V: +25% Melee & Ability Damage',
+            '<span style="color:#7ecfff">(Subway)</span>'
+          ],
+          'Spider Slayer I-V': [
+            'I: +5% Melee & Ability Damage',
+            'II: +10% Melee & Ability Damage',
+            'III: +15% Melee & Ability Damage',
+            'IV: +20% Melee & Ability Damage',
+            'V: +25% Melee & Ability Damage',
+            '<span style="color:#7ecfff">(SpiderCave)</span>'
+          ],
+          'Orc Slayer I-V': [
+            'I: +5% Melee & Ability Damage',
+            'II: +10% Melee & Ability Damage',
+            'III: +15% Melee & Ability Damage',
+            'IV: +20% Melee & Ability Damage',
+            'V: +25% Melee & Ability Damage',
+            '<span style="color:#7ecfff">(OrcCastle)</span>'
+          ],
+          'Beast Slayer I-V': [
+            'I: +5% Melee & Ability Damage',
+            'II: +10% Melee & Ability Damage',
+            'III: +15% Melee & Ability Damage',
+            'IV: +20% Melee & Ability Damage',
+            'V: +25% Melee & Ability Damage',
+            '<span style="color:#7ecfff">(Caves, SnowForest)</span>'
+          ],
+          // Hunter Progression
+          'Adaptive Hunter': [
+            '<b>Permanent Boosts:</b> +5% damage',
+            '<b>Requirements:</b> 500 kills, 2 dungeon clears, E-tier dungeons'
+          ],
+          'Relentless Hunter': [
+            '<b>Permanent Boosts:</b> +10% damage, +5% crit chance',
+            '<b>Requirements:</b> 2,000 kills, 5 dungeon clears, D-tier dungeons'
+          ],
+          'Dungeon Predator': [
+            '<b>Permanent Boosts:</b> +20% damage, +10% crit chance',
+            '<b>Requirements:</b> 5,000 kills, 10 dungeon clears, C-tier dungeons'
+          ],
+          'Apex Stalker': [
+            '<b>Permanent Boosts:</b> +30% damage, +15% crit chance, +5% drop rate',
+            '<b>Requirements:</b> 10,000 kills, 15 dungeon clears, B-tier dungeons'
+          ],
+          'Embodiment of Slaughter': [
+            '<b>Permanent Boosts:</b> +50% damage, +25% crit chance, +15% drop rate',
+            '<b>Requirements:</b> 50,000 kills, 30 dungeon clears, S-tier dungeons'
+          ],
+          'Harbinger of Catastrophe': [
+            '<b>Permanent Boosts:</b> +55% damage, +28% crit chance, +18% drop rate',
+            '<b>Requirements:</b> 100,000 kills, 40 dungeon clears, S+-tier dungeons'
+          ],
+          "System's Apex": [
+            '<b>Permanent Boosts:</b> +60% damage, +30% crit chance, +20% drop rate',
+            '<b>Requirements:</b> 200,000 kills, 50 dungeon clears, S++-tier dungeons'
+          ],
+        };
+        document.querySelectorAll('.title-popup').forEach(el => {
+          el.style.cursor = 'pointer';
+          el.style.textDecoration = 'underline dotted';
+          el.addEventListener('click', function(e) {
+            const name = el.getAttribute('data-title');
+            document.getElementById('modal-title-name').innerHTML = name;
+            const boosts = TITLE_BOOSTS[name] || ['No boosts'];
+            document.getElementById('modal-title-boosts').innerHTML = boosts.map(b => `<div>${b}</div>`).join('');
+            document.getElementById('title-boost-modal').style.display = 'flex';
+          });
+        });
+        document.getElementById('close-title-boost-modal').onclick = function() {
+          document.getElementById('title-boost-modal').style.display = 'none';
+        };
+        document.getElementById('title-boost-modal').addEventListener('click', function(e) {
+          if (e.target === this) this.style.display = 'none';
+        });
+        </script>
+      <div class="section">
+        <h2 style="color:#ff4c4c;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Dungeon Slayer
+          <span style="font-weight:400;font-size:0.7em;color:#ffb4b4;margin-left:8px;">(granted on dungeon completion, tiers at 10/25/75/150/300 total clears)</span>
+        </h2>
+        <ul>
+          <li><span class="title-popup" data-title="Serpent Slayer I-V" style="font-weight:bold;">Serpent Slayer I-V</span> — Clear Subway</li>
+          <li><span class="title-popup" data-title="Spider Slayer I-V" style="font-weight:bold;">Spider Slayer I-V</span> — Clear SpiderCave</li>
+          <li><span class="title-popup" data-title="Orc Slayer I-V" style="font-weight:bold;">Orc Slayer I-V</span> — Clear OrcCastle</li>
+          <li><span class="title-popup" data-title="Beast Slayer I-V" style="font-weight:bold;">Beast Slayer I-V</span> — Clear Caves or SnowForest (combined count)</li>
+        </ul>
+      </div>
+      <div class="section">
+        <h2 style="color:#7ecfff;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Hunter Progression
+          <span style="font-weight:400;font-size:0.7em;color:#7ecfff;margin-left:8px;">(checked on mob kill & dungeon clear)</span>
+        </h2>
+        <table>
+          <tr>
+            <th>Title</th>
+            <th>Kills</th>
+            <th>Clears (tier dungeons)</th>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Adaptive Hunter" style="font-weight:bold;">Adaptive Hunter</span></td>
+            <td>500</td>
+            <td>2 (E-tier: Caves, OrcCastle, Jungle, Desert, SnowForest, SpiderCave)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Relentless Hunter" style="font-weight:bold;">Relentless Hunter</span></td>
+            <td>2,000</td>
+            <td>5 (D-tier: Jungle, Desert, SnowForest, SpiderCave)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Dungeon Predator" style="font-weight:bold;">Dungeon Predator</span></td>
+            <td>5,000</td>
+            <td>10 (C-tier: Desert, SnowForest, SpiderCave)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Apex Stalker" style="font-weight:bold;">Apex Stalker</span></td>
+            <td>10,000</td>
+            <td>15 (B-tier: SnowForest, SpiderCave)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Embodiment of Slaughter" style="font-weight:bold;">Embodiment of Slaughter</span></td>
+            <td>50,000</td>
+            <td>30 (S-tier: SpiderCave)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="Harbinger of Catastrophe" style="font-weight:bold;">Harbinger of Catastrophe</span></td>
+            <td>100,000</td>
+            <td>40 (S++: OrcCastle)</td>
+          </tr>
+          <tr>
+            <td><span class="title-popup" data-title="System's Apex" style="font-weight:bold;">System's Apex</span></td>
+            <td>200,000</td>
+            <td>50 (S+++: OrcCastle)</td>
+          </tr>
+        </table>
+              <script>
+              // Ensure script runs after DOM is loaded
+              (function() {
+                function setupTitlePopups() {
+                  document.querySelectorAll('.title-popup').forEach(el => {
+                    el.style.cursor = 'pointer';
+                    el.style.textDecoration = 'underline dotted';
+                    el.addEventListener('click', function(e) {
+                      const name = el.getAttribute('data-title');
+                      document.getElementById('modal-title-name').innerHTML = name;
+                      const boosts = TITLE_BOOSTS[name] || ['No boosts'];
+                      document.getElementById('modal-title-boosts').innerHTML = boosts.map(b => `<div>${b}</div>`).join('');
+                      document.getElementById('title-boost-modal').style.display = 'flex';
+                    });
+                  });
+                }
+                if (document.readyState === 'loading') {
+                  document.addEventListener('DOMContentLoaded', setupTitlePopups);
+                } else {
+                  setupTitlePopups();
+                }
+              })();
+              </script>
+      </div>
+      <div class="section">
+        <h2 style="color:#ffd700;display:flex;align-items:center;gap:10px;font-size:1.5em;">
+          Special
+        </h2>
+        <ul>
+          <li><b>Noob</b> — Default/new player
+            <span class="boost-icon" title="No boosts"></span>
+          </li>
+            <style>
+              .boost-icon {
+                display: inline-block;
+                font-size: 1.1em;
+                margin-left: 7px;
+                margin-right: 2px;
+                cursor: help;
+                vertical-align: middle;
+                transition: filter 0.18s;
+              }
+              .boost-icon:hover {
+                filter: brightness(1.4) drop-shadow(0 0 6px #00d4ff88);
+              }
+            </style>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

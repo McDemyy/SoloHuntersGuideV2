@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solo Leveling Puzzle Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    body { background: var(--void); color: var(--silver); min-height: 100vh; }
+    .puzzle-container { max-width: 420px; margin: 0 auto; padding: 32px 12px 80px; display: flex; flex-direction: column; align-items: center; }
+    .puzzle-title { font-family: 'Cinzel', serif; font-size: 2.1em; color: var(--ice); letter-spacing: 2px; margin-bottom: 12px; text-align: center; }
+    .puzzle-desc { font-family: 'Share Tech Mono', monospace; font-size: 1em; color: rgba(180,210,255,0.7); margin-bottom: 24px; text-align: center; }
+    .puzzle-box { background: rgba(2,5,18,0.97); border: 1px solid rgba(41,121,255,0.18); border-radius: 6px; padding: 28px 18px; width: 100%; box-shadow: 0 0 32px rgba(41,121,255,0.08); margin-bottom: 18px; }
+    .puzzle-input, .puzzle-btn { font-family: 'Share Tech Mono', monospace; font-size: 1em; border-radius: 3px; border: 1px solid rgba(41,121,255,0.18); padding: 10px 14px; margin: 8px 0; width: 100%; box-sizing: border-box; }
+    .puzzle-btn { background: rgba(41,121,255,0.12); color: var(--ice); cursor: pointer; transition: background .2s, color .2s; }
+    .puzzle-btn:hover { background: var(--ice); color: var(--void); }
+    .puzzle-feedback { font-size: 1em; color: var(--red); margin-top: 10px; min-height: 1.5em; text-align: center; }
+    .puzzle-progress { font-size: 0.95em; color: var(--cyan); margin-bottom: 10px; text-align: center; }
+    @media (max-width: 600px) { .puzzle-container { padding: 18px 2vw 80px; } .puzzle-title { font-size: 1.3em; } }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-logo">
+      <span class="nav-logo-icon">&#x2694;</span>
+      SH System DB
+      <span class="nav-logo-pulse"></span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">System Online</span>
+      <a href="../pages/redgates.html" class="nav-redgate">
+        <img src="../images/Backgrounds/RedGateIcon.png" alt="" />
+        Red Gates
+      </a>
+    </div>
+  </nav>
+  <main>
+    <div class="puzzle-container">
+      <div class="puzzle-title">Solo Leveling Puzzle Challenge</div>
+      <div class="puzzle-desc">Solve each puzzle to progress. Each one is themed around Solo Leveling and will test your logic, memory, and wit. Good luck, Hunter!</div>
+      <div class="puzzle-progress" id="puzzle-progress">Puzzle 1 of 3</div>
+      <div class="puzzle-box" id="puzzle-box"></div>
+      <div class="puzzle-feedback" id="puzzle-feedback"></div>
+    </div>
+  </main>
+  <script>
+    // Puzzle data: each has a render function and a check function
+    const puzzles = [
+      {
+        title: "Gate Sequence",
+        desc: "The gates open in a specific order. Arrange the following gates by their Solo Leveling power requirement, from lowest to highest:",
+        options: ["Jungle", "Desert", "Subway", "Snow Forest", "Caves", "Spider Cave"],
+        answer: ["Subway", "Caves", "Jungle", "Desert", "Snow Forest", "Spider Cave"],
+        render(container) {
+          container.innerHTML = `<div style='margin-bottom:10px;'>${this.desc}</div>`;
+          this.options.forEach((opt, i) => {
+            container.innerHTML += `<div style='margin:4px 0;'><input type='number' min='1' max='6' class='puzzle-input' style='width:50px;display:inline-block;' id='order${i}' /> <span>${opt}</span></div>`;
+          });
+          container.innerHTML += `<button class='puzzle-btn' id='submit1'>Submit</button>`;
+        },
+        check() {
+          const order = [];
+          for(let i=0;i<6;i++) {
+            const val = document.getElementById('order'+i).value;
+            if(!val) return {correct:false, msg:"Fill all positions."};
+            order.push({gate:this.options[i], pos:parseInt(val,10)});
+          }
+          order.sort((a,b)=>a.pos-b.pos);
+          const userOrder = order.map(x=>x.gate);
+          for(let i=0;i<6;i++) if(userOrder[i]!==this.answer[i]) return {correct:false, msg:"Incorrect order. Try again!"};
+          return {correct:true};
+        }
+      },
+      {
+        title: "Hunter's Inventory",
+        desc: "You have 4 items: <b>Mana Potion</b>, <b>Steel Dagger</b>, <b>Gate Key</b>, <b>Healing Rune</b>. You can only carry 3. The boss is immune to physical attacks and the gate is locked. Which 3 do you take? (Type their names, comma separated)",
+        answer: ["Mana Potion","Gate Key","Healing Rune"],
+        render(container) {
+          container.innerHTML = `<div style='margin-bottom:10px;'>${this.desc}</div><input class='puzzle-input' id='inv-input' placeholder='item1, item2, item3' /><button class='puzzle-btn' id='submit2'>Submit</button>`;
+        },
+        check() {
+          const val = document.getElementById('inv-input').value.trim();
+          if(!val) return {correct:false, msg:"Enter your 3 items."};
+          const items = val.split(',').map(x=>x.trim().replace(/\s+/g,' '));
+          if(items.length!==3) return {correct:false, msg:"You must pick exactly 3 items."};
+          for(const ans of this.answer) if(!items.includes(ans)) return {correct:false, msg:"That's not the optimal set."};
+          return {correct:true};
+        }
+      },
+      {
+        title: "Shadow Command",
+        desc: "You must command your shadow soldier to defeat an enemy. The enemy is weak to magic, but will counter if attacked directly. Type the correct command to win (hint: use your shadow's ability smartly).",
+        answer: "cast shadow bind",
+        render(container) {
+          container.innerHTML = `<div style='margin-bottom:10px;'>${this.desc}</div><input class='puzzle-input' id='cmd-input' placeholder='Enter command...' /><button class='puzzle-btn' id='submit3'>Submit</button>`;
+        },
+        check() {
+          const val = document.getElementById('cmd-input').value.trim().toLowerCase();
+          if(!val) return {correct:false, msg:"Type your command."};
+          if(val!==this.answer) return {correct:false, msg:"Incorrect command. Think about the enemy's weakness and your shadow's skills."};
+          return {correct:true};
+        }
+      }
+    ];
+    let current = 0;
+    function renderPuzzle() {
+      const box = document.getElementById('puzzle-box');
+      const progress = document.getElementById('puzzle-progress');
+      const feedback = document.getElementById('puzzle-feedback');
+      feedback.textContent = '';
+      progress.textContent = `Puzzle ${current+1} of ${puzzles.length}`;
+      puzzles[current].render(box);
+      document.getElementById('puzzle-box').querySelector('button').onclick = () => {
+        const res = puzzles[current].check();
+        if(res.correct) {
+          if(current < puzzles.length-1) {
+            current++;
+            renderPuzzle();
+          } else {
+            box.innerHTML = `<div style='font-size:1.2em;color:var(--ice);text-align:center;'>Congratulations, Hunter!<br>You solved all puzzles.<br><a href='../index.html' class='puzzle-btn' style='margin-top:18px;'>Return Home</a></div>`;
+            progress.textContent = 'All puzzles complete!';
+          }
+          feedback.textContent = '';
+        } else {
+          feedback.textContent = res.msg;
+        }
+      };
+    }
+    renderPuzzle();
+  </script>
+</body>
+</html>

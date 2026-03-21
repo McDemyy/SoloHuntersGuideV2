@@ -213,6 +213,11 @@
   <div class="bg-sweep-layer" id="sweep-layer"></div>
   <div class="bg-vignette"></div>
 
+
+  <!-- Credits Button Bottom Right -->
+  <button id="btn-credits" class="fixed-btn" style="right: 18px; bottom: 18px; min-width: 80px; padding: 7px 14px; font-size: 10px;">Credits</button>
+
+
   <nav class="navbar">
     <a href="index.html" class="nav-logo">
       <span class="nav-logo-icon">&#x2694;</span>
@@ -273,26 +278,6 @@
         </div>
       </a>
 
-      <!-- POWER SCANNER -->
-      <div class="scanner-panel">
-        <div class="scanner-frame">
-          <div class="sf-c tl"></div><div class="sf-c tr"></div>
-          <div class="sf-c bl"></div><div class="sf-c br"></div>
-          <div class="scanner-header">
-            <div class="scanner-label">
-              <span class="scanner-label-dot"></span>
-              Power Analysis &mdash; locate your gate
-            </div>
-            <span class="scanner-hint">Press <kbd>/</kbd> to focus</span>
-          </div>
-          <div class="scanner-row">
-            <input class="scanner-input" id="scanner-input" type="number" min="0" placeholder="Enter Power stat..." autocomplete="off" />
-            <button class="scanner-btn" id="scanner-btn">Analyze</button>
-            <button class="scanner-btn clear" id="scanner-clear" style="display:none">&#x2715;</button>
-          </div>
-          <div class="scanner-result" id="scanner-result"></div>
-        </div>
-      </div>
 
       <!-- MENU GRID -->
       <nav class="menu-grid" aria-label="Main navigation">
@@ -326,11 +311,11 @@
           <span class="btn-label">Best Builds</span>
           <span class="btn-desc">Tank &middot; DPS &middot; Mage</span>
         </a>
-        <a href="pages/classes.html" class="menu-btn v-purple" data-track="Classes">
+        <a href="pages/titles.html" class="menu-btn v-gold" data-track="Titles">
           <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
-          <span class="btn-rank">[ Hunter Ranks ]</span>
-          <span class="btn-label">Classes</span>
-          <span class="btn-desc">Rarity &middot; Drop chance</span>
+          <span class="btn-rank">[ Honors ]</span>
+          <span class="btn-label">Titles</span>
+          <span class="btn-desc">Unlockable &middot; Achievements</span>
         </a>
         <button class="menu-btn v-purple wide" id="btn-open-map">
           <span class="mc tl"></span><span class="mc tr"></span><span class="mc bl"></span><span class="mc br"></span>
@@ -341,47 +326,19 @@
           </div>
           <span class="wide-arrow">&#x203A;</span>
         </button>
-      </nav>
-
-      <div class="recent-bar" id="recent-bar">
-        <div class="recent-heading">Recently Visited</div>
-        <div class="recent-chips" id="recent-chips">
-          <span class="recent-none">Visit a page to track it here</span>
+      <!-- INDEX MODAL -->
+      <div id="modal-index" class="sys-modal">
+        <div class="modal-box">
+          <button class="modal-close" data-close="modal-index">&times;</button>
+          <div class="modal-title">Index</div>
+          <div class="modal-links">
+            <a href="pages/weapons.html" class="modal-link">Weapons <span class="modal-link-arrow">&#x203A;</span></a>
+            <a href="pages/magic.html" class="modal-link">Magic <span class="modal-link-arrow">&#x203A;</span></a>
+            <a href="pages/armor.html" class="modal-link">Armor <span class="modal-link-arrow">&#x203A;</span></a>
+            <a href="pages/artifacts.html" class="modal-link">Artifacts <span class="modal-link-arrow">&#x203A;</span></a>
+            <a href="pages/classes.html" class="modal-link">Classes <span class="modal-link-arrow">&#x203A;</span></a>
+          </div>
         </div>
-      </div>
-
-      <div class="status-bar">
-        <div class="status-item"><span class="status-label">Status</span><span class="status-value active">Active</span></div>
-        <div class="status-item"><span class="status-label">Weapons</span><span class="status-value" id="stat-weapons">—</span></div>
-        <div class="status-item"><span class="status-label">Armor Sets</span><span class="status-value" id="stat-armor">—</span></div>
-        <div class="status-item"><span class="status-label">Magic</span><span class="status-value" id="stat-magic">—</span></div>
-        <div class="status-item"><span class="status-label">Artifacts</span><span class="status-value" id="stat-artifacts">—</span></div>
-        <div class="status-item"><span class="status-label">Classes</span><span class="status-value" id="stat-classes">—</span></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    Solo Hunters &mdash; Hunter Guide Hub &mdash; All data is game reference only.
-  </footer>
-
-  <button class="fixed-btn" id="btn-credits">Credits</button>
-  <audio id="bg-music" src="system-open.mp3" preload="auto" loop style="display:none;"></audio>
-  <button class="fixed-btn" id="btn-mute">Music</button>
-  <a href="pages/demoncastle.html" id="btn-demoncastle"><span class="dc-dot"></span>Demon Castle</a>
-
-  <!-- INDEX MODAL -->
-  <div id="modal-index" class="sys-modal">
-    <div class="modal-box">
-      <button class="modal-close" data-close="modal-index">&times;</button>
-      <div class="modal-title">Select Category</div>
-      <div class="modal-links">
-        <a href="pages/weapons.html"           class="modal-link">Weapons            <span class="modal-link-arrow">&#x203A;</span></a>
-        <a href="pages/magic.html"             class="modal-link">Magic              <span class="modal-link-arrow">&#x203A;</span></a>
-        <a href="pages/armor.html"             class="modal-link">Armor              <span class="modal-link-arrow">&#x203A;</span></a>
-        <a href="pages/artifacts.html"         class="modal-link">Artifacts          <span class="modal-link-arrow">&#x203A;</span></a>
-        <a href="pages/classes.html"           class="modal-link">Classes            <span class="modal-link-arrow">&#x203A;</span></a>
-        <a href="pages/beginner-guide.html"    class="modal-link">Beginner Guide     <span class="modal-link-arrow">&#x203A;</span></a>
       </div>
     </div>
   </div>
@@ -447,6 +404,7 @@
   document.getElementById('btn-open-index').addEventListener('click',()=>openModal('modal-index'));
   document.getElementById('btn-open-map').addEventListener('click',()=>openModal('modal-map'));
   document.getElementById('btn-credits').addEventListener('click',()=>openModal('modal-credits'));
+  // Puzzle button removed
   document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.dataset.close)));
   document.querySelectorAll('.sys-modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
   document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.sys-modal.open').forEach(m=>m.classList.remove('open'));});
